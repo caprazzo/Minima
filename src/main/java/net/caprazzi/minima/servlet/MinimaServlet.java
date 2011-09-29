@@ -73,6 +73,7 @@ public class MinimaServlet extends HttpServlet {
 	
 	protected void sendJson(HttpServletResponse resp, int status, byte[] data) {
 		try {
+			resp.setContentType("application/json");
 			resp.setStatus(201);
 			ServletOutputStream out = resp.getOutputStream();
 			out.write(data);
