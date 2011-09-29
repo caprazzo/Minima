@@ -1,28 +1,20 @@
 package net.caprazzi.minima;
 
-import java.util.Arrays;
-
-import javax.servlet.ServletInputStream;
-
 public class Story {
 
 	private String id;
 	private String desc;
 	private String list;
+	private int revision;
 
 	public Story() {
-		
+		// this constructor intentionally empty: jackson requires it for automagic mapping
 	}
 	
 	public Story(String id, String desc, String list) {
 		this.id = id;
 		this.desc = desc;
 		this.list = list;
-	}
-
-	public static Story fromJson(ServletInputStream inputStream) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public String getId() {
@@ -45,15 +37,18 @@ public class Story {
 		this.desc = desc;
 	}
 	
+	public int getRevision() {
+		return revision;
+	}
+	
+	public void setRevision(int revision) {
+		this.revision = revision;
+	}
+	
 	public String getList() {
 		return list;
 	}
 
-	public static byte[] asJson() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public boolean equals(Object object) {
 		if (object == this) return true;
