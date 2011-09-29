@@ -1,28 +1,27 @@
 package net.caprazzi.minima;
 
-import net.caprazzi.minima.MinimaService.CreateStory;
-import net.caprazzi.minima.MinimaService.UpdateStory;
+import net.caprazzi.minima.service.MinimaService.CreateStory;
+import net.caprazzi.minima.service.MinimaService.UpdateStory;
 
 public class TestUtils {
 	
 	public final static CreateStory createStoryNoop = new CreateStory() {
 		@Override
-		public void error(String string, Exception e) {
-		}
+		public void error(String string, Exception e) {}
 		
 		@Override
-		public void success(byte[] story) {
-		}
+		public void success(byte[] story) {}
 	};
 	
 	public final static UpdateStory updateStoryNoop = new UpdateStory() {
 		@Override
-		public void error(String string, Exception e) {
-		}
+		public void error(String string, Exception e) {}
 		
 		@Override
-		public void success() {
-		}
+		public void success(String key, int rev, byte[] data) {}
+
+		@Override
+		public void collision(String key, int yourRev, int foundRev) {}
 	};
 	
 	public static class TestCreateStory extends CreateStory {
@@ -45,8 +44,13 @@ public class TestUtils {
 		}
 
 		@Override
-		public void success() {
+		public void success(String key, int rev, byte[] data) {
 			throw new RuntimeException("unexpected success");
+		}
+
+		@Override
+		public void collision(String key, int yourRev, int foundRev) {
+			throw new RuntimeException("unexpected collision");
 		}
 	}
 	

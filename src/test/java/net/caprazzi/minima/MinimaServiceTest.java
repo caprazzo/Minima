@@ -14,8 +14,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.minima.MinimaService.CreateStory;
-import net.caprazzi.minima.MinimaService.UpdateStory;
+import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.service.MinimaService.CreateStory;
+import net.caprazzi.minima.service.MinimaService.UpdateStory;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -44,7 +45,7 @@ public class MinimaServiceTest {
 	public void update_should_update_story_in_db() {
 		byte[] data = service.asJson(new Story("key", "dsec", "tofo"));
 		service.updateStory("key", 1, data, TestUtils.updateStoryNoop);		
-		verify(db).put(eq("key"), eq(1), eq(data), any(Put.class));
+		verify(db).put(eq("key"), eq(1), any(byte[].class), any(Put.class));
 	}
 	
 	@Test
@@ -59,11 +60,7 @@ public class MinimaServiceTest {
 	@Test
 	public void should_reject_invalid_json() {
 		final AtomicBoolean flag = new AtomicBoolean();
-		service.updateStory("key", 0, "garbage".getBytes(), new UpdateStory() {
-			
-			@Override
-			public void success() {}
-			
+		service.updateStory("key", 0, "garbage".getBytes(), new TestUtils.TestUpdateStory() {
 			@Override
 			public void error(String message, Exception e) {
 				flag.set(true);

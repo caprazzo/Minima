@@ -2,6 +2,7 @@ package net.caprazzi.minima;
 
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.minima.service.MinimaService;
 
 /**
  * Http Api

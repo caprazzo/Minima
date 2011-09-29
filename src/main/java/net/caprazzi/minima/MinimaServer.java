@@ -1,5 +1,8 @@
 package net.caprazzi.minima;
 
+import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.servlet.MinimaServlet;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
