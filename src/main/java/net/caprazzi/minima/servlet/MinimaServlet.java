@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.service.MinimaService.CreateStory;
 import net.caprazzi.minima.service.MinimaService.UpdateStory;
 
 import org.eclipse.jetty.util.IO;
@@ -30,45 +31,73 @@ public class MinimaServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
 		String[] parts = req.getRequestURI().split("/");
-		if (parts[1].equals("board")) {
-			logger.debug("GET /board");
-			Writer out = resp.getWriter();
-			minimaService.writeBoard(out);
-			out.close();
+		if (!parts[1].equals("board")) {
+			sendError(resp, 404, "not found");
 			return;
 		}
+		
+		logger.debug("GET /board");
+		Writer out = resp.getWriter();
+		minimaService.writeBoard(out);
+		out.close();
+		return;
 	}
 	
 	@Override
 	protected void doPut(HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		
 		String[] parts = req.getRequestURI().split("/");
-		if (parts[1].equals("story")) {
-			String key = parts[2];
-			int revision = Integer.parseInt(parts[3]);
-			byte[] story = IO.readBytes(req.getInputStream());
-			minimaService.updateStory(key, revision, story, new UpdateStory() {
-
-				@Override
-				public void success(String key, int rev, byte[] jsonData) {
-					sendJson(resp, 201, jsonData);
-				}
-				
-				@Override
-				public void collision(String key, int yourRev, int foundRev) {
-					logger.warn("Collision while updating story ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
-					sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
-				}
-				
-				@Override
-				public void error(String message, Exception e) {
-					logger.error("Error while updating story " + message, e);
-					sendError(resp, 500, "Internal Server Error");
-				}
-				
-			});
+		if (!parts[1].equals("story")) {
+			sendError(resp, 404, "not found");
+			return;
 		}
+		
+		String key = parts[2];
+		int revision = Integer.parseInt(parts[3]);
+		byte[] story = IO.readBytes(req.getInputStream());
+		minimaService.updateStory(key, revision, story, new UpdateStory() {
+
+			@Override
+			public void success(String key, int rev, byte[] jsonData) {
+				sendJson(resp, 201, jsonData);
+			}
+			
+			@Override
+			public void collision(String key, int yourRev, int foundRev) {
+				logger.warn("Collision while updating story ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+				sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+			}
+			
+			@Override
+			public void error(String message, Exception e) {
+				logger.error("Error while updating story " + message, e);
+				sendError(resp, 500, "Internal Server Error");
+			}
+			
+		});
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, final HttpServletResponse resp)
+			throws ServletException, IOException {
+		String[] parts = req.getRequestURI().split("/");
+		
+		if (!parts[1].equals("story")) {
+			sendError(resp, 404, "not found");
+			return;
+		}
+		
+		minimaService.createStory(IO.readBytes(req.getInputStream()), new CreateStory() {
+			@Override public void success(byte[] story) {
+				sendJson(resp, 201, story);
+			}
+			@Override public void error(String string, Exception e) {
+				logger.warn(string, e);
+			}
+		});
 	}
 	
 	protected void sendJson(HttpServletResponse resp, int status, byte[] data) {
@@ -95,32 +124,4 @@ public class MinimaServlet extends HttpServlet {
 		}		
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {
-		String[] parts = req.getRequestURI().split("/");
-		if (parts[1].equals("story")) {
-			byte[] story = IO.readBytes(req.getInputStream());
-			minimaService.createStory(story, new MinimaService.CreateStory() {
-				@Override
-				public void success(byte[] story) {
-					resp.setStatus(201);
-					ServletOutputStream out;
-					try {
-						out = resp.getOutputStream();
-						out.write(story);
-						out.close();					
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				}
-				
-				@Override
-				public void error(String string, Exception e) {
-					logger.warn(string, e);
-				}
-			});
-		}
-	}
-	
 }
