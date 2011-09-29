@@ -38,7 +38,6 @@ public class MinimaServlet extends HttpServlet {
 			return;
 		}
 		
-		logger.debug("GET /board");
 		Writer out = resp.getWriter();
 		minimaService.writeBoard(out);
 		out.close();
