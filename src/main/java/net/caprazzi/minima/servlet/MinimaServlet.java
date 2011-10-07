@@ -33,11 +33,12 @@ public class MinimaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String[] parts = req.getRequestURI().split("/");
-		if (!parts[1].equals("board")) {
+		if (!parts[2].equals("board")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
 		
+		resp.setContentType("application/json");
 		Writer out = resp.getWriter();
 		minimaService.writeBoard(out);
 		out.close();
@@ -49,7 +50,7 @@ public class MinimaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String[] parts = req.getRequestURI().split("/");
-		if (!parts[1].equals("story")) {
+		if (!parts[2].equals("story")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
@@ -84,7 +85,7 @@ public class MinimaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String[] parts = req.getRequestURI().split("/");
 		
-		if (!parts[1].equals("story")) {
+		if (!parts[2].equals("story")) {
 			sendError(resp, 404, "not found");
 			return;
 		}

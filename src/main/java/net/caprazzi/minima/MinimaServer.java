@@ -1,6 +1,7 @@
 package net.caprazzi.minima;
 
 import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
 
 import org.eclipse.jetty.server.Server;
@@ -18,7 +19,7 @@ public class MinimaServer {
 	public void start(int port) throws Exception {
 		Server server = new Server(port);
 
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         context.setContextPath("/");
         server.setHandler(context);
         
@@ -27,7 +28,8 @@ public class MinimaServer {
         // use /uuid to get a fresh id
         // context.addServlet(new ServletHolder(new UUIDServlet()), "/uuid");
         
-        context.addServlet(new ServletHolder(minimaServlet), "/*");
+        context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/");
+        context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         
         server.start();
         server.join();
