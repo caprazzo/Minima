@@ -44,7 +44,9 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				       listeners: {
 				    	   update: function(e) {
 				    		   var list = that.query('#todoList')[0];
-				    		   console.log('after render', list.el, e.getNodes());				    		  
+				    		   console.log('after render', list.el, e.getNodes());
+				    		   
+				    		   /*
 				    		   new Ext.util.Droppable(list.el.id , {
 				    			   listeners: { 
 				    				   drop: function(droppable, draggable, ev) {
@@ -55,6 +57,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    				   }
 				    			   }
 				    		   });
+				    		   */
 				    		   var nodes = e.getNodes();
 				    		   if (nodes) {
 				    			   for(var i=0; i<nodes.length; i++) {
@@ -70,15 +73,24 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    				   new Ext.util.Droppable(nodes[i], {
 				    					   listeners: {
 				    						   drop: function(droppable, draggable, e) {
-				    							   console.log('item fuzzo', droppable, draggable, e);
-				    						   }
+				    							   console.log('droppred over item', droppable, draggable, e);
+				    						   },
+				    						   dropenter: function(droppable, draggable, e) {
+				    							   console.log('dropenter on item', droppable, draggable, e);
+				    							   var list = that.query('#todoList')[0]
+				    							   list.ownerCt.insert(1, new Ext.Panel('{html:"foo"}'));
+				    							   list.ownerCt.doComponentLayout();
+				    							   list.doComponentLayout();
+				    						   },
+				    						   dropleave: function(droppable, draggable, e) {
+				    							   console.log('dropleave on item', droppable, draggable, e);
+				    							   //list.insert(0, new Ext.Panel('{html:"foo"}'));
+				    							   //list.doComponentLayout();
+				    						   },
 				    					   }
 				    				   });
 				    			   }
 				    		   }
-				    	   },
-				    	   drop: function(droppable, draggable, e) {
-				    		   console.log('dropped', dropped, draggable, e);
 				    	   }
 				       }
 				   }, 
