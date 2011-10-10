@@ -57,6 +57,12 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 		            			   }
 		            			   that.store.add(newStory);
 		            			   that.store.sync();
+		            			   var input = that.query('#txt-new-story-todo')[0];
+		            			   input.hide();
+		            			   input.reset();
+		            			   var btn = that.query('#btn-create-todo')[0];
+		            			   btn.show();
+		            			   btn.enable();
 		            		   }
 		            	   }
 		               }
@@ -66,7 +72,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 					   itemId: 'btn-create-todo',
 					   text: 'create',
 					   handler: function(el) {
-						   el.disable();
+						   el.hide();
 						   console.log('[View.Viewport] btn.create.todo');
 						   var input = that.query('#txt-new-story-todo')[0];
 						   input.show();
