@@ -5,12 +5,9 @@
  */
 Ext.regController('Viewport', {
 
-	index: function() {
-		var store = new App.Store.Minima();
-		store.load();
-		console.log('loaded');
-		console.log(store.getAt(0));
-		console.log(store.data);
+	index: function(options) {
+		console.log('[Controller.Viewport] index', options);
+		this.store = options.store;
 		//this.showView();
 	},
 	

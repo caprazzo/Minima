@@ -5,6 +5,11 @@ App.Store.Minima = Ext.extend(Ext.data.Store, {
 		var config = Ext.apply({
 			model: 'Story',
 			storeId: 'MinimaStore',
+			
+			getGroupString: function(record) {
+				return record.get('list')[0]
+			},
+			
 			proxy: {
 				type: 'ajax',
 				url: 'data/board',

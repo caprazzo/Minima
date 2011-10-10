@@ -12,13 +12,21 @@ Ext.regApplication('App', {
 		Ext.Viewport.init();
 		Ext.Viewport.onOrientationChange();
 
+		var store = new App.Store.Minima();
+		store.load();
+		console.log('loaded');
+		console.log(store.getAt(0));
+		console.log(store.data);
+		
 		this.viewport = new App.View.Viewport({
-			application: this
+			application: this,
+			store: store
 		});
 
 		Ext.dispatch({
 			controller: 'Viewport',
-			action    : 'index'
+			action    : 'index',
+			store:	store
 		});
 	}
 });
@@ -32,12 +40,9 @@ Ext.regApplication('App', {
  */
 Ext.regController('Viewport', {
 
-	index: function() {
-		var store = new App.Store.Minima();
-		store.load();
-		console.log('loaded');
-		console.log(store.getAt(0));
-		console.log(store.data);
+	index: function(options) {
+		console.log('[Controller.Viewport] index', options);
+		this.store = options.store;
 		//this.showView();
 	},
 	
@@ -82,6 +87,11 @@ App.Store.Minima = Ext.extend(Ext.data.Store, {
 		var config = Ext.apply({
 			model: 'Story',
 			storeId: 'MinimaStore',
+			
+			getGroupString: function(record) {
+				return record.get('list')[0]
+			},
+			
 			proxy: {
 				type: 'ajax',
 				url: 'data/board',
@@ -106,16 +116,109 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 	fullscreen: true,
 
 
-	initComponent: function() {
+	initComponent: function(options) {
+		console.log('[View.Viewport] initComponent', this.store);
 		var config = {
-			layout: 'fit',
+			xtype: 'panel',
+			layout: {
+				type: 'hbox',
+				align: 'stretch'
+			},
 			items: [
-			   { html: 'hello world' }
+			   { 
+				   xtype: 'panel',
+				   title: 'todo',
+				   flex: 1,
+				   dockedItems: [{
+					   dock: 'top',
+					   html: 'todo'
+				   }],
+				   items: [{
+				       xtype: 'list',
+				       itemId: 'todoList',
+				       store: this.store,
+				       itemSelector: 'foo.bar',
+				       collectData: function(records, startIndex) {
+				    	   var r = [];
+				    	   for( var i=0; i<records.length; i++ ) {
+				               if( records[i].data.list == 'todo' )
+				                   r.push( this.prepareData(records[i].data, 0, records[i]) );
+				    	   }
+				           return r;
+				       },
+				       itemTpl: new Ext.XTemplate('{desc}')
+				   }, {
+					   dock: 'bottom',
+					   html: 'create'
+				   }]
+			   },
+			   { 
+				   xtype: 'panel',
+				   title: 'doing',
+				   flex: 1,
+				   dockedItems: [{
+					   dock: 'top',
+					   html: 'doing'
+				   }],
+				   items: [{
+				       xtype: 'list',
+				       itemId: 'todoList',
+				       store: this.store,
+				       itemSelector: 'foo.bar',
+				       collectData: function(records, startIndex) {
+				    	   var r = [];
+				    	   for( var i=0; i<records.length; i++ ) {
+				               if( records[i].data.list == 'doing' )
+				                   r.push( this.prepareData(records[i].data, 0, records[i]) );
+				    	   }
+				           return r;
+				       },
+				       itemTpl: new Ext.XTemplate('{desc}')
+				   }, {
+					   dock: 'bottom',
+					   html: 'create'
+				   }]
+			   },
+			   { 
+				   xtype: 'panel',
+				   title: 'done',
+				   flex: 1,
+				   dockedItems: [{
+					   dock: 'top',
+					   html: 'done'
+				   }],
+				   items: [{
+				       xtype: 'list',
+				       itemId: 'todoList',
+				       store: this.store,
+				       itemSelector: 'foo.bar',
+				       collectData: function(records, startIndex) {
+				    	   var r = [];
+				    	   for( var i=0; i<records.length; i++ ) {
+				               if( records[i].data.list == 'done' )
+				                   r.push( this.prepareData(records[i].data, 0, records[i]) );
+				    	   }
+				           return r;
+				       },
+				       itemTpl: new Ext.XTemplate('{desc}')
+				   }, {
+					   dock: 'bottom',
+					   html: 'create'
+				   }]
+			   },
 			]
-		};
+		}
+		
 		Ext.apply(this, config);
 		App.View.Viewport.superclass.initComponent.call(this);
-
+		
+		this.store.on(
+			'datachanged',
+			function() {
+				console.log('[View] store.on.datachanged');
+			},
+			this
+		);
 	}
 });
 
