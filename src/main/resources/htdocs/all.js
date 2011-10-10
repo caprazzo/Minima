@@ -198,8 +198,11 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				   items: [{
 				       xtype: 'list',
 				       itemId: 'todoList',
+				       scroll: false,
+				       singleSelect: true,
 				       store: this.store,
-				       itemSelector: 'foo.bar',
+				       itemSelector: 'div.item',
+				       droppable: true,
 				       collectData: function(records, startIndex) {
 				    	   var r = [];
 				    	   for( var i=0; i<records.length; i++ ) {
@@ -208,7 +211,47 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    	   }
 				           return r;
 				       },
-				       itemTpl: new Ext.XTemplate('{desc}')
+				       itemTpl: new Ext.XTemplate('<tpl for="."><div class="item">{desc}</div></tpl>'),
+				       listeners: {
+				    	   update: function(e) {
+				    		   var list = that.query('#todoList')[0];
+				    		   console.log('after render', list.el, e.getNodes());				    		  
+				    		   new Ext.util.Droppable(list.el.id , {
+				    			   listeners: { 
+				    				   drop: function(droppable, draggable, ev) {
+				    					   console.log('dropped item in list', droppable, draggable);
+				    				   },
+				    				   dropenter: function(droppable, draggable, ev) {
+				    					   console.log('entering drop on list', droppable, draggable);
+				    				   }
+				    			   }
+				    		   });
+				    		   var nodes = e.getNodes();
+				    		   if (nodes) {
+				    			   for(var i=0; i<nodes.length; i++) {
+				    				   var d = new Ext.util.Draggable(nodes[i], {
+				    					   revert: true,
+				    					   listeners: {
+				    						   drop: function(droppable, draggable, e) {
+				    							   console.log('item dropped', dropped, draggable, e);
+				    						   }
+				    					   }
+				    				   });   
+				    				   
+				    				   new Ext.util.Droppable(nodes[i], {
+				    					   listeners: {
+				    						   drop: function(droppable, draggable, e) {
+				    							   console.log('item fuzzo', droppable, draggable, e);
+				    						   }
+				    					   }
+				    				   });
+				    			   }
+				    		   }
+				    	   },
+				    	   drop: function(droppable, draggable, e) {
+				    		   console.log('dropped', dropped, draggable, e);
+				    	   }
+				       }
 				   }, 
 				   {
 					   xtype: 'textareafield',
@@ -260,9 +303,11 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				   }],
 				   items: [{
 				       xtype: 'list',
-				       itemId: 'todoList',
+				       itemId: 'doingList',
+				       droppable: true,
 				       store: this.store,
 				       itemSelector: 'foo.bar',
+				       droppable: true,
 				       collectData: function(records, startIndex) {
 				    	   var r = [];
 				    	   for( var i=0; i<records.length; i++ ) {
@@ -271,7 +316,12 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    	   }
 				           return r;
 				       },
-				       itemTpl: new Ext.XTemplate('{desc}')
+				       itemTpl: new Ext.XTemplate('{desc}'),
+				       listeners: {
+				    	   drop: function(droppable, draggable, e) {
+				    		   console.log('dropped', dropped, draggable, e);
+				    	   }
+				       }
 				   }, {
 					   dock: 'bottom',
 					   html: 'create'
@@ -287,7 +337,8 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				   }],
 				   items: [{
 				       xtype: 'list',
-				       itemId: 'todoList',
+				       itemId: 'doneList',
+				       droppable: true,
 				       store: this.store,
 				       itemSelector: 'foo.bar',
 				       collectData: function(records, startIndex) {
@@ -299,6 +350,12 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				           return r;
 				       },
 				       itemTpl: new Ext.XTemplate('{desc}')
+				       ,
+				       listeners: {
+				    	   drop: function(droppable, draggable, e) {
+				    		   console.log('dropped', dropped, draggable, e);
+				    	   }
+				       }
 				   }, {
 					   dock: 'bottom',
 					   html: 'create'
