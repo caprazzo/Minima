@@ -8,6 +8,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 
 	initComponent: function(options) {
 		console.log('[View.Viewport] initComponent', this.store);
+		var that = this;
 		var config = {
 			xtype: 'panel',
 			layout: {
@@ -37,9 +38,29 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				           return r;
 				       },
 				       itemTpl: new Ext.XTemplate('{desc}')
-				   }, {
-					   dock: 'bottom',
-					   html: 'create'
+				   }, 
+				   {
+					   xtype: 'textareafield',
+		               itemId: 'txt-new-story-todo',
+		               hidden: true,
+		               listeners: {
+		            	   keyup: function(el, ev) {
+		            		   console.log('keyup', ev, ev.browserEvent.keyCode);		            		   
+		            		   if (ev.browserEvent.keyCode == 13) {
+		            			   console.log('submit', ev);
+		            		   }
+		            	   }
+		               }
+				   },
+				   {					 
+					   xtype: 'button',
+					   itemId: 'btn-create-todo',
+					   text: 'create',
+					   handler: function() {
+						   console.log('[View.Viewport] btn.create.todo');
+						   var input = that.query('#txt-new-story-todo')[0];
+						   input.show();
+					   }
 				   }]
 			   },
 			   { 
