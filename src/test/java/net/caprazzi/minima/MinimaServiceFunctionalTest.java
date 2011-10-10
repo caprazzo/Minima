@@ -41,8 +41,7 @@ public class MinimaServiceFunctionalTest {
 		service.createStory(service.asJson(story), new TestUtils.TestCreateStory() {
 			
 			@Override
-			public void success(byte[] story) {
-				Story stored = service.fromJson(story);
+			public void success(Story stored) {
 				assertEquals("desc", stored.getDesc());
 				assertEquals("list", stored.getList());
 				assertNotNull(stored.getId());
@@ -59,8 +58,7 @@ public class MinimaServiceFunctionalTest {
 		
 		service.createStory(service.asJson(story), new TestUtils.TestCreateStory() {
 			@Override
-			public void success(byte[] story) {
-				Story created = service.fromJson(story);
+			public void success(Story created) {
 				created.setDesc("newDesc");
 				created.setList("newList");
 				byte[] updatedJson = service.asJson(created);
@@ -108,8 +106,7 @@ public class MinimaServiceFunctionalTest {
 		
 		service.createStory(service.asJson(story), new TestUtils.TestCreateStory() {
 			@Override
-			public void success(byte[] story) {
-				Story updated = service.fromJson(story);
+			public void success(Story updated) {
 				updated.setDesc("newDesc");
 				updated.setList("newList");
 				byte[] updatedJson = service.asJson(updated);

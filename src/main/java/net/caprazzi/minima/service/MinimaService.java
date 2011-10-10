@@ -10,6 +10,7 @@ import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
+import net.caprazzi.minima.PostStory;
 import net.caprazzi.minima.Story;
 
 import org.codehaus.jackson.JsonFactory;
@@ -61,7 +62,7 @@ public class MinimaService {
 	public void createStory(byte[] data, final CreateStory cb) {
 		
 		String key = randomString();
-		Story story = fromJson(data);
+		Story story = fromPostStoryJson(data);
 		story.setId(key);
 		story.setRevision(1);	
 		
@@ -74,7 +75,7 @@ public class MinimaService {
 
 					@Override
 					public void found(String key, int rev, byte[] data) {
-						cb.success(data);
+						cb.success(fromJson(data));
 					}
 
 					@Override
@@ -103,7 +104,7 @@ public class MinimaService {
 		if (!validateStoryData(storyData, cb)) 
 			return;
 		
-		Story story = fromJson(storyData);
+		Story story = fromPostStoryJson(storyData);
 		story.setId(id);
 		story.setRevision(revision+1);	
 		final byte[] writeData = asJson(story);
@@ -126,6 +127,16 @@ public class MinimaService {
 				cb.error(key, e);
 			}
 		});
+	}
+	
+	public Story fromPostStoryJson(byte[] story) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			PostStory postStory = mapper.readValue(story, PostStory.class);
+			return postStory.getStories().get(0);			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public Story fromJson(byte[] story) {
@@ -183,7 +194,7 @@ public class MinimaService {
 	}
 	
 	public static abstract class CreateStory implements Callback  {
-		public abstract void success(byte[] story);
+		public abstract void success(Story story);
 	}
 	
 	private static SecureRandom random = new SecureRandom();

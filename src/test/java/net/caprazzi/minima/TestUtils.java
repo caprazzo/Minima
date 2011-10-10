@@ -10,7 +10,7 @@ public class TestUtils {
 		public void error(String string, Exception e) {}
 		
 		@Override
-		public void success(byte[] story) {}
+		public void success(Story story) {}
 	};
 	
 	public final static UpdateStory updateStoryNoop = new UpdateStory() {
@@ -32,7 +32,7 @@ public class TestUtils {
 		}
 
 		@Override
-		public void success(byte[] story) {
+		public void success(Story story) {
 			throw new RuntimeException("unexpected success");
 		}
 	}

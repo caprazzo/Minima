@@ -1,6 +1,7 @@
 package net.caprazzi.minima.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 
 import javax.servlet.ServletException;
@@ -9,10 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.caprazzi.minima.PostStory;
+import net.caprazzi.minima.Story;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
 import net.caprazzi.minima.service.MinimaService.UpdateStory;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +37,7 @@ public class MinimaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String[] parts = req.getRequestURI().split("/");
-		if (!parts[2].equals("board")) {
+		if (!parts[2].equals("stories")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
@@ -50,7 +54,7 @@ public class MinimaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String[] parts = req.getRequestURI().split("/");
-		if (!parts[2].equals("story")) {
+		if (!parts[2].equals("stories")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
@@ -85,19 +89,39 @@ public class MinimaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String[] parts = req.getRequestURI().split("/");
 		
-		if (!parts[2].equals("story")) {
+		if (!parts[2].equals("stories")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
 		
 		minimaService.createStory(IO.readBytes(req.getInputStream()), new CreateStory() {
-			@Override public void success(byte[] story) {
-				sendJson(resp, 201, story);
+			@Override public void success(Story saved) {
+				sendStoryJson(resp, 201, saved);
 			}
 			@Override public void error(String string, Exception e) {
 				logger.warn(string, e);
 			}
 		});
+	}
+	
+	protected void sendStoryJson(HttpServletResponse resp, int status, Story story) {
+		try {
+			resp.setContentType("application/json");
+			resp.setStatus(201);
+			PrintWriter out = resp.getWriter();
+			
+			
+			 ObjectMapper mapper = new ObjectMapper();
+			 try {
+				mapper.writeValue(out, new PostStory(story));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	protected void sendJson(HttpServletResponse resp, int status, byte[] data) {

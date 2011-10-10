@@ -44,10 +44,19 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 		               itemId: 'txt-new-story-todo',
 		               hidden: true,
 		               listeners: {
+		            	   blur: function(el, ev) {
+		            		   console.log('blur', ev.target.value);
+		            	   },
 		            	   keyup: function(el, ev) {
 		            		   console.log('keyup', ev, ev.browserEvent.keyCode);		            		   
 		            		   if (ev.browserEvent.keyCode == 13) {
-		            			   console.log('submit', ev);
+		            			   console.log('submit', ev.target.value);
+		            			   var newStory = {
+		            			      desc: Ext.util.Format.trim(ev.target.value),
+		            			      list: 'todo'
+		            			   }
+		            			   that.store.add(newStory);
+		            			   that.store.sync();
 		            		   }
 		            	   }
 		               }
@@ -56,7 +65,8 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 					   xtype: 'button',
 					   itemId: 'btn-create-todo',
 					   text: 'create',
-					   handler: function() {
+					   handler: function(el) {
+						   el.disable();
 						   console.log('[View.Viewport] btn.create.todo');
 						   var input = that.query('#txt-new-story-todo')[0];
 						   input.show();
