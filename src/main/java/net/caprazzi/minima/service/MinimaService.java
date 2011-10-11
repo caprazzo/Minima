@@ -2,6 +2,7 @@ package net.caprazzi.minima.service;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -65,6 +66,12 @@ public class MinimaService {
 		Story story = fromPostStoryJson(data);
 		story.setId(key);
 		story.setRevision(1);	
+		
+		if (story.getPos() == null) {
+			cb.error("Position must be specified", null);
+			return;
+		}
+	
 		
 		db.put(key, 0, asJson(story), new Put() {
 

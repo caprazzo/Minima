@@ -2,6 +2,7 @@ package net.caprazzi.minima;
 
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
+import net.caprazzi.minima.servlet.IndexServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
 
 import org.eclipse.jetty.server.Server;
@@ -28,6 +29,7 @@ public class MinimaServer {
         // use /uuid to get a fresh id
         // context.addServlet(new ServletHolder(new UUIDServlet()), "/uuid");
         
+        context.addServlet(new ServletHolder(new IndexServlet()),"/index");
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/");
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         

@@ -100,6 +100,11 @@ public class MinimaServlet extends HttpServlet {
 			}
 			@Override public void error(String string, Exception e) {
 				logger.warn(string, e);
+				try {
+					resp.sendError(400);
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
 			}
 		});
 	}

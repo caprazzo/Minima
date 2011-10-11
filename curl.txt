@@ -1,8 +1,8 @@
 # get board
-curl -i localhost:8989/data/board
+curl -i localhost:8989/data/stories
 
 # create new story
-curl -X POST -d'{"desc":"desc", "list":"todo"}' http://localhost:8989/data/story
+curl -X POST -d'{"stories":[{"desc":"desc", "list":"todo"}]}' http://localhost:8989/data/stories
 
 #update a story
-curl -X PUT -d'{"desc":"newdesc", "list":"done"}' http://localhost:8989/data/story/2p1tg4n/1
+curl -X PUT -d'{"desc":"newdesc", "list":"done"}' http://localhost:8989/data/stories/2p1tg4n/1

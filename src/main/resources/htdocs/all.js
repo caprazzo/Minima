@@ -122,6 +122,10 @@ Ext.regModel('Story', {
 		{
 			name: 'list',
 			type: 'string'
+		},
+		{
+			name: 'pos',
+			type: 'number'
 		}
 	]
 });
@@ -138,9 +142,12 @@ App.Store.Minima = Ext.extend(Ext.data.Store, {
 			storeId: 'MinimaStore',
 			autoSave: true,
 			
-			getGroupString: function(record) {
-				return record.get('list')[0]
-			},
+			sorters: [
+			    {
+			    	property: 'pos',
+			    	direction: 'ASC'
+			    }
+			],
 			
 			proxy: {
 				type: 'rest',
@@ -215,7 +222,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				       listeners: {
 				    	   update: function(e) {
 				    		   var list = that.query('#todoList')[0];
-				    		   console.log('after render', list.el, e.getNodes());
+				    		   //console.log('after render', list.el, e.getNodes());
 				    		   
 				    		   /*
 				    		   new Ext.util.Droppable(list.el.id , {
@@ -281,10 +288,19 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 		            		   //console.log('keyup', ev, ev.browserEvent.keyCode);		            		   
 		            		   if (ev.browserEvent.keyCode == 13) {
 		            			   console.log('submit', ev.target.value);
+		            			   
+		            			   // get last value in store
+		            			   var lastStory = that.store.last();
+		            			   var startPos = (lastStory) ? lastStory.data.pos : 0; 
+		            			   var pos = startPos + 65536;
+		            			   
+		            			   console.log('loaded last story', lastStory);
 		            			   var newStory = {
 		            			      desc: Ext.util.Format.trim(ev.target.value),
-		            			      list: 'todo'
+		            			      list: 'todo',
+		            			      pos: pos
 		            			   }
+		            			   
 		            			   that.store.add(newStory);
 		            			   that.store.sync();
 		            			   var input = that.query('#txt-new-story-todo')[0];

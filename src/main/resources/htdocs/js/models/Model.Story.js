@@ -15,6 +15,10 @@ Ext.regModel('Story', {
 		{
 			name: 'list',
 			type: 'string'
+		},
+		{
+			name: 'pos',
+			type: 'number'
 		}
 	]
 });

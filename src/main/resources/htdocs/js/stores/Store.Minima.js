@@ -8,9 +8,12 @@ App.Store.Minima = Ext.extend(Ext.data.Store, {
 			storeId: 'MinimaStore',
 			autoSave: true,
 			
-			getGroupString: function(record) {
-				return record.get('list')[0]
-			},
+			sorters: [
+			    {
+			    	property: 'pos',
+			    	direction: 'ASC'
+			    }
+			],
 			
 			proxy: {
 				type: 'rest',

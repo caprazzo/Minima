@@ -53,7 +53,7 @@ import net.caprazzi.minima.service.MinimaService;
 public class MiniMain {
 
 	public static void main(String[] args) throws Exception {
-		Keez.Db db = new KeezFileDb(".", "minimav0");
+		Keez.Db db = new KeezFileDb("./db", "minimav0");
 		MinimaService minimaService = new MinimaService(db);
 		MinimaServer minimaServer = new MinimaServer(minimaService);
 		minimaServer.start(8989);

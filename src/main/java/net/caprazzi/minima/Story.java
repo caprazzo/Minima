@@ -1,11 +1,22 @@
 package net.caprazzi.minima;
 
+import java.math.BigDecimal;
+
+/**
+ * 
+ * Position:
+ * - first story in a board has position 2^16 (65536)
+ * - new stories added after that have position last_story.pos + 65536
+ * - when a story is placed before the first, its pos becomes first_story.pos / 2
+ * - whan a story is placed between two other stories, its pos becomes high_story.pos + ((high_story.pos - low_story.pos)/2)
+ *
+ */
 public class Story {
 
 	private String id;
 	private String desc;
 	private String list;
-	private int pos = -1;
+	private BigDecimal pos;
 	private int revision;
 	
 
@@ -51,11 +62,11 @@ public class Story {
 		return list;
 	}
 	
-	public void setPos(int pos) {
+	public void setPos(BigDecimal pos) {
 		this.pos = pos;
 	}
 	
-	public int getPos() {
+	public BigDecimal getPos() {
 		return pos;
 	}
 
@@ -74,5 +85,5 @@ public class Story {
 	public int hashCode() {
 		throw new RuntimeException("not implemented");
 	}
-
+	
 }
