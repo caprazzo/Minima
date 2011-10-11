@@ -22,6 +22,7 @@ public class IndexServlet extends HttpServlet {
 		writer.write(IO.toString(in).replaceAll("\\{\\{ JS_SRC_URL \\}\\}", "all.js?rl=" + new Date().getTime()));
 
 		writer.close();
+		in.close();
 	}
 
 }

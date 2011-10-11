@@ -62,37 +62,44 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    		   if (nodes) {
 				    			   for(var i=0; i<nodes.length; i++) {
 				    				   
-				    				   var d = new Ext.util.Draggable(nodes[i], {
-				    					   revert: true,
-				    					   listeners: {
-				    						   drop: function(droppable, draggable, e) {
-				    							   console.log('item dropped', dropped, draggable, e);
-				    						   }
-				    					   }
-				    				   });   
+				    				  
 				    				   
-				    				   
-				    				   var node = nodes[i];
-				    				   var record = list.getRecord(node);
-				    				   new Ext.util.Droppable(nodes[i], {
-				    					   listeners: {
-				    						   drop: function(droppable, draggable, e) {
-				    							   console.log('droped over item', droppable, draggable, e);
-				    						   },
-				    						   dropenter: function(droppable, draggable, e) {
-				    							   console.log('drop-enter', { node: node, record: record, droppable: droppable, draggable: draggable, event:e});
-				    							   if (droppable == node)
-				    								   return;
-				    							   droppable.el.setHeight(droppable.el.getHeight() + draggable.el.getHeight());
-				    						   },
-				    						   dropleave: function(droppable, draggable, e) {
-				    							   console.log('dropleave on item', droppable, draggable, e);
-				    							   if (droppable == node)
-				    								   return;
-				    							   droppable.el.setHeight(droppable.el.getHeight() - draggable.el.getHeight());
-				    						   }
-				    					   }
-				    				   });
+				    				   (function() {
+			    						   	var node = nodes[i];
+			    						   	var record = list.getRecord(node);
+			    				   			console.log('making record droppable', record.data.desc);
+			    				   			
+			    				   			var d = new Ext.util.Draggable(node, {
+					    					   revert: true,
+					    					   node: node,
+					    					   listeners: {
+					    						   drop: function(droppable, draggable, e) {
+					    							   console.log('item dropped', dropped, draggable, e);
+					    						   }
+					    					   }
+			    				   			});   
+			    				   		 
+					    				   new Ext.util.Droppable(node, {
+					    					   listeners: {
+					    						   drop: function(droppable, draggable, e) {
+					    							   //console.log('droped record', droppable, draggable, e);
+					    						   },
+					    						   dropenter: function(droppable, draggable, e) {
+					    							   var node = draggable.node;
+					    							   var source = list.getRecord(node);
+					    							   that.store.remove(source);
+					    							   source.data.pos = record.data.pos / 2;
+					    							   that.store.insert(0, source);
+					    							   console.log('drop-enter', source.data.desc, 'target: ', record.data.desc);
+					    						   },
+					    						   dropleave: function(droppable, draggable, e) {
+					    							   var node = draggable.node;
+					    							   var source = list.getRecord(node);
+					    							   console.log('drop-leave', source.data.desc, 'target: ', record.data.desc);
+					    						   }
+					    					   }
+					    				   });
+				    				   })();
 				    			   }
 				    		   }
 				    	   }

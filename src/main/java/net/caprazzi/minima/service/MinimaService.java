@@ -111,7 +111,7 @@ public class MinimaService {
 		if (!validateStoryData(storyData, cb)) 
 			return;
 		
-		Story story = fromPostStoryJson(storyData);
+		Story story = fromJson(storyData);
 		story.setId(id);
 		story.setRevision(revision+1);	
 		final byte[] writeData = asJson(story);

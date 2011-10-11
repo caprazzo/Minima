@@ -1,77 +1,78 @@
-(function() {
-  Ext.override(Ext.data.Store, {
-    onProxyWrite: function(operation) {
-      var data     = this.data,
-        action   = operation.action,
-        records  = operation.getRecords(),
-        length   = records.length,
-        callback = operation.callback,
-        record, i;
-
-      if (operation.wasSuccessful()) {
-        if (action == 'create' || action == 'update') {
-          for (i = 0; i < length; i++) {
-            record = records[i];
-
-            record.phantom = false;
-            record.join(this);
-            if(action == 'create') {
-              var old = data.findBy(function(item) { return item.phantom == true});
-              data.replace(old.internalId, record);
-            } else {
-              data.replace(record);
-            }
-          }
-        }
-
-        else if (action == 'destroy') {
-          for (i = 0; i < length; i++) {
-            record = records[i];
-
-            record.unjoin(this);
-            data.remove(record);
-          }
-
-          this.removed = [];
-        }
-
-        this.fireEvent('datachanged');
-      }
-
-
-      if (typeof callback == 'function') {
-          callback.call(operation.scope || this, records, operation, operation.wasSuccessful());
-      }
-    }
-  });
-})();
-
-Ext.regApplication('App', {
-	defaultTarget: 'viewport',
-	defaultUrl   : 'Viewport/index',
-	name         : 'App',
-	useHistory   : false,
-	useLoadMask : true,
-
-	launch: function() {
-		Ext.Viewport.init();
-		Ext.Viewport.onOrientationChange();
-
-		var store = new App.Store.Minima();
-		store.load();
-		console.log('loaded');
-		console.log(store.getAt(0));
-		console.log(store.data);
-		
-		this.viewport = new App.View.Viewport({
-			application: this,
-			store: store
-		});
-
-		Ext.dispatch({
-			controller: 'Viewport',
-			action    : 'index',
-			store:	store
-		});
+$(function() {
+	
+	var stories = {};
+	
+	var lists = {
+		todo: {
+			el: $('#list-todo'),
+			items: {}
+		},
+		doing: {
+			el: $('#list-doing'),
+			items: {}
+		},
+		done: {
+			el: $('#list-done'),
+			items: {}
+		}
 	}
+	
+	$('.ui-list').sortable({
+		placeholder: "ui-state-highlight", 
+		connectWith:'.ui-list',
+		update: function(event, ui) {
+			var list_id = event.target.id;
+			var item_id = event.srcElement.id;
+			var item_val = stories[item_id];
+			
+			if ('list-' + item_val.list == list_id) {
+				// new absolute position in ui
+				var new_position = ui.item.index();
+				// old absolute position in ui
+				var old_position = lists[item_val.list][item_val.id].abs_pos;
+				
+				var item_replaced = lists[item_val.list].items[item_abs_position];
+				console.log(list_id,' on.update', list_id, item_val.desc, 'moved from ', old_position, 'to', new_position);
+			}
+		}
+	});
+	
+	
+	$.getJSON('/data/stories', function(data) {
+		
+		// distribute items to the relevant lists
+		$.each(data.stories, function(key, val) {			
+			lists[val.list].items[val.id] = {
+				abs_pos: -1,
+				data: val
+			};
+		});
+		
+		var sorter = function(a, b) {
+			return a.data.pos - b.data.pos;
+		}
+		// sort all items in list using data.pos
+		$.each(lists, function(list, val) {
+			console.log('preparing list', list);
+			
+			var items_sorted = $.map(lists[list].items, function(element) {
+				return element;
+			}).sort(sorter);
+			
+			// update the relative positions of each item
+			// and render each item
+			$.each(items_sorted, function(idx, item) {
+				item.abs_pos = idx;				
+				var story = item.data;
+				
+				var htmlId = 'story-' + story.id;
+				stories[htmlId] = story;
+				console.log(story);
+				$('<li>').html(story.desc).attr('id', htmlId).appendTo(lists[list].el);
+			});
+		});
+	
+		console.log('lists prepared', lists);						
+	});
+	
 });

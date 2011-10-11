@@ -2,7 +2,20 @@
 curl -i localhost:8989/data/stories
 
 # create new story
-curl -X POST -d'{"stories":[{"desc":"desc", "list":"todo"}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"first todo", "list":"todo", "pos":65536}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"second todo", "list":"todo", "pos":131072}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"third todo", "list":"todo", "pos":196608}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"fourth todo", "list":"todo", "pos":262144}]}' http://localhost:8989/data/stories
+
+curl -X POST -d'{"stories":[{"desc":"first doing", "list":"doing", "pos":65536}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"second doing", "list":"doing", "pos":131072}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"third doing", "list":"doing", "pos":196608}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"fourth doing", "list":"doing", "pos":262144}]}' http://localhost:8989/data/stories
+
+curl -X POST -d'{"stories":[{"desc":"first done", "list":"done", "pos":65536}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"second done", "list":"done", "pos":131072}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"third done", "list":"done", "pos":196608}]}' http://localhost:8989/data/stories
+curl -X POST -d'{"stories":[{"desc":"fourth done", "list":"done", "pos":262144}]}' http://localhost:8989/data/stories
 
 #update a story
 curl -X PUT -d'{"desc":"newdesc", "list":"done"}' http://localhost:8989/data/stories/2p1tg4n/1

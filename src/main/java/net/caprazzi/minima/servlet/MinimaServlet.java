@@ -59,8 +59,8 @@ public class MinimaServlet extends HttpServlet {
 			return;
 		}
 		
-		String key = parts[2];
-		int revision = Integer.parseInt(parts[3]);
+		String key = parts[3];
+		int revision = Integer.parseInt(parts[4]);
 		byte[] story = IO.readBytes(req.getInputStream());
 		minimaService.updateStory(key, revision, story, new UpdateStory() {
 

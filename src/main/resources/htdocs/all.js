@@ -1,412 +1,121 @@
-
-//./js/index.js
-
-(function() {
-  Ext.override(Ext.data.Store, {
-    onProxyWrite: function(operation) {
-      var data     = this.data,
-        action   = operation.action,
-        records  = operation.getRecords(),
-        length   = records.length,
-        callback = operation.callback,
-        record, i;
-
-      if (operation.wasSuccessful()) {
-        if (action == 'create' || action == 'update') {
-          for (i = 0; i < length; i++) {
-            record = records[i];
-
-            record.phantom = false;
-            record.join(this);
-            if(action == 'create') {
-              var old = data.findBy(function(item) { return item.phantom == true});
-              data.replace(old.internalId, record);
-            } else {
-              data.replace(record);
-            }
-          }
-        }
-
-        else if (action == 'destroy') {
-          for (i = 0; i < length; i++) {
-            record = records[i];
-
-            record.unjoin(this);
-            data.remove(record);
-          }
-
-          this.removed = [];
-        }
-
-        this.fireEvent('datachanged');
-      }
-
-
-      if (typeof callback == 'function') {
-          callback.call(operation.scope || this, records, operation, operation.wasSuccessful());
-      }
-    }
-  });
-})();
-
-Ext.regApplication('App', {
-	defaultTarget: 'viewport',
-	defaultUrl   : 'Viewport/index',
-	name         : 'App',
-	useHistory   : false,
-	useLoadMask : true,
-
-	launch: function() {
-		Ext.Viewport.init();
-		Ext.Viewport.onOrientationChange();
-
-		var store = new App.Store.Minima();
-		store.load();
-		console.log('loaded');
-		console.log(store.getAt(0));
-		console.log(store.data);
-		
-		this.viewport = new App.View.Viewport({
-			application: this,
-			store: store
-		});
-
-		Ext.dispatch({
-			controller: 'Viewport',
-			action    : 'index',
-			store:	store
-		});
-	}
-});
-
-//./js/controllers/Controller.Viewport.js
-
-/**
- * Chat Controller
- *
- * @author Nils Dehl <mail@nils-dehl.de>
- */
-Ext.regController('Viewport', {
-
-	index: function(options) {
-		console.log('[Controller.Viewport] index', options);
-		this.store = options.store;
-		//this.showView();
-	},
+$(function() {
 	
-	showView: function() {
-		if (!this.viewPort) {
-			this.viewPort = this.render({
-				xtype: 'App.View.Viewport'
-			});
+	var stories = {};
+	
+	var lists = {
+		todo: {
+			el: $('#list-todo'),
+			items: {}
+		},
+		doing: {
+			el: $('#list-doing'),
+			items: {}
+		},
+		done: {
+			el: $('#list-done'),
+			items: {}
 		}
 	}
-});
-
-//./js/models/Model.Story.js
-
-Ext.regModel('Story', {
-	fields: [
-		{
-			name: 'revision',
-			type: 'number'
-		},
-		{
-			name: 'id',
-			type: 'string'
-		},
-		{
-			name: 'desc',
-			type: 'string'
-		},
-		{
-			name: 'list',
-			type: 'string'
-		},
-		{
-			name: 'pos',
-			type: 'number'
-		}
-	]
-});
-
-//./js/stores/Store.Minima.js
-
-Ext.ns('App.Store');
-App.Store.Minima = Ext.extend(Ext.data.Store, {
-	constructor: function(cfg) {
-		cfg = cfg || {};
-		
-		var config = Ext.apply({
-			model: 'Story',
-			storeId: 'MinimaStore',
-			autoSave: true,
+	
+	$('.ui-list').sortable({
+		placeholder: "ui-state-highlight", 
+		connectWith:'.ui-list',
+		update: function(event, ui) {
+			var list_id = event.target.id;
+			var item_id = event.srcElement.id;
+			var item_val = stories[item_id];
+			var num_items = ui.item.parent().children().length;
 			
-			sorters: [
-			    {
-			    	property: 'pos',
-			    	direction: 'ASC'
-			    }
-			],
-			
-			proxy: {
-				type: 'rest',
-				url: 'data/stories',
-				record: 'stories',
-				writer: {
-					type: 'json',
-					root: 'stories'
-				},
-				reader: {
-					type: 'json',
-					root: 'stories'
+			if ('list-' + item_val.list == list_id) {
+				// new absolute position in ui
+				var new_position = ui.item.index();
+				// old absolute position in ui
+				var old_position = lists[item_val.list].items[item_val.id].abs_pos;
+				
+				console.log(list_id,' on.update', item_val.desc, ' moved from ', old_position, 'to', new_position);
+				// item is in between other two items
+				
+				if (new_position == old_position) {
+					console.log('item remained in same position'); // event should not fire
+					return;
 				}
-			},
-			
-			listeners: {
-				datachanged: function() {
-					console.log('[Store.MinimaStore] datachanged');
+				
+				if (new_position > 0 && new_position < num_items-1) {
+					
+					var previous_item = ui.item.parent().children().get(new_position -1 );
+					var previous_item_val = stories[previous_item.id];
+					var next_item = ui.item.parent().children().get(new_position +1 );
+					var next_item_val = stories[next_item.id];										
+					var new_pos = (next_item_val.pos - previous_item_val.pos) / 2;
+					console.log(list_id, ' on.update ', item_val.desc, 'is between items', previous_item_val, next_item_val, 'new pos', new_pos);
+					
+					// send update to server
+					var updated_story = item_val;
+					updated_story.pos = new_pos;
+					$.ajax({
+						type: 'PUT',
+						url: '/data/stories/' + item_val.id + '/' + item_val.revision,
+						contentType: 'application/json',
+						data: JSON.stringify(updated_story),
+						dataType: 'json',
+						processData: false,
+						success: function(data) {
+							console.log('received back', data);	
+						}
+					});
 				}
+				else if (new_position == 0) {
+					var next_item = ui.item.parent().children().get(new_position +1 );
+					var next_item_val = stories[next_item.id];
+					var new_pos = next_item_val.pos / 2;
+					console.log(list_id, ' on.update ', item_val.desc, 'is first');
+				}
+				else if (new_position == num_items-1) {
+					console.log(list_id, ' on.update ', item_val.desc, 'is last');
+				}
+				
+				//var item_replaced = lists[item_val.list].items[item_abs_position];
+				
 			}
-		}, cfg);
-		App.Store.Minima.superclass.constructor.call(this, config);
-	}
-});
-Ext.reg('App.Store.Minima', App.Store.Minima);
-
-//./js/views/View.Viewport.js
-
-Ext.ns('App.View');
-
-App.View.Viewport = Ext.extend(Ext.Panel, {
-	id        : 'viewport',
-	layout    : 'card',
-	fullscreen: true,
-
-
-	initComponent: function(options) {
-		console.log('[View.Viewport] initComponent', this.store);
-		var that = this;
-		var config = {
-			xtype: 'panel',
-			layout: {
-				type: 'hbox',
-				align: 'stretch'
-			},
-			items: [
-			   { 
-				   xtype: 'panel',
-				   title: 'todo',
-				   flex: 1,
-				   dockedItems: [{
-					   dock: 'top',
-					   html: 'todo'
-				   }],
-				   items: [{
-				       xtype: 'list',
-				       itemId: 'todoList',
-				       scroll: false,
-				       singleSelect: true,
-				       store: this.store,
-				       itemSelector: 'div.item',
-				       droppable: true,
-				       collectData: function(records, startIndex) {
-				    	   var r = [];
-				    	   for( var i=0; i<records.length; i++ ) {
-				               if( records[i].data.list == 'todo' )
-				                   r.push( this.prepareData(records[i].data, 0, records[i]) );
-				    	   }
-				           return r;
-				       },
-				       itemTpl: new Ext.XTemplate('<tpl for="."><div class="around-item"><div class="item">{desc}</div></div></tpl>'),
-				       listeners: {
-				    	   update: function(e) {
-				    		   var list = that.query('#todoList')[0];
-				    		   //console.log('after render', list.el, e.getNodes());
-				    		   
-				    		   /*
-				    		   new Ext.util.Droppable(list.el.id , {
-				    			   listeners: { 
-				    				   drop: function(droppable, draggable, ev) {
-				    					   console.log('dropped item in list', droppable, draggable);
-				    				   },
-				    				   dropenter: function(droppable, draggable, ev) {
-				    					   console.log('entering drop on list', droppable, draggable);
-				    				   }
-				    			   }
-				    		   });
-				    		   */
-				    		   var nodes = e.getNodes();
-				    		   if (nodes) {
-				    			   for(var i=0; i<nodes.length; i++) {
-				    				   
-				    				   var d = new Ext.util.Draggable(nodes[i], {
-				    					   revert: true,
-				    					   listeners: {
-				    						   drop: function(droppable, draggable, e) {
-				    							   console.log('item dropped', dropped, draggable, e);
-				    						   }
-				    					   }
-				    				   });   
-				    				   
-				    				   
-				    				   var node = nodes[i];
-				    				   var record = list.getRecord(node);
-				    				   new Ext.util.Droppable(nodes[i], {
-				    					   listeners: {
-				    						   drop: function(droppable, draggable, e) {
-				    							   console.log('droped over item', droppable, draggable, e);
-				    						   },
-				    						   dropenter: function(droppable, draggable, e) {
-				    							   console.log('drop-enter', { node: node, record: record, droppable: droppable, draggable: draggable, event:e});
-				    							   if (droppable == node)
-				    								   return;
-				    							   droppable.el.setHeight(droppable.el.getHeight() + draggable.el.getHeight());
-				    						   },
-				    						   dropleave: function(droppable, draggable, e) {
-				    							   console.log('dropleave on item', droppable, draggable, e);
-				    							   if (droppable == node)
-				    								   return;
-				    							   droppable.el.setHeight(droppable.el.getHeight() - draggable.el.getHeight());
-				    						   }
-				    					   }
-				    				   });
-				    			   }
-				    		   }
-				    	   }
-				       }
-				   }, 
-				   {
-					   xtype: 'textareafield',
-		               itemId: 'txt-new-story-todo',
-		               hidden: true,
-		               listeners: {
-		            	   blur: function(el, ev) {
-		            		   console.log('blur', ev.target.value);
-		            	   },
-		            	   keyup: function(el, ev) {
-		            		   //console.log('keyup', ev, ev.browserEvent.keyCode);		            		   
-		            		   if (ev.browserEvent.keyCode == 13) {
-		            			   console.log('submit', ev.target.value);
-		            			   
-		            			   // get last value in store
-		            			   var lastStory = that.store.last();
-		            			   var startPos = (lastStory) ? lastStory.data.pos : 0; 
-		            			   var pos = startPos + 65536;
-		            			   
-		            			   console.log('loaded last story', lastStory);
-		            			   var newStory = {
-		            			      desc: Ext.util.Format.trim(ev.target.value),
-		            			      list: 'todo',
-		            			      pos: pos
-		            			   }
-		            			   
-		            			   that.store.add(newStory);
-		            			   that.store.sync();
-		            			   var input = that.query('#txt-new-story-todo')[0];
-		            			   input.hide();
-		            			   input.reset();
-		            			   var btn = that.query('#btn-create-todo')[0];
-		            			   btn.show();
-		            			   btn.enable();
-		            		   }
-		            	   }
-		               }
-				   },
-				   {					 
-					   xtype: 'button',
-					   itemId: 'btn-create-todo',
-					   text: 'create',
-					   handler: function(el) {
-						   el.hide();
-						   console.log('[View.Viewport] btn.create.todo');
-						   var input = that.query('#txt-new-story-todo')[0];
-						   input.show();
-					   }
-				   }]
-			   },
-			   { 
-				   xtype: 'panel',
-				   title: 'doing',
-				   flex: 1,
-				   dockedItems: [{
-					   dock: 'top',
-					   html: 'doing'
-				   }],
-				   items: [{
-				       xtype: 'list',
-				       itemId: 'doingList',
-				       droppable: true,
-				       store: this.store,
-				       itemSelector: 'foo.bar',
-				       droppable: true,
-				       collectData: function(records, startIndex) {
-				    	   var r = [];
-				    	   for( var i=0; i<records.length; i++ ) {
-				               if( records[i].data.list == 'doing' )
-				                   r.push( this.prepareData(records[i].data, 0, records[i]) );
-				    	   }
-				           return r;
-				       },
-				       itemTpl: new Ext.XTemplate('{desc}'),
-				       listeners: {
-				    	   drop: function(droppable, draggable, e) {
-				    		   console.log('dropped', dropped, draggable, e);
-				    	   }
-				       }
-				   }, {
-					   dock: 'bottom',
-					   html: 'create'
-				   }]
-			   },
-			   { 
-				   xtype: 'panel',
-				   title: 'done',
-				   flex: 1,
-				   dockedItems: [{
-					   dock: 'top',
-					   html: 'done'
-				   }],
-				   items: [{
-				       xtype: 'list',
-				       itemId: 'doneList',
-				       droppable: true,
-				       store: this.store,
-				       itemSelector: 'foo.bar',
-				       collectData: function(records, startIndex) {
-				    	   var r = [];
-				    	   for( var i=0; i<records.length; i++ ) {
-				               if( records[i].data.list == 'done' )
-				                   r.push( this.prepareData(records[i].data, 0, records[i]) );
-				    	   }
-				           return r;
-				       },
-				       itemTpl: new Ext.XTemplate('{desc}')
-				       ,
-				       listeners: {
-				    	   drop: function(droppable, draggable, e) {
-				    		   console.log('dropped', dropped, draggable, e);
-				    	   }
-				       }
-				   }, {
-					   dock: 'bottom',
-					   html: 'create'
-				   }]
-			   },
-			]
 		}
+	});
+	
+	
+	$.getJSON('/data/stories', function(data) {
 		
-		Ext.apply(this, config);
-		App.View.Viewport.superclass.initComponent.call(this);
+		// distribute items to the relevant lists
+		$.each(data.stories, function(key, val) {			
+			lists[val.list].items[val.id] = {
+				abs_pos: -1,
+				data: val
+			};
+		});
 		
-		this.store.on(
-			'datachanged',
-			function() {
-				console.log('[View] store.on.datachanged');
-			},
-			this
-		);
-	}
+		var sorter = function(a, b) {
+			return a.data.pos - b.data.pos;
+		}
+		// sort all items in list using data.pos
+		$.each(lists, function(list, val) {
+			console.log('preparing list', list);
+			
+			var items_sorted = $.map(lists[list].items, function(element) {
+				return element;
+			}).sort(sorter);
+			
+			// update the relative positions of each item
+			// and render each item
+			$.each(items_sorted, function(idx, item) {
+				item.abs_pos = idx;				
+				var story = item.data;
+				
+				var htmlId = 'story-' + story.id;
+				stories[htmlId] = story;
+				console.log(story);
+				$('<li>').html(story.desc).attr('id', htmlId).appendTo(lists[list].el);
+			});
+		});
+	
+		console.log('lists prepared', lists);						
+	});
+	
 });
-
-Ext.reg('App.View.Viewport', App.View.Viewport);
