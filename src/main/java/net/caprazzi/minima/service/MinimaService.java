@@ -10,7 +10,7 @@ import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.minima.PostStory;
+import net.caprazzi.minima.Stories;
 import net.caprazzi.minima.Story;
 
 import org.codehaus.jackson.JsonFactory;
@@ -132,7 +132,7 @@ public class MinimaService {
 	public Story fromPostStoryJson(byte[] story) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			PostStory postStory = mapper.readValue(story, PostStory.class);
+			Stories postStory = mapper.readValue(story, Stories.class);
 			return postStory.getStories().get(0);			
 		} catch (Exception e) {
 			throw new RuntimeException(e);

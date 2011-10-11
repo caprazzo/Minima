@@ -5,7 +5,9 @@ public class Story {
 	private String id;
 	private String desc;
 	private String list;
+	private int pos = -1;
 	private int revision;
+	
 
 	public Story() {
 		// this constructor intentionally empty: jackson requires it for automagic mapping
@@ -47,6 +49,14 @@ public class Story {
 	
 	public String getList() {
 		return list;
+	}
+	
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+	
+	public int getPos() {
+		return pos;
 	}
 
 	@Override

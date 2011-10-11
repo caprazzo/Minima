@@ -40,7 +40,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    	   }
 				           return r;
 				       },
-				       itemTpl: new Ext.XTemplate('<tpl for="."><div class="item">{desc}</div></tpl>'),
+				       itemTpl: new Ext.XTemplate('<tpl for="."><div class="around-item"><div class="item">{desc}</div></div></tpl>'),
 				       listeners: {
 				    	   update: function(e) {
 				    		   var list = that.query('#todoList')[0];
@@ -61,6 +61,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    		   var nodes = e.getNodes();
 				    		   if (nodes) {
 				    			   for(var i=0; i<nodes.length; i++) {
+				    				   
 				    				   var d = new Ext.util.Draggable(nodes[i], {
 				    					   revert: true,
 				    					   listeners: {
@@ -70,23 +71,26 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 				    					   }
 				    				   });   
 				    				   
+				    				   
+				    				   var node = nodes[i];
+				    				   var record = list.getRecord(node);
 				    				   new Ext.util.Droppable(nodes[i], {
 				    					   listeners: {
 				    						   drop: function(droppable, draggable, e) {
-				    							   console.log('droppred over item', droppable, draggable, e);
+				    							   console.log('droped over item', droppable, draggable, e);
 				    						   },
 				    						   dropenter: function(droppable, draggable, e) {
-				    							   console.log('dropenter on item', droppable, draggable, e);
-				    							   var list = that.query('#todoList')[0]
-				    							   list.ownerCt.insert(1, new Ext.Panel('{html:"foo"}'));
-				    							   list.ownerCt.doComponentLayout();
-				    							   list.doComponentLayout();
+				    							   console.log('drop-enter', { node: node, record: record, droppable: droppable, draggable: draggable, event:e});
+				    							   if (droppable == node)
+				    								   return;
+				    							   droppable.el.setHeight(droppable.el.getHeight() + draggable.el.getHeight());
 				    						   },
 				    						   dropleave: function(droppable, draggable, e) {
 				    							   console.log('dropleave on item', droppable, draggable, e);
-				    							   //list.insert(0, new Ext.Panel('{html:"foo"}'));
-				    							   //list.doComponentLayout();
-				    						   },
+				    							   if (droppable == node)
+				    								   return;
+				    							   droppable.el.setHeight(droppable.el.getHeight() - draggable.el.getHeight());
+				    						   }
 				    					   }
 				    				   });
 				    			   }
@@ -103,7 +107,7 @@ App.View.Viewport = Ext.extend(Ext.Panel, {
 		            		   console.log('blur', ev.target.value);
 		            	   },
 		            	   keyup: function(el, ev) {
-		            		   console.log('keyup', ev, ev.browserEvent.keyCode);		            		   
+		            		   //console.log('keyup', ev, ev.browserEvent.keyCode);		            		   
 		            		   if (ev.browserEvent.keyCode == 13) {
 		            			   console.log('submit', ev.target.value);
 		            			   var newStory = {

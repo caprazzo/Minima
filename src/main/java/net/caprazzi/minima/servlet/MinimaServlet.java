@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.caprazzi.minima.PostStory;
+import net.caprazzi.minima.Stories;
 import net.caprazzi.minima.Story;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
@@ -113,7 +113,7 @@ public class MinimaServlet extends HttpServlet {
 			
 			 ObjectMapper mapper = new ObjectMapper();
 			 try {
-				mapper.writeValue(out, new PostStory(story));
+				mapper.writeValue(out, new Stories(story));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
