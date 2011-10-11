@@ -1,5 +1,8 @@
 $(function() {
 	
+
+	
+	
 	var stories = {};
 	
 	var lists = {
@@ -46,7 +49,7 @@ $(function() {
 					var previous_item_val = stories[previous_item.id];
 					var next_item = ui.item.parent().children().get(new_position +1 );
 					var next_item_val = stories[next_item.id];										
-					var new_pos = (next_item_val.pos - previous_item_val.pos) / 2;
+					var new_pos = previous_item_val.pos + ((next_item_val.pos - previous_item_val.pos) / 2);
 					console.log(list_id, ' on.update ', item_val.desc, 'is between items', previous_item_val, next_item_val, 'new pos', new_pos);
 					
 					// send update to server
@@ -80,11 +83,82 @@ $(function() {
 		}
 	});
 	
+	function Minima() {
+		this.board = {
+			lists: {},
+			stories: {}
+		};
+
+		this.ui = {
+			idx: {
+				data_id: {},
+				html_id: {}
+			}
+			lists: {},
+			stories: {}
+		};
+		
+		this.id_to_el_map = {};
+		this.el_to_id_map = {};
+	}
 	
+	Minima.prototype.receiveBoard = function(board) {
+		console.log('[Minima] receiveBoard', board);
+		this.receiveLists(board.lists);
+		this.receiveStories(board.stories);
+		console.log('[Minima] received board', this.data);
+		this.doLayout();
+	}
+	
+	Minima.prototype.receiveLists = function(lists) {
+		console.log('[Minima] receiveLists', lists);
+		var that = this;
+		$.each(lists, function(idx, list) {
+			that.board.lists[list.id] = list;
+		});
+	}
+	
+	Minima.prototype.receiveStories = function(stories) {
+		console.log('[Minima] receiveStories', stories);
+		var that = this;
+		$.each(stories, function(idx, story) {
+			that.board.stories[story.id] = story;
+		});
+	}
+	
+	Minima.prototype.doLayout = function() {
+		console.log('[Minima] doLayout');
+		// create list containers if missing
+		// already created in html (lists are static)
+		$.each(this.board.lists, function(key, story) {
+			var html_id = 'list-' + story.id;
+			this.ui.idx.data_id[story.id] = html_id;
+			this.ui.idx.html_id[html_id] = story.id;
+			var el = $('#list-' + story.id);
+			this.ui.lists[story.id] = { el: el };
+		});		
+	}		
+	
+	var minima = new Minima();
+	
+	// lists are static for now, but Minima need not know that
+	var staticLists = [ { name: 'todo', id: 'todo', pos:65536 }, { name: 'doing', id: 'doing', pos:131072 }, { name: 'done', id: 'done', pos:196608 }];
 	$.getJSON('/data/stories', function(data) {
+		data.lists = staticLists;
+		minima.receiveBoard(data);				
+	});
+	
+	
+	function receiveAllLists(lists) {
+		$.each(lists, function(idx, val) {
+			
+		});
+	}
+	
+	function receiveAllStories(stories) {
 		
 		// distribute items to the relevant lists
-		$.each(data.stories, function(key, val) {			
+		$.each(stories, function(key, val) {			
 			lists[val.list].items[val.id] = {
 				abs_pos: -1,
 				data: val
@@ -115,7 +189,9 @@ $(function() {
 			});
 		});
 	
-		console.log('lists prepared', lists);						
-	});
+		console.log('lists prepared', lists);
+	}
+	
+	
 	
 });
