@@ -37,7 +37,7 @@ public class MinimaServiceTest {
 	@Test
 	public void create_should_put_new_story_in_db() {
 		byte[] data = service.asJson(new Story("key", "dsec", "tofo"));
-		service.createStory(data, TestUtils.createStoryNoop);
+		service.createStory("id", data, TestUtils.createStoryNoop);
 		verify(db).put(anyString(), eq(0), any(byte[].class), any(Put.class));
 	}
 	

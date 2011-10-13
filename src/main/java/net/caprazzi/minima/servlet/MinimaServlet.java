@@ -94,7 +94,9 @@ public class MinimaServlet extends HttpServlet {
 			return;
 		}
 		
-		minimaService.createStory(IO.readBytes(req.getInputStream()), new CreateStory() {
+		String key = parts[3];
+		
+		minimaService.createStory(key, IO.readBytes(req.getInputStream()), new CreateStory() {
 			@Override public void success(Story saved) {
 				sendStoryJson(resp, 201, saved);
 			}
@@ -118,7 +120,7 @@ public class MinimaServlet extends HttpServlet {
 			
 			 ObjectMapper mapper = new ObjectMapper();
 			 try {
-				mapper.writeValue(out, new Stories(story));
+				mapper.writeValue(out, story);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

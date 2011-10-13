@@ -60,10 +60,9 @@ public class MinimaService {
 		});
 	}
 	
-	public void createStory(byte[] data, final CreateStory cb) {
+	public void createStory(String key, byte[] data, final CreateStory cb) {
 		
-		String key = randomString();
-		Story story = fromPostStoryJson(data);
+		Story story = fromJson(data);
 		story.setId(key);
 		story.setRevision(1);	
 		
@@ -72,7 +71,6 @@ public class MinimaService {
 			return;
 		}
 	
-		
 		db.put(key, 0, asJson(story), new Put() {
 
 			@Override

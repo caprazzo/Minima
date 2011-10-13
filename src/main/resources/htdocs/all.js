@@ -83,11 +83,13 @@ $(function() {
 		}
 	});
 	
-	function Minima() {
-		this.board = {
-			lists: {},
-			stories: {}
-		};
+
+	
+
+	
+	/*
+	function MinimaView() {
+		
 
 		this.ui = {
 			idx: {
@@ -100,30 +102,6 @@ $(function() {
 		
 		this.id_to_el_map = {};
 		this.el_to_id_map = {};
-	}
-	
-	Minima.prototype.receiveBoard = function(board) {
-		console.log('[Minima] receiveBoard', board);
-		this.receiveLists(board.lists);
-		this.receiveStories(board.stories);
-		console.log('[Minima] received board', this.data);
-		this.doLayout();
-	}
-	
-	Minima.prototype.receiveLists = function(lists) {
-		console.log('[Minima] receiveLists', lists);
-		var that = this;
-		$.each(lists, function(idx, list) {
-			that.board.lists[list.id] = list;
-		});
-	}
-	
-	Minima.prototype.receiveStories = function(stories) {
-		console.log('[Minima] receiveStories', stories);
-		var that = this;
-		$.each(stories, function(idx, story) {
-			that.board.stories[story.id] = story;
-		});
 	}
 	
 	Minima.prototype.doLayout = function() {
@@ -139,14 +117,11 @@ $(function() {
 		});		
 	}		
 	
-	var minima = new Minima();
+	
+	var store = new MinimaStore();
 	
 	// lists are static for now, but Minima need not know that
-	var staticLists = [ { name: 'todo', id: 'todo', pos:65536 }, { name: 'doing', id: 'doing', pos:131072 }, { name: 'done', id: 'done', pos:196608 }];
-	$.getJSON('/data/stories', function(data) {
-		data.lists = staticLists;
-		minima.receiveBoard(data);				
-	});
+	
 	
 	
 	function receiveAllLists(lists) {
@@ -191,7 +166,9 @@ $(function() {
 	
 		console.log('lists prepared', lists);
 	}
+	*/
 	
+
 	
 	
 });

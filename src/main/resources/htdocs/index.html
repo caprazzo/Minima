@@ -5,10 +5,27 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 	
-	<script src="js/Columnizer-jQuery-Plugin/src/jquery.columnizer.js" type="text/javascript"></script>
+	<script src="js/Minima.js" type="text/javascript"></script>
+	
+	<script src="js/model/Model.Board.js" type="text/javascript"></script>
+	<script src="js/model/Model.List.js" type="text/javascript"></script>
+	<script src="js/model/Model.Story.js" type="text/javascript"></script>
+	
+	<script src="js/viewModel/ViewModel.Board.js" type="text/javascript"></script>
+	<script src="js/viewModel/ViewModel.List.js" type="text/javascript"></script>
+	<script src="js/viewModel/ViewModel.Story.js" type="text/javascript"></script>
+	
+	<script src="js/view/View.List.js" type="text/javascript"></script>
+	<script src="js/view/View.Story.js" type="text/javascript"></script>
+	<script src="js/view/View.Board.js" type="text/javascript"></script>
+	
+	<script src="js/MinimaView.js" type="text/javascript"></script>
+	<script src="js/MinimaController.js" type="text/javascript"></script>
+	<script src="js/MinimaClient.js" type="text/javascript"></script>
+	<script src="js/MinimaStore.js" type="text/javascript"></script>
+	<script src="js/index.js" type="text/javascript"></script>
 	
 	<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" rel="stylesheet"></style>
-	<script type="text/javascript" src="{{ JS_SRC_URL }}"></script>
 	
 	<style type="text/css">
 	#board {
@@ -59,10 +76,18 @@
 	</style>
 </head>
 <body>
+
+	<div id="content"></div>
+	
+	<!-- 
 	<div id="board">
 		<div id="list-todo-wrapper" class="list-wrapper">
 			<div class="list-header">TODO</div>
 			<ul id="list-todo" class="ui-list"></ul>
+			<div class="list-footer">
+				<textarea></textarea>
+				<button>add</button>
+			</div>
 		</div>
 		<div id="list-doing-wrapper" class="list-wrapper">
 			<div class="list-header">DOING</div>
@@ -75,5 +100,6 @@
 		
 		<br clear="both" />
 	</div>
+	 -->
 </body>
 </html>
