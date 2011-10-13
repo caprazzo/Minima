@@ -4,7 +4,7 @@ function ModelList() {
 	this.stories = {};
 }
 
-ModelList.fromJson = function(json_list) {
+ModelList.fromObject = function(json_list) {
 	var list = new ModelList();
 	list.setName(json_list.name);
 	list.setId(json_list.id);

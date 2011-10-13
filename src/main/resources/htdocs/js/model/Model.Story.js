@@ -15,17 +15,27 @@ ModelStory.newStory = function(list_id, text, pos) {
 	return story;
 }
 
+ModelStory.prototype.asObject = function() {
+	return {
+		id: this.id,
+		pos: this.pos,
+		desc: this.desc,
+		revision: this.rev,
+		list: this.list_id
+	}
+}
+
 ModelStory.initialPos = function() {
 	return 65536;
 }
 
-ModelStory.fromJson = function(json_story) {
+ModelStory.fromObject = function(story_obj) {
 	var story = new ModelStory();
-	story.setId(json_story.id);
-	story.setListId(json_story.list);
-	story.setDesc(json_story.desc);
-	story.setPos(json_story.pos);
-	story.setRevision(json_story.revision);
+	story.setId(story_obj.id);
+	story.setListId(story_obj.list);
+	story.setDesc(story_obj.desc);
+	story.setPos(story_obj.pos);
+	story.setRevision(story_obj.revision);
 	return story;
 }
 
@@ -96,8 +106,3 @@ ModelStory.prototype.reposition = function(prevModel, nextModel) {
 ModelStory.prototype.isBefore = function(other) {
 	return this.getPos() < other.getPos();
 }
-
-ModelStory.prototype.toString = function() {
-	return 'ModelStory';
-}
-

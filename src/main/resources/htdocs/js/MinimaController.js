@@ -13,7 +13,7 @@ function MinimaController(options) {
 	
 	//this.view.setList(listModel);
 	//this.view.setList(listModel);
-	
+	/*
 	var newList = ModelList.fromJson({id: 'todo', name: 'TODO'});
 	this.view.setList(newList);
 	
@@ -23,7 +23,7 @@ function MinimaController(options) {
 	
 	var doneList = ModelList.fromJson({id: 'done', name: 'DONE'});
 	this.view.setList(doneList);
-	
+	*/
 	/*
 	var story = ModelStory.fromJson({ id:'story_1', list:'todo', desc:'story-1', pos: 65536 });
 	this.view
@@ -53,10 +53,31 @@ function MinimaController(options) {
 	//this._initClient();
 	//this._initView();
 	
-	//Minima.onCreateStory(function(storyModel) {
-	//	console.log('[Controller] new story created');
-	//	this.store.addNewStory(storyModel);
-	//}, this);
+	var view = this.view;
+	Minima.onCreateStory(function(storyModel) {
+		console.log('[Controller] new story created');
+		this.client.saveStory(storyModel, function(recv) {
+			var listViewId = ViewList.viewId(recv.getListId());
+			view.getList(listViewId).setStory(recv);
+		});
+	}, this);
+	
+	this.client.onBoard(function(board) {
+		console.log('[Controller] client.on.board', board);
+		
+		$.each(board.lists, function(idx, list_obj) {
+			view.setList(ModelList.fromObject(list_obj));
+		});
+		
+		$.each(board.stories, function(idx, story_obj) {
+			var storyModel = ModelStory.fromObject(story_obj);
+			var listViewId = ViewList.viewId(storyModel.getListId());
+			view.getList(listViewId).setStory(storyModel);
+		});
+		
+	}, this);
+	
+	this.client.loadBoard();
 }
 
 MinimaController.prototype._initClient = function() {
@@ -133,8 +154,5 @@ MinimaController.prototype._initView = function() {
 
 MinimaController.prototype.start = function() {
 	console.log('[Contoller] start');
-	//this.client.loadBoard();
-	
-	this.view
-	
+	this.client.loadBoard();
 }

@@ -16,7 +16,7 @@ MinimaStore.prototype.updateStory = function(story) {
 	this.board.stories[story.id] = story;
 }
 
-MinimaStore.addNewStory = function(story) {
+MinimaStore.prototype.addNewStory = function(story) {
 	console.log('[Store] add new story', story);
 	
 }

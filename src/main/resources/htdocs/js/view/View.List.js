@@ -284,6 +284,7 @@ ViewList.prototype._createStory = function(text) {
 	var pos = max_pos + 65536;
 	var storyModel = ModelStory.newStory(this.listVm.getId(), text, pos);
 	this.setStory(storyModel);
+	Minima.fireCreateStory(storyModel);
 }
 
 ViewList.prototype.getRoot = function() {

@@ -33,19 +33,19 @@ MinimaClient.prototype.loadBoard = function() {
 	});
 }
 
-MinimaClient.prototype.createStory = function(story, successFn) {
+MinimaClient.prototype.saveStory = function(story, successFn) {
 	var client = this;
 	$.ajax({
 		type: 'POST',
-		url: '/data/stories/' + story.id,
+		url: '/data/stories/' + story.getId(),
 		contentType: 'application/json',
-		data: JSON.stringify(story),
+		data: JSON.stringify(story.asObject()),
 		dataType: 'json',
 		processData: false,
 		success: function(data) {
 			console.log('[Client] createStory.success', data);
-			successFn(data);
-			client.fireReceiveStory(data);
+			successFn(ModelStory.fromObject(data));
+			//client.fireReceiveStory(data);
 		}
 	});	
 }
