@@ -14,10 +14,12 @@ ViewBoard.prototype.refresh = function() {
 }
 
 ViewBoard.prototype.setList = function(listModel) {
-	var listView = this.lists[listModel.getId()];
+	var viewId = ViewList.viewId(listModel.getId());
+	var listView = this.lists[viewId];
+	
 	if (!listView) {
 		listView = new ViewList(this, listModel);
-		this.lists[listModel.getId()] = listView;
+		this.lists[listView.getViewId()] = listView;
 	}
 	else {
 		listView.updateModel(listModel);
@@ -43,7 +45,6 @@ ViewBoard.prototype.findStoryView = function(story_id) {
 ViewBoard.prototype._createStructure = function() {
 	this.ui.root = $('<div id="board"></div>')
 		.appendTo(this.ui.parent);
-	
 }
 
 ViewBoard.prototype.addChildView = function(viewObject) {

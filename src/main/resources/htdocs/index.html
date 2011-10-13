@@ -28,22 +28,51 @@
 	<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" rel="stylesheet"></style>
 	
 	<style type="text/css">
+	html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{border:0;outline:0;vertical-align:baseline;background:transparent;margin:0;padding:0;}
+	body,input,select,textarea{line-height:1;font:14px/18px "Helvetica Neue",Arial,Helvetica,sans-serif;color:#444444;}
+	ol,ul{list-style:none;}
+	h3,h4,h5,h6{font-size:16px;line-height:20px;margin-bottom:6px;}
+	h1,h2,h3,h4,h5,h6 { font-weight: bold; color: #222; }
 	#board {
 		margin: 0px 100px;
 	}
 	.column{ padding: 5px; }
 	.ui-list {
-		padding: 5px;
+		padding: 0;
+		min-height: 15px;
 		list-style-type: none;
 		background-color: #eee;
 		display: block;
 	}
 	.ui-list li {
-		padding: 5px;
-		margin: 5px;
+		padding: 6px;
+		margin: 5px 0px 5px 0px;
 		background-color: #fefefe;
 		border: 1px solid #ccc;
-		border-radius: 4px
+		border-radius: 4px;
+	}
+	
+	.ui-list li div {
+		font-size: 14px;
+		line-height: 15px;
+	}
+	
+	.list-header {
+		margin-bottom: 11px;
+	}
+	
+	.list-footer {
+		margin-top: 11px;
+	}
+	
+	.list-footer textarea {
+		resize: none;
+		width: 182px;
+		height: 100px;
+		font-size: 14px;
+		line-height: 15px;
+		padding: 6px;
+		margin-top: 8px;
 	}
 	
 	.list-wrapper {
@@ -52,16 +81,9 @@
 		clear: right;
 		border: 1px solid gray;
 		background-color: #eee;
-		padding: 5px;
+		padding: 7px;
 		margin: 10px;
 		border-radius: 3px;
-	}
-	
-	.ui-list li {
-		margin: 0 5px 5px 5px;
-		padding: 5px;
-		font-size: 1.2em;
-		height: 1.5em;
 	}
 	
 	html>body .ui-list li {

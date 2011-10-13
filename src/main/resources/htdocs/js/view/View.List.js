@@ -6,6 +6,7 @@ function ViewList(parentView, listModel) {
 	this.ui = {
 		root: null,
 		header: null,
+		title: null,
 		ul: null,
 		textarea: null,
 		addBtn: null,
@@ -13,13 +14,7 @@ function ViewList(parentView, listModel) {
 	};
 	
 	this.stories = {};
-	
 	this.refresh();
-	
-	// this.listVm.onUpdate(function() {
-	//	console.log('[ViewList] listVm.update');
-	//	this.refresh();
-	// }, this);
 }
 
 ViewList.viewId = function(model_id) {
@@ -68,7 +63,7 @@ ViewList.prototype.updateModel = function(model) {
 }
 
 ViewList.prototype.updateName = function(name) {
-	this.ui.header.html(name);
+	this.ui.title.html(name);
 }
 
 ViewList.prototype.refresh = function() {
@@ -77,7 +72,7 @@ ViewList.prototype.refresh = function() {
 		this._createStructure();
 		this._setupUi();
 	}
-	this.ui.header.html(this.listVm.getName());
+	this.ui.title.html(this.listVm.getName());
 	this._refreshStories();
 }
 
@@ -99,6 +94,9 @@ ViewList.prototype._createStructure = function() {
 	
 	this.ui.header = $('<div class="list-header"></div>')
 		.appendTo(this.ui.root);
+	
+	this.ui.title = $('<h2></h2>')
+		.appendTo(this.ui.header);
 	
 	this.ui.ul = $('<ul class="ui-list"></ul>')
 		.appendTo(this.ui.root);
@@ -150,11 +148,9 @@ ViewList.prototype._handleReceiveItem = function(htmlItem) {
 	// update the model and set it to this list	
 	storyView.getParentView().removeStoryView(storyView.getViewId());
 	
-	
 	storyModel.setListId(this.listVm.getId());
 	this.setStory(storyModel);
 }
-
 
 ViewList.prototype._handleRemoveItem = function(htmlItem) {
 	this.log('remove item', htmlItem);
@@ -170,7 +166,6 @@ ViewList.prototype._handleSortItem = function(htmlItem) {
 ViewList.prototype._setupUi = function() {
 	var view = this;
 	this.ui.ul.attr('id', 'list-' + this.listVm.getId())
-		.data('list.id', this.listVm.getId())
 		.sortable({
 			placeholder: "ui-state-highlight", 
 			connectWith:'.ui-list',
@@ -273,9 +268,22 @@ ViewList.prototype._txtStoryEnter = function() {
 	this.log('story text enter');
 	var text = $.trim(this.ui.textarea.val());	
 	if (text) {
-		this.listVm.createStory(text);
+		this._createStory(text);
 	}
 	this._resetEnterUi();
+}
+
+ViewList.prototype._createStory = function(text) {
+	this.log('add story', text);
+	var max_pos = -1;
+	$.each(this.stories, function(key, val) {
+		var pos = val.getModel().getPos();
+		if (pos > max_pos)
+			max_pos = pos;
+	});
+	var pos = max_pos + 65536;
+	var storyModel = ModelStory.newStory(this.listVm.getId(), text, pos);
+	this.setStory(storyModel);
 }
 
 ViewList.prototype.getRoot = function() {

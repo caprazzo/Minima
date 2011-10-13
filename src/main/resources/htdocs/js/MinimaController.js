@@ -7,25 +7,24 @@ function MinimaController(options) {
 	this.store = options.store;
 	this.view = options.view;
 	
-	var list = {
-		id: 'todo',
-		name: 'TODO'
-	}
 	
-	var listModel = ModelList.fromJson(list);
 	
-	this.view.setList(listModel);
-	this.view.setList(listModel);
+	//var listModel = ModelList.fromJson(list);
 	
-	var newList = ModelList.fromJson({id: 'todo', name: 'to-do'});
+	//this.view.setList(listModel);
+	//this.view.setList(listModel);
+	
+	var newList = ModelList.fromJson({id: 'todo', name: 'TODO'});
 	this.view.setList(newList);
 	
-	var doingList = ModelList.fromJson({id: 'doing', name: 'doing'});
+	var doingList = ModelList.fromJson({id: 'doing', name: 'DOING'});
+	this.view.setList(doingList);
 	this.view.setList(doingList);
 	
-	var doneList = ModelList.fromJson({id: 'done', name: 'done'});
+	var doneList = ModelList.fromJson({id: 'done', name: 'DONE'});
 	this.view.setList(doneList);
 	
+	/*
 	var story = ModelStory.fromJson({ id:'story_1', list:'todo', desc:'story-1', pos: 65536 });
 	this.view
 		.getList(story.getListId())
@@ -40,7 +39,7 @@ function MinimaController(options) {
 	this.view
 		.getList(story.getListId())
 		.setStory(story);
-	
+	*/
 
 	
 	//var story = ModelStory.fromJson({ id:'story_1_doing', list:'doing', desc:'story-1 doing', pos: 65536 });

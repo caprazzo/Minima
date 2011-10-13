@@ -6,11 +6,12 @@ function ModelStory() {
 	this.list_id = null;
 }
 
-ModelStory.newStory = function(list_id, text) {
+ModelStory.newStory = function(list_id, text, pos) {
 	var story = new ModelStory();
 	story.setListId(list_id);
 	story.setDesc(text);
 	story.setId(Minima.makeId());
+	story.setPos(pos);
 	return story;
 }
 
