@@ -31,7 +31,7 @@ ViewBoard.prototype.getList = function(list_id) {
 ViewBoard.prototype.findStoryView = function(story_id) {
 	var found = null;
 	$.each(this.lists, function(list_id, listView) {
-		var storyView = listView.getStory(story_id);
+		var storyView = listView.getStoryView(story_id);
 		if (storyView) {
 			found = storyView;
 			return false;

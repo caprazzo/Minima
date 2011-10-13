@@ -23,6 +23,9 @@ function MinimaController(options) {
 	var doingList = ModelList.fromJson({id: 'doing', name: 'doing'});
 	this.view.setList(doingList);
 	
+	var doneList = ModelList.fromJson({id: 'done', name: 'done'});
+	this.view.setList(doneList);
+	
 	var story = ModelStory.fromJson({ id:'story_1', list:'todo', desc:'story-1', pos: 65536 });
 	this.view
 		.getList(story.getListId())

@@ -13,6 +13,22 @@ function Minima() {
 	}
 })();
 
+Minima.args = function(arguments) {
+	var arr = [];
+	Array.prototype.push.apply(arr, arguments)
+	return arr;
+}
+
+Minima.log = function(tag, args) {
+	var ar = Minima.args(args);
+	ar.unshift(tag);
+	console.log.apply(console, ar);
+}
+
+Minima.getViewId = function($htmlItem) {
+	return $htmlItem.children(':first').attr('id')
+}
+
 Minima.fireEvent = function(handlers) {
 	if (!handlers) {
 		console.warn('trying to fire event with no handler');

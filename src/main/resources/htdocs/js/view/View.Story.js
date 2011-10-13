@@ -1,12 +1,24 @@
 function ViewStory(parentView, storyVm) {
-	console.log('[ViewStory] new ViewStory', storyVm);
+	this.viewId = ViewStory.viewId(storyVm.getId());
+	this.tag = '['+this.viewId+']';
+	console.log(this.tag, 'new ViewStory', storyVm, this.parentView);
 	this.parentView = parentView;
+	
 	this.storyVm = storyVm;
 	this.ui = {
 		parent: null,
 		root: null
 	};
 	this.refresh();
+}
+
+// static method to build a view id from a model id
+ViewStory.viewId = function(model_id) {
+	return 'ViewStory-' + model_id;
+}
+
+ViewStory.prototype.getViewId = function() {
+	return this.viewId;
 }
 
 ViewStory.prototype.getParentView = function() {
@@ -18,7 +30,7 @@ ViewStory.prototype.getModel = function() {
 }
 
 ViewStory.prototype.refresh = function() {
-	console.log('[ViewStory] refresh', this.storyVm.getId());
+	console.log(this.tag, 'refresh', this.storyVm.getId());
 	if (this.ui.parent == null) {
 		this._createStructure();
 	}
@@ -33,13 +45,13 @@ ViewStory.prototype.updateModel = function(model) {
 	if (diff['pos']) {
 		this.updatePosition(model.getPos());
 	}
-	this.model = model;
+	this.storyVm = model;
 }
 
 ViewStory.prototype._createStructure = function() {
 	this.ui.parent = this.parentView.getChildRoot(this);
 	this.ui.root = $('<div></div>')
-		.attr('id', 'story-' + this.storyVm.getId())
+		.attr('id', this.getViewId())
 		.appendTo(this.ui.parent);
 }
 

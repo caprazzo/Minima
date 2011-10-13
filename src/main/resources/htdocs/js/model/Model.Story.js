@@ -14,6 +14,10 @@ ModelStory.newStory = function(list_id, text) {
 	return story;
 }
 
+ModelStory.initialPos = function() {
+	return 65536;
+}
+
 ModelStory.fromJson = function(json_story) {
 	var story = new ModelStory();
 	story.setId(json_story.id);
@@ -67,7 +71,14 @@ ModelStory.prototype.diff = function(other) {
 }
 
 ModelStory.prototype.reposition = function(prevModel, nextModel) {
-	console.log('reposition between', prevModel, 'and', nextModel);
+	console.log('[ModelStory:' + this.id +']', 'reposition between', prevModel, 'and', nextModel);
+	
+	// this is the only item in its list
+	if (prevModel == null && nextModel == null) {
+		this.setPos(ModelStory.initialPos());
+		return;
+	}
+	
 	if (prevModel == null) {
 		this.setPos(nextModel.getPos() / 2);
 		return;
