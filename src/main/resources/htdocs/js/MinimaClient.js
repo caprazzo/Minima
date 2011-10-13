@@ -34,7 +34,7 @@ MinimaClient.prototype.loadBoard = function() {
 }
 
 MinimaClient.prototype.saveStory = function(story, successFn) {
-	var client = this;
+	console.log('[Client] creating story', story);
 	$.ajax({
 		type: 'POST',
 		url: '/data/stories/' + story.getId(),
@@ -45,24 +45,22 @@ MinimaClient.prototype.saveStory = function(story, successFn) {
 		success: function(data) {
 			console.log('[Client] createStory.success', data);
 			successFn(ModelStory.fromObject(data));
-			//client.fireReceiveStory(data);
 		}
 	});	
 }
 
 MinimaClient.prototype.updateStory = function(story, successFn) {
-	var store = this;
+	console.log('[Client] sending story update', story);
 	$.ajax({
 		type: 'PUT',
-		url: '/data/stories/' + story.id + '/' + story.revision,
+		url: '/data/stories/' + story.getId() + '/' + story.getRevision(),
 		contentType: 'application/json',
-		data: JSON.stringify(story),
+		data: JSON.stringify(story.asObject()),
 		dataType: 'json',
 		processData: false,
 		success: function(data) {
 			console.log('[Client] updateStory.success', data);	
-			successFn(data);
-			store.fireReceiveStory(data);
+			successFn(ModelStory.fromObject(data));
 		}
 	})
 }

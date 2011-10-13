@@ -37,7 +37,7 @@ ViewList.prototype.setStory = function(storyModel) {
 		storyView = new ViewStory(this, storyModel);
 		this.stories[storyView.getViewId()] = storyView;
 	}
-	else {
+	else {		
 		storyView.updateModel(storyModel);
 	}
 }
@@ -149,6 +149,7 @@ ViewList.prototype._handleReceiveItem = function(htmlItem) {
 	storyView.getParentView().removeStoryView(storyView.getViewId());
 	
 	storyModel.setListId(this.listVm.getId());
+	Minima.fireUpdateStory(storyModel);
 	this.setStory(storyModel);
 }
 

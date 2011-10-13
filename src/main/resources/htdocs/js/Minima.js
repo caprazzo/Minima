@@ -11,6 +11,15 @@ function Minima() {
 	Minima.onCreateStory= function(fn, ctx) {
 		_onCreateStoryHandler = Minima.bindEvent(_onCreateStoryHandler, fn, ctx);	
 	}
+	
+	var _onUpdateStoryHandler = null;
+	Minima.fireUpdateStory = function(storyModel) {
+		Minima.fireEvent(_onUpdateStoryHandler, storyModel);
+	}
+	
+	Minima.onUpdateStory= function(fn, ctx) {
+		_onUpdateStoryHandler = Minima.bindEvent(_onUpdateStoryHandler, fn, ctx);	
+	}
 })();
 
 Minima.args = function(arguments) {

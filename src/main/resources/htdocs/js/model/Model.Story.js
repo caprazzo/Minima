@@ -68,6 +68,9 @@ ModelStory.prototype.getPos = function(pos) {
 ModelStory.prototype.setRevision = function(rev) {
 	this.rev = rev;
 }
+ModelStory.prototype.getRevision = function() {
+	return this.rev;
+}
 
 ModelStory.prototype.diff = function(other) {
 	var diff = {};

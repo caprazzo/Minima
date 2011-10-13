@@ -7,60 +7,27 @@ function MinimaController(options) {
 	this.store = options.store;
 	this.view = options.view;
 	
-	
-	
-	//var listModel = ModelList.fromJson(list);
-	
-	//this.view.setList(listModel);
-	//this.view.setList(listModel);
-	/*
-	var newList = ModelList.fromJson({id: 'todo', name: 'TODO'});
-	this.view.setList(newList);
-	
-	var doingList = ModelList.fromJson({id: 'doing', name: 'DOING'});
-	this.view.setList(doingList);
-	this.view.setList(doingList);
-	
-	var doneList = ModelList.fromJson({id: 'done', name: 'DONE'});
-	this.view.setList(doneList);
-	*/
-	/*
-	var story = ModelStory.fromJson({ id:'story_1', list:'todo', desc:'story-1', pos: 65536 });
-	this.view
-		.getList(story.getListId())
-		.setStory(story);
-	
-	var story = ModelStory.fromJson({ id:'story_2', list:'todo', desc:'story-2', pos: 100000 });
-	this.view
-		.getList(story.getListId())
-		.setStory(story);
-	
-	var story = ModelStory.fromJson({ id:'story_3', list:'todo', desc:'story-3', pos: 80000 });
-	this.view
-		.getList(story.getListId())
-		.setStory(story);
-	*/
-
-	
-	//var story = ModelStory.fromJson({ id:'story_1_doing', list:'doing', desc:'story-1 doing', pos: 65536 });
-	//this.view
-	//	.getList(story.getListId())
-	//	.setStory(story);
-	
-	//this.view.setBoardVm(this.boardVm);
-	
 	//this._initStore();
 	//this._initClient();
 	//this._initView();
 	
 	var view = this.view;
+	var client = this.client;
 	Minima.onCreateStory(function(storyModel) {
 		console.log('[Controller] new story created');
-		this.client.saveStory(storyModel, function(recv) {
+		client.saveStory(storyModel, function(recv) {
 			var listViewId = ViewList.viewId(recv.getListId());
 			view.getList(listViewId).setStory(recv);
 		});
 	}, this);
+	
+	Minima.onUpdateStory(function(storyModel) {
+		console.log('[Controller] story updated', storyModel);
+		client.updateStory(storyModel, function(recv) {
+			var listViewId = ViewList.viewId(recv.getListId());
+			view.getList(listViewId).setStory(recv);
+		});
+	});
 	
 	this.client.onBoard(function(board) {
 		console.log('[Controller] client.on.board', board);
@@ -77,7 +44,6 @@ function MinimaController(options) {
 		
 	}, this);
 	
-	this.client.loadBoard();
 }
 
 MinimaController.prototype._initClient = function() {
