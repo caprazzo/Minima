@@ -61,11 +61,16 @@ ModelStory.prototype.diff = function(other) {
 	}
 	
 	diff['desc'] = (other.getDesc() != this.getDesc());
+	diff['pos'] = (other.getPos() != this.getPos());
 
 	return diff;
 }
 
 ModelStory.prototype.isBefore = function(other) {
-	return this.getPos() < other.getPos();
+	var is = this.getPos() < other.getPos();
+}
+
+ModelStory.prototype.toString = function() {
+	return 'ModelStory';
 }
 

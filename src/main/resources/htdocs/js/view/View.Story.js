@@ -23,8 +23,11 @@ ViewStory.prototype.refresh = function() {
 
 ViewStory.prototype.updateModel = function(model) {
 	var diff = this.storyVm.diff(model);
-	if (diff['desc'] != null) {
+	if (diff['desc']) {
 		this.updateDesc(model.getDesc());
+	}
+	if (diff['pos']) {
+		this.updatePosition(model.getPos());
 	}
 	this.model = model;
 }
@@ -41,4 +44,8 @@ ViewStory.prototype.getRoot = function() {
 
 ViewStory.prototype.updateDesc = function(desc) {
 	this.ui.root.html(desc);
+}
+
+ViewStory.prototype.updatePosition = function(pos) {
+	this.parentView.updateChildPosition(this, pos);
 }

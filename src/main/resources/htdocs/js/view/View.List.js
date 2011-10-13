@@ -129,7 +129,9 @@ ViewList.prototype.getChildRoot = function(childView) {
 		var ui = this.ui;
 		var inserted = false;
 		
-		
+		// if this model has lower relative position
+		// than an existing story, create its root in
+		// the correct position
 		$.each(this.stories, function(key, val) {
 			var other = val.getModel();
 			if (childModel.isBefore(other)) {
@@ -143,10 +145,12 @@ ViewList.prototype.getChildRoot = function(childView) {
 			this.ui.ul.append(childRoot);
 		
 		this.ui.stories[childModel.getId()] = childRoot;
-			
 	}
 	return childRoot;
-	
+}
+
+ViewList.prototype.updateChildPosition = function(childView, newPos) {
+	throw 'not implemented';
 }
 
 ViewList.prototype._btnAddClick = function() {
