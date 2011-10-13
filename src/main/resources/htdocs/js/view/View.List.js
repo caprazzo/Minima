@@ -31,6 +31,12 @@ ViewList.prototype.setStory = function(storyModel) {
 	}
 }
 
+ViewList.prototype.removeStory = function(story_id) {
+	// 1. try remove view object
+	
+	// 2. try remove view root
+}
+
 ViewList.prototype.updateModel = function(model) {
 	var diff = this.listVm.diff(model);
 	if (diff['name']) {
@@ -106,7 +112,7 @@ ViewList.prototype._setupUi = function() {
 				var list_id = $(event.target).data('list.id');
 				var story_id = $(event.srcElement).data('story_id');
 				var htmlId = ui.item.children(':first').attr('id');
-				var storyId = view._getStoryId(htmlId);
+				var story_id = view._getStoryId(htmlId);
 				itemView = view.getStory(story_id);
 				
 				console.log('list: ' + list_id);
@@ -119,11 +125,28 @@ ViewList.prototype._setupUi = function() {
 					
 					console.log('[ViewList]', view.listVm.getId(), 'item incoming from ', listView);
 					// 2. remove item from other list
+					listView.removeStory(story_id);
+					
 					// 3. update item position and list
+					var prev = ui.item.prev();
+					prevView = (prev.length) 
+							? view.getStory(prev.children(':first').attr('id')) 
+							: null;
+					
+					var next = ui.item.next();
+					nextView = (next.length) 
+						? view.getStory(next.children(':first').attr('id')) 
+						: null;
+						
+					console.log('[ViewList]', view.listVm.getId(), 'updating story order', itemView, prevView, nextView);
+					
 					// 4. set item to this list
+					itemView.getModel().setListId(list_id);
+					view.setStory(itemView.getModel());
 					return;
 				}
 				
+				return;
 				// detect outgoing
 				
 				var prev = ui.item.prev();
