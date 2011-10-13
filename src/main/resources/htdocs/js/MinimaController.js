@@ -45,7 +45,7 @@ function MinimaController(options) {
 		.getList(story.getListId())
 		.setStory(story);
 	
-	var story = ModelStory.fromJson({ id:'story_3', list:'todo', desc:'story-3 updated', pos: '940000' });
+	var story = ModelStory.fromJson({ id:'story_3', list:'todo', desc:'story-3 updated', pos: '10' });
 	this.view
 		.getList(story.getListId())
 		.setStory(story);

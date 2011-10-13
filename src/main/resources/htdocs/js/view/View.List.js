@@ -138,6 +138,7 @@ ViewList.prototype.getChildRoot = function(childView) {
 				var otherRoot = ui.stories[other.getId()];
 				childRoot.insertBefore(otherRoot);
 				inserted = true;
+				return false;
 			}
 		});
 		
@@ -150,7 +151,22 @@ ViewList.prototype.getChildRoot = function(childView) {
 }
 
 ViewList.prototype.updateChildPosition = function(childView, newPos) {
-	throw 'not implemented';
+	var childModel = childView.getModel();
+	var childRoot = this.ui.stories[childModel.getId()];
+	childRoot.remove();
+	var ui = this.ui;
+	var inserted = false;
+	$.each(this.stories, function(key, val) {
+		var other = val.getModel();
+		if (newPos < other.getPos()) {
+			var otherRoot = ui.stories[other.getId()];
+			childRoot.insertBefore(otherRoot);
+			inserted = true;
+			return false;
+		}
+	});
+	if (!inserted)
+		this.ui.ul.append(childRoot);
 }
 
 ViewList.prototype._btnAddClick = function() {
