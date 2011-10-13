@@ -20,6 +20,9 @@ function MinimaController(options) {
 	var newList = ModelList.fromJson({id: 'todo', name: 'to-do'});
 	this.view.setList(newList);
 	
+	var doingList = ModelList.fromJson({id: 'doing', name: 'doing'});
+	this.view.setList(doingList);
+	
 	var story = ModelStory.fromJson({ id:'story_1', list:'todo', desc:'story-1', pos: 65536 });
 	this.view
 		.getList(story.getListId())
@@ -45,10 +48,20 @@ function MinimaController(options) {
 		.getList(story.getListId())
 		.setStory(story);
 	
-	var story = ModelStory.fromJson({ id:'story_3', list:'todo', desc:'story-3 updated', pos: '10' });
+	var story = ModelStory.fromJson({ id:'story_3', list:'todo', desc:'story-3 updated', pos: 75000 });
 	this.view
 		.getList(story.getListId())
 		.setStory(story);
+	
+	var story = ModelStory.fromJson({ id:'story_3', list:'todo', desc:'story-3 updated', pos: 76000 });
+	this.view
+		.getList(story.getListId())
+		.setStory(story);
+	
+	//var story = ModelStory.fromJson({ id:'story_1_doing', list:'doing', desc:'story-1 doing', pos: 65536 });
+	//this.view
+	//	.getList(story.getListId())
+	//	.setStory(story);
 	
 	//this.view.setBoardVm(this.boardVm);
 	

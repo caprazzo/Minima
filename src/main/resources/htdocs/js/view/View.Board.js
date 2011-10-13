@@ -28,6 +28,18 @@ ViewBoard.prototype.getList = function(list_id) {
 	return this.lists[list_id];
 }
 
+ViewBoard.prototype.findStoryView = function(story_id) {
+	var found = null;
+	$.each(this.lists, function(list_id, listView) {
+		var storyView = listView.getStory(story_id);
+		if (storyView) {
+			found = storyView;
+			return false;
+		}
+	});
+	return found;
+}
+
 ViewBoard.prototype._createStructure = function() {
 	this.ui.root = $('<div id="board"></div>')
 		.appendTo(this.ui.parent);

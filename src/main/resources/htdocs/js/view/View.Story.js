@@ -9,6 +9,10 @@ function ViewStory(parentView, storyVm) {
 	this.refresh();
 }
 
+ViewStory.prototype.getParentView = function() {
+	return this.parentView;
+}
+
 ViewStory.prototype.getModel = function() {
 	return this.storyVm;
 }
@@ -35,6 +39,7 @@ ViewStory.prototype.updateModel = function(model) {
 ViewStory.prototype._createStructure = function() {
 	this.ui.parent = this.parentView.getChildRoot(this);
 	this.ui.root = $('<div></div>')
+		.attr('id', 'story-' + this.storyVm.getId())
 		.appendTo(this.ui.parent);
 }
 

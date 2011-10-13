@@ -87,6 +87,14 @@ ViewList.prototype._createStructure = function() {
 	this.parentView.addChildView(this);
 }
 
+ViewList.prototype._getStoryId = function(htmlId) {
+	return htmlId.substring('story-'.length);
+}
+
+ViewList.prototype.getStory = function(story_id) {
+	return this.stories[story_id];
+}
+
 ViewList.prototype._setupUi = function() {
 	var view = this;
 	this.ui.ul.attr('id', 'list-' + this.listVm.getId())
@@ -97,9 +105,44 @@ ViewList.prototype._setupUi = function() {
 			update: function(event, ui) {
 				var list_id = $(event.target).data('list.id');
 				var story_id = $(event.srcElement).data('story_id');
-				var new_abs_pos = ui.item.index();
-				console.log('[View] updated story order', list_id, story_id, new_abs_pos);
-				view.fireUpdateStoryPosition(list_id, story_id, new_abs_pos);
+				var htmlId = ui.item.children(':first').attr('id');
+				var storyId = view._getStoryId(htmlId);
+				itemView = view.getStory(story_id);
+				
+				console.log('list: ' + list_id);
+				// no view for this item, must be incoming
+				if (!itemView) {
+					
+					// 1. get item view from other list
+					itemView = view.parentView.findStoryView(story_id);
+					var listView = itemView.getParentView();
+					
+					console.log('[ViewList]', view.listVm.getId(), 'item incoming from ', listView);
+					// 2. remove item from other list
+					// 3. update item position and list
+					// 4. set item to this list
+					return;
+				}
+				
+				// detect outgoing
+				
+				var prev = ui.item.prev();
+				prevView = (prev.length) 
+						? view._getStoryView(prev.children(':first').attr('id')) 
+						: null;
+				
+				var next = ui.item.next();
+				nextView = (next.length) 
+					? view._getStoryView(next.children(':first').attr('id')) 
+					: null;
+					
+				console.log('[ViewList]', view.listVm.getId(), 'updating story order', itemView, prevView, nextView);
+				return;
+				itemView.getModel().reposition(
+						prevView ? prevView.getModel() : null, 
+						nextView ? nextView.getModel() : null );
+				
+				view.setStory(itemView.getModel());
 			}
 		});
 	
@@ -124,7 +167,7 @@ ViewList.prototype.getChildRoot = function(childView) {
 	var childModel = childView.getModel();
 	var childRoot = this.ui.stories[childModel.getId()];
 	if (childRoot == null) {
-		var childRoot = $('<li></li>');
+		var childRoot = $('<li></li>').data('view', childView);
 		var rel_pos = childModel.getPos();
 		var ui = this.ui;
 		var inserted = false;
@@ -158,6 +201,10 @@ ViewList.prototype.updateChildPosition = function(childView, newPos) {
 	var inserted = false;
 	$.each(this.stories, function(key, val) {
 		var other = val.getModel();
+		
+		if (childModel.getId() == other.getId())
+			return;
+		
 		if (newPos < other.getPos()) {
 			var otherRoot = ui.stories[other.getId()];
 			childRoot.insertBefore(otherRoot);

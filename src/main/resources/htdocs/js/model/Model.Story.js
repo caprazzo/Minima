@@ -66,6 +66,21 @@ ModelStory.prototype.diff = function(other) {
 	return diff;
 }
 
+ModelStory.prototype.reposition = function(prevModel, nextModel) {
+	console.log('reposition between', prevModel, 'and', nextModel);
+	if (prevModel == null) {
+		this.setPos(nextModel.getPos() / 2);
+		return;
+	}
+	
+	if (nextModel == null) {
+		this.setPos(prevModel.getPos() + 65536);
+		return;
+	}
+	
+	this.setPos(prevModel.getPos() + (nextModel.getPos() - prevModel.getPos())/2);
+}
+
 ModelStory.prototype.isBefore = function(other) {
 	var is = this.getPos() < other.getPos();
 }
