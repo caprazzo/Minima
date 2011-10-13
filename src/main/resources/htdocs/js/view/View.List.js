@@ -153,10 +153,6 @@ ViewList.prototype._handleReceiveItem = function(htmlItem) {
 	
 	storyModel.setListId(this.listVm.getId());
 	this.setStory(storyModel);
-	
-	
-	
-	
 }
 
 
@@ -220,10 +216,10 @@ ViewList.prototype.getChildRoot = function(childView) {
 		// if this model has lower relative position
 		// than an existing story, create its root in
 		// the correct position
-		$.each(this.stories, function(key, val) {
-			var other = val.getModel();
-			if (childModel.isBefore(other)) {
-				var otherRoot = ui.stories[other.getId()];
+		$.each(this.stories, function(key, otherView) {
+			var otherModel = otherView.getModel();
+			if (childModel.isBefore(otherModel)) {
+				var otherRoot = ui.stories[otherView.getViewId()];
 				childRoot.insertBefore(otherRoot);
 				inserted = true;
 				return false;

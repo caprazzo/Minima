@@ -1,8 +1,8 @@
 function ViewStory(parentView, storyVm) {
 	this.viewId = ViewStory.viewId(storyVm.getId());
 	this.tag = '['+this.viewId+']';
-	console.log(this.tag, 'new ViewStory', storyVm, this.parentView);
 	this.parentView = parentView;
+	console.log(this.tag, 'new ViewStory', storyVm, this.parentView);
 	
 	this.storyVm = storyVm;
 	this.ui = {

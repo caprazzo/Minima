@@ -93,7 +93,7 @@ ModelStory.prototype.reposition = function(prevModel, nextModel) {
 }
 
 ModelStory.prototype.isBefore = function(other) {
-	var is = this.getPos() < other.getPos();
+	return this.getPos() < other.getPos();
 }
 
 ModelStory.prototype.toString = function() {
