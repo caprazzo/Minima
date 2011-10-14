@@ -218,11 +218,16 @@ ViewList.prototype._setupUi = function() {
 			}			
 		});
 	
-	this.ui.textarea.hide().keypress(function(e) {
-		if (e.keyCode == 13) {
-			view._txtStoryEnter();
-		}
-	});
+	this.ui.textarea.hide()
+		.keypress(function(e) {
+			if (e.keyCode == 13) {
+				view._txtStoryEnter();
+			}
+		}).keyup(function(e) {
+			if (e.keyCode == 27) {
+				view._resetEnterUi();
+			} 
+		});
 	
 	this.ui.addBtn
 		.button()
