@@ -85,6 +85,7 @@ public class MinimaService {
 					@Override
 					public void found(String key, int rev, byte[] data) {
 						cb.success(fromJson(data));
+						pushServlet.send(data);
 					}
 
 					@Override

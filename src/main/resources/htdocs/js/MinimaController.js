@@ -44,6 +44,14 @@ function MinimaController(options) {
 		
 	}, this);
 	
+	this.client.onReceiveStory(function(storyModel) {
+		console.log('[Controller] client.on.receiveStory');
+		var listViewId = ViewList.viewId(storyModel.getListId());
+		view.getList(listViewId).setStory(storyModel);
+	}, this);
+	
+	
+	
 }
 
 MinimaController.prototype._initClient = function() {
@@ -121,5 +129,5 @@ MinimaController.prototype._initView = function() {
 MinimaController.prototype.start = function() {
 	console.log('[Contoller] start');
 	this.client.connectWebSocket();
-	// this.client.loadBoard();
+	this.client.loadBoard();
 }

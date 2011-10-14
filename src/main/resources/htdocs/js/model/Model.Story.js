@@ -71,6 +71,9 @@ ModelStory.prototype.setRevision = function(rev) {
 ModelStory.prototype.getRevision = function() {
 	return this.rev;
 }
+ModelStory.prototype.incrementRevision = function() {
+	this.rev += 1;
+}
 
 ModelStory.prototype.diff = function(other) {
 	var diff = {};

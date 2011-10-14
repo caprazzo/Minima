@@ -13,13 +13,12 @@ MinimaClient.prototype.fireOnBoard = function(board) {
 	handler.fn.call(handler.ctx, board);
 }
 
-MinimaClient.prototype.onReceiveStory = function(handler, ctx) {
-	this.onReceiveStoryHandler = {fn:handler, ctx:ctx};
+MinimaClient.prototype.onReceiveStory = function(fn, ctx) {
+	this.onReceiveStoryHandler = Minima.bindEvent(this.onReceiveStoryHandler, fn, ctx);	
 }
 
-MinimaClient.prototype.fireReceiveStory = function(story) {
-	var handler = this.onReceiveStoryHandler;
-	handler.fn.call(handler.ctx, story);
+MinimaClient.prototype.fireReceiveStory = function(storyModel) {
+	Minima.fireEvent(this.onReceiveStoryHandler, storyModel);
 }
 
 MinimaClient.prototype.loadBoard = function() {
@@ -35,6 +34,7 @@ MinimaClient.prototype.loadBoard = function() {
 };
 
 MinimaClient.prototype.connectWebSocket = function() {
+	var client = this;
 	if (!window.WebSocket) {
 		alert("WebSocket not supported by this browser");
 		console.warn("WebSocket not supported by this browser");
@@ -52,7 +52,9 @@ MinimaClient.prototype.connectWebSocket = function() {
 	}
 	
 	ws.onmessage = function(msg) {
-		console.log('WebSocket.onmsg', msg);
+		console.log('WebSocket.onmsg', msg.data);
+		var obj = $.parseJSON(msg.data);
+		client.fireReceiveStory(ModelStory.fromObject(obj));
 	}
 	
 	ws.onerror = function(err) {
