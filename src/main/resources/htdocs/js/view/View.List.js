@@ -117,7 +117,23 @@ ViewList.prototype.getStoryView = function(story_view_id) {
 	return this.stories[story_view_id];
 }
 
-// process item dragged into this list from other list
+ViewList.prototype._getPrevModel = function(htmlItem) {
+	var prev = htmlItem.prev();
+	prevView = (prev.length) 
+			? this.getStoryView(Minima.getViewId(prev)) 
+			: null;
+	return (prevView) ? prevView.getModel() : null;
+}
+
+ViewList.prototype._getNextModel = function(htmlItem) {
+	var next = htmlItem.next();
+	nextView = (next.length) 
+		? this.getStoryView(Minima.getViewId(next)) 
+		: null;
+	return (nextView) ? nextView.getModel() : null;
+}
+
+// handle item dragged into this list from other list
 ViewList.prototype._handleReceiveItem = function(htmlItem) {
 	this.log('receive item', htmlItem);
 	// destroy the item, it will be recreated anew
@@ -130,18 +146,10 @@ ViewList.prototype._handleReceiveItem = function(htmlItem) {
 	this.log('moving story', storyModel, 'from', listView.getViewId(), 'to', this.getViewId());
 	
 	// find previous model in ui, if any
-	var prev = htmlItem.prev();
-	prevView = (prev.length) 
-			? this.getStoryView(Minima.getViewId(prev)) 
-			: null;
-	prevModel = (prevView) ? prevView.getModel() : null;
+	var prevModel = this._getPrevModel(htmlItem);
 	
 	// find next model in ui, if any
-	var next = htmlItem.next();
-	nextView = (next.length) 
-		? this.getStoryView(Minima.getViewId(next)) 
-		: null;
-	nextModel = (nextView) ? nextView.getModel() : null;
+	var nextModel = this._getNextModel(htmlItem);
 		
 	storyModel.reposition(prevModel, nextModel);
 	
@@ -153,20 +161,33 @@ ViewList.prototype._handleReceiveItem = function(htmlItem) {
 	this.setStory(storyModel);
 }
 
+// handle item dragged out of this list
 ViewList.prototype._handleRemoveItem = function(htmlItem) {
 	this.log('remove item', htmlItem);
-	var viewId = Minima.getViewId(htmlItem);
-	// var storyView = this.getStoryView(viewId);
-	// this.removeStoryView(viewId);
 }
 
+// handle item sorted internally
 ViewList.prototype._handleSortItem = function(htmlItem) {
-	this.log('sort item', htmlItem);
+		
+	var viewId = Minima.getViewId(htmlItem);
+	var storyView =  this.getStoryView(viewId);
+	var storyModel = storyView.getModel();
+	var listView = storyView.getParentView();
+	
+	// find previous model in ui, if any
+	var prevModel = this._getPrevModel(htmlItem);
+	
+	// find next model in ui, if any
+	var nextModel = this._getNextModel(htmlItem);
+		
+	storyModel.reposition(prevModel, nextModel);
+	Minima.fireUpdateStory(storyModel);
+	this.setStory(storyModel);
 }
 
 ViewList.prototype._setupUi = function() {
 	var view = this;
-	this.ui.ul.attr('id', 'list-' + this.listVm.getId())
+	this.ui.ul.attr('id', this.getViewId())
 		.sortable({
 			placeholder: "ui-state-highlight", 
 			connectWith:'.ui-list',
@@ -179,7 +200,14 @@ ViewList.prototype._setupUi = function() {
 			update: function(event, ui) {
 				// note: this is triggered also after receive
 				// in the receiving view
+				console.log(view.getViewId(), 'sort', event, ui );
+				var itemListViewId =  (ui.item.parent().attr('id'));
+				if (view.getViewId() != itemListViewId) {
+					console.log(view.getViewId(), 'ignoring sort from other list', itemListViewId);
+					return;
+				}
 				view._handleSortItem(ui.item);
+				
 			}			
 		});
 	
@@ -209,17 +237,20 @@ ViewList.prototype.getChildRoot = function(childView) {
 		var ui = this.ui;
 		var inserted = false;
 		
-		// if this model has lower relative position
-		// than an existing story, create its root in
-		// the correct position
-		
-		// sort stories by their pos
+		console.log(this.ui.root);
+		var view = this;
+		// sort stories by their relative position
+		// TODO: this slows down startup because the sorting is done every time
 		var stories = $.map(this.stories, function(view, view_id) {
 			return view;
 		});
 		stories.sort(function(viewA, viewB) {
 			return viewB.getModel().isBefore(viewA.getModel());
 		});
+		
+		// if this model has lower relative position
+		// than an existing story, create its root in
+		// the correct position
 		
 		$.each(stories, function(idx, otherView) {
 			var otherModel = otherView.getModel();
