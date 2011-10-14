@@ -26,14 +26,28 @@ ViewBoard.prototype.setList = function(listModel) {
 	}
 }
 
+ViewBoard.prototype.setStory = function(storyModel) {
+	var storyViewId = ViewStory.viewId(storyModel.getId());
+	var listViewId = ViewList.viewId(storyModel.getListId());
+	var targetList = this.getList(listViewId);
+	
+	var existingStoryView = this.findStoryView(storyViewId);
+	if (existingStoryView && existingStoryView.getParentView().getViewId() != targetList.getViewId()) {
+		existingStoryView
+			.getParentView()
+			.removeStoryView(storyViewId);
+	}
+	targetList.setStory(storyModel);
+}
+
 ViewBoard.prototype.getList = function(list_id) {
 	return this.lists[list_id];
 }
 
-ViewBoard.prototype.findStoryView = function(story_id) {
+ViewBoard.prototype.findStoryView = function(story_view_id) {
 	var found = null;
 	$.each(this.lists, function(list_id, listView) {
-		var storyView = listView.getStoryView(story_id);
+		var storyView = listView.getStoryView(story_view_id);
 		if (storyView) {
 			found = storyView;
 			return false;

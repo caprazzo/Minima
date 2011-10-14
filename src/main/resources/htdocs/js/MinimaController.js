@@ -38,16 +38,14 @@ function MinimaController(options) {
 		
 		$.each(board.stories, function(idx, story_obj) {
 			var storyModel = ModelStory.fromObject(story_obj);
-			var listViewId = ViewList.viewId(storyModel.getListId());
-			view.getList(listViewId).setStory(storyModel);
+			view.setStory(storyModel);
 		});
 		
 	}, this);
 	
 	this.client.onReceiveStory(function(storyModel) {
 		console.log('[Controller] client.on.receiveStory');
-		var listViewId = ViewList.viewId(storyModel.getListId());
-		view.getList(listViewId).setStory(storyModel);
+		view.setStory(storyModel);
 	}, this);
 	
 	
