@@ -1,6 +1,4 @@
-function Minima() {
-	
-}
+function Minima() {}
 
 (function() {
 	var _onCreateStoryHandler = null;

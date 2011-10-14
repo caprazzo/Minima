@@ -45,6 +45,7 @@ MinimaClient.prototype.connectWebSocket = function() {
 	
 	ws.onopen = function() {
 		console.log('WebSocket.onopen');
+		// TODO: we should sync the board after a disconnection
 	}
 	
 	ws.onclose = function() {
