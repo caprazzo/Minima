@@ -4,6 +4,7 @@ function ModelStory() {
 	this.pos = null
 	this.rev = null;
 	this.list_id = null;
+	this.archived = null;
 }
 
 ModelStory.newStory = function(list_id, text, pos) {
@@ -21,7 +22,8 @@ ModelStory.prototype.asObject = function() {
 		pos: this.pos,
 		desc: this.desc,
 		revision: this.rev,
-		list: this.list_id
+		list: this.list_id,
+		archived: this.archived
 	}
 }
 
@@ -36,6 +38,7 @@ ModelStory.fromObject = function(story_obj) {
 	story.setDesc(story_obj.desc);
 	story.setPos(story_obj.pos);
 	story.setRevision(story_obj.revision);
+	story.setArchived(story_obj.archived);
 	return story;
 }
 
@@ -113,3 +116,10 @@ ModelStory.prototype.isBefore = function(other) {
 	return this.getPos() < other.getPos();
 }
 
+ModelStory.prototype.setArchived = function(archived) {
+	this.archived = archived;
+}
+
+ModelStory.prototype.getArchived = function() {
+	return this.archived;
+}

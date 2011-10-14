@@ -63,10 +63,18 @@ ViewStory.prototype._createStructure = function() {
 				
 }
 
+ViewStory.prototype._handleArchiveSory = function() {
+	this.storyVm.setArchived(true);
+	this.parentView.removeStoryView(this.getViewId());
+	Minima.fireUpdateStory(this.storyVm);
+}
+
 ViewStory.prototype._setupUi = function() {
+	var view = this;
 	this.ui.archiveBtn
 		.click(function() {
 			console.log('archive btn handle');
+			view._handleArchiveSory();
 		});
 }
 

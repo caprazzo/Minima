@@ -18,6 +18,7 @@ public class Story {
 	private String list;
 	private BigDecimal pos;
 	private int revision;
+	private boolean archived;
 	
 
 	public Story() {
@@ -68,6 +69,14 @@ public class Story {
 	
 	public BigDecimal getPos() {
 		return pos;
+	}
+	
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+	
+	public boolean getArchived() {
+		return this.archived;
 	}
 
 	@Override

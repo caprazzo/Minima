@@ -33,6 +33,13 @@ ViewList.prototype.setStory = function(storyModel) {
 	this.log('setStory', storyModel);
 	var viewId = ViewStory.viewId(storyModel.getId());
 	var storyView = this.stories[viewId];
+	if (storyModel.getArchived()) {
+		if (storyView) {
+			this.removeStoryView(viewId);
+		}
+		return;
+	}
+	
 	if (!storyView) {
 		storyView = new ViewStory(this, storyModel);
 		this.stories[storyView.getViewId()] = storyView;

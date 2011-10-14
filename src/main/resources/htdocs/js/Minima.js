@@ -20,6 +20,7 @@ function Minima() {
 	Minima.onUpdateStory= function(fn, ctx) {
 		_onUpdateStoryHandler = Minima.bindEvent(_onUpdateStoryHandler, fn, ctx);	
 	}
+	
 })();
 
 Minima.args = function(arguments) {
