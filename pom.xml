@@ -12,7 +12,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<jettyVersion>7.2.2.v20101205</jettyVersion>
+		<jettyVersion>8.0.3.v20111011</jettyVersion>
 	</properties>
 
 
