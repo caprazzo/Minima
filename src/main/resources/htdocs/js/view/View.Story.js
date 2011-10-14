@@ -29,12 +29,13 @@ ViewStory.prototype.getModel = function() {
 	return this.storyVm;
 }
 
-ViewStory.prototype.refresh = function(doEffect) {
+ViewStory.prototype.refresh = function() {
 	console.log(this.tag, 'refresh', this.storyVm.getId());
 	if (this.ui.parent == null) {
-		this._createStructure(doEffect);
+		this._createStructure();
+		this._setupUi();
 	}
-	this.ui.root.html(this.storyVm.getDesc());
+	this.updateDesc(this.storyVm.getDesc());
 }
 
 ViewStory.prototype.updateModel = function(model) {
@@ -48,11 +49,25 @@ ViewStory.prototype.updateModel = function(model) {
 	this.storyVm = model;
 }
 
-ViewStory.prototype._createStructure = function(doEffect) {
-	this.ui.parent = this.parentView.getChildRoot(this, doEffect);
-	this.ui.root = $('<div></div>')
+ViewStory.prototype._createStructure = function() {
+	this.ui.parent = this.parentView.getChildRoot(this);
+	this.ui.root = $('<div class="ui-story"></div>')
 		.attr('id', this.getViewId())
-		.appendTo(this.ui.parent);	
+		.appendTo(this.ui.parent);
+	
+	this.ui.archiveBtn = $('<span class="ui-story-archive-btn">x</span>')
+		.appendTo(this.ui.root);
+	
+	this.ui.desc = $('<div class="ui-story-desc"></div>')
+		.appendTo(this.ui.root);
+				
+}
+
+ViewStory.prototype._setupUi = function() {
+	this.ui.archiveBtn
+		.click(function() {
+			console.log('archive btn handle');
+		});
 }
 
 ViewStory.prototype.getRoot = function() {
@@ -60,7 +75,7 @@ ViewStory.prototype.getRoot = function() {
 }
 
 ViewStory.prototype.updateDesc = function(desc) {
-	this.ui.root.html(desc);
+	this.ui.desc.html(desc);
 }
 
 ViewStory.prototype.updatePosition = function(pos) {
