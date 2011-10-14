@@ -32,7 +32,7 @@ public class MinimaServiceFunctionalTest {
 	public void setUp() {
 		testDir = Files.createTempDir();
 		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx");
-		service = new MinimaService(db);
+		service = new MinimaService(db, null);
 	}
 	
 	@Test

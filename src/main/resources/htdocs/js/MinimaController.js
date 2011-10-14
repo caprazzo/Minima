@@ -120,5 +120,6 @@ MinimaController.prototype._initView = function() {
 
 MinimaController.prototype.start = function() {
 	console.log('[Contoller] start');
-	this.client.loadBoard();
+	this.client.connectWebSocket();
+	// this.client.loadBoard();
 }

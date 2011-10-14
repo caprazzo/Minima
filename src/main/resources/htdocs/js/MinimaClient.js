@@ -1,6 +1,7 @@
 function MinimaClient(options) {
 	this.onBoardHandler = null;
 	this.onReceiveStoryHandler = null;
+	this.web_socket_location = options.web_socket_location;
 }
 
 MinimaClient.prototype.onBoard = function(handler, ctx) {
@@ -31,7 +32,34 @@ MinimaClient.prototype.loadBoard = function() {
 		board.name = 'A Board';
 		store.fireOnBoard(board);
 	});
-}
+};
+
+MinimaClient.prototype.connectWebSocket = function() {
+	if (!window.WebSocket) {
+		alert("WebSocket not supported by this browser");
+		console.warn("WebSocket not supported by this browser");
+		return;
+	}
+	
+	var ws = new WebSocket(this.web_socket_location);
+	
+	ws.onopen = function() {
+		console.log('WebSocket.onopen');
+	}
+	
+	ws.onclose = function() {
+		console.log('WebSocket.onclose');
+	}
+	
+	ws.onmessage = function(msg) {
+		console.log('WebSocket.onmsg', msg);
+	}
+	
+	ws.onerror = function(err) {
+		console.log('WebSocket.onerr', err);
+	}
+	
+};
 
 MinimaClient.prototype.saveStory = function(story, successFn) {
 	console.log('[Client] creating story', story);

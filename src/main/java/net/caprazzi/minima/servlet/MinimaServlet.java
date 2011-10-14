@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.caprazzi.minima.Stories;
 import net.caprazzi.minima.Story;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
@@ -116,15 +115,12 @@ public class MinimaServlet extends HttpServlet {
 			resp.setContentType("application/json");
 			resp.setStatus(201);
 			PrintWriter out = resp.getWriter();
-			
-			
 			 ObjectMapper mapper = new ObjectMapper();
 			 try {
 				mapper.writeValue(out, story);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			
 			out.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);

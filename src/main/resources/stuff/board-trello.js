@@ -1,4 +1,4 @@
-{
+var board = {
     "now": 1318280562662,
     "boards": [{
         "name": "IM",

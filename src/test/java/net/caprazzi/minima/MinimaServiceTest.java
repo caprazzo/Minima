@@ -31,7 +31,7 @@ public class MinimaServiceTest {
 	@Before
 	public void setUp() {
 		db = mock(Keez.Db.class);
-		service = new MinimaService(db);
+		service = new MinimaService(db, null);
 	}
 	
 	@Test

@@ -13,6 +13,7 @@ import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.Stories;
 import net.caprazzi.minima.Story;
+import net.caprazzi.minima.servlet.MinimaPushServlet;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -28,8 +29,11 @@ public class MinimaService {
 	
 	private final Keez.Db db;
 
-	public MinimaService(final Keez.Db db) {
+	private final MinimaPushServlet pushServlet;
+
+	public MinimaService(final Keez.Db db, MinimaPushServlet pushServlet) {
 		this.db = db;
+		this.pushServlet = pushServlet;
 	}
 
 	public void writeBoard(final Writer out) {
@@ -119,6 +123,7 @@ public class MinimaService {
 			public void ok(String key, int rev) {
 				logger.info("Saved story [" + key + "]@" + rev);
 				cb.success(key, rev, writeData);
+				pushServlet.send(writeData);
 			}
 
 			@Override

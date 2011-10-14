@@ -3,18 +3,22 @@ package net.caprazzi.minima;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.IndexServlet;
+import net.caprazzi.minima.servlet.MinimaPushServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 public class MinimaServer {
 
 	private final MinimaService minimaService;
+	private final MinimaPushServlet pushServlet;
 
-	public MinimaServer(MinimaService minimaService) {
+	public MinimaServer(MinimaService minimaService, MinimaPushServlet pushServlet) {
 		this.minimaService = minimaService;
+		this.pushServlet = pushServlet;
 	}
 
 	public void start(int port) throws Exception {
@@ -29,9 +33,15 @@ public class MinimaServer {
         // use /uuid to get a fresh id
         // context.addServlet(new ServletHolder(new UUIDServlet()), "/uuid");
         
-        context.addServlet(new ServletHolder(new IndexServlet()),"/index");
+        //ServletHolder servletHolder = new ServletHolder(new DefaultServlet());
+        //servletHolder.setName("default");
+		//context.addServlet(servletHolder, "/foo");
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/");
+        context.addServlet(new ServletHolder(new IndexServlet()),"/index");
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
+        ServletHolder holder = new ServletHolder(pushServlet);
+        holder.setName("socket");
+        context.addServlet(holder, "/socket");
         
         server.start();
         server.join();
