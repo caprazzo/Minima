@@ -49,6 +49,9 @@ MinimaClient.prototype.connectWebSocket = function() {
 	
 	ws.onclose = function() {
 		console.log('WebSocket.onclose');
+		setTimeout(function() {
+			client.connectWebSocket();
+		}, 1500);
 	}
 	
 	ws.onmessage = function(msg) {
