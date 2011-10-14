@@ -49,7 +49,7 @@ ViewList.prototype.removeStoryView = function(story_view_id) {
 	
 	var htmlRoot = this.ui.stories[story_view_id];
 	if (htmlRoot) {
-		delete this.ui.stories[story_view_id];
+		delete this.ui.stories[story_view_id];		
 		htmlRoot.remove();
 	}
 }
@@ -200,11 +200,11 @@ ViewList.prototype._setupUi = function() {
 }
 
 ViewList.prototype.getChildRoot = function(childView) {
-	this.log('createChildView', childView);
+	this.log('getChildRoot', childView);
 	var childModel = childView.getModel();
 	var childRoot = this.ui.stories[childView.getViewId()];
 	if (childRoot == null) {
-		var childRoot = $('<li></li>');
+		var childRoot = $('<li class="ui-story-normal"></li>');
 		var rel_pos = childModel.getPos();
 		var ui = this.ui;
 		var inserted = false;
@@ -212,7 +212,16 @@ ViewList.prototype.getChildRoot = function(childView) {
 		// if this model has lower relative position
 		// than an existing story, create its root in
 		// the correct position
-		$.each(this.stories, function(key, otherView) {
+		
+		// sort stories by their pos
+		var stories = $.map(this.stories, function(view, view_id) {
+			return view;
+		});
+		stories.sort(function(viewA, viewB) {
+			return viewB.getModel().isBefore(viewA.getModel());
+		});
+		
+		$.each(stories, function(idx, otherView) {
 			var otherModel = otherView.getModel();
 			if (childModel.isBefore(otherModel)) {
 				var otherRoot = ui.stories[otherView.getViewId()];

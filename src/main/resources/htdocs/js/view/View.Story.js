@@ -1,4 +1,4 @@
-function ViewStory(parentView, storyVm) {
+function ViewStory(parentView, storyVm, doEffect) {
 	this.viewId = ViewStory.viewId(storyVm.getId());
 	this.tag = '['+this.viewId+']';
 	this.parentView = parentView;
@@ -9,7 +9,7 @@ function ViewStory(parentView, storyVm) {
 		parent: null,
 		root: null
 	};
-	this.refresh();
+	this.refresh(doEffect);
 }
 
 // static method to build a view id from a model id
@@ -29,10 +29,10 @@ ViewStory.prototype.getModel = function() {
 	return this.storyVm;
 }
 
-ViewStory.prototype.refresh = function() {
+ViewStory.prototype.refresh = function(doEffect) {
 	console.log(this.tag, 'refresh', this.storyVm.getId());
 	if (this.ui.parent == null) {
-		this._createStructure();
+		this._createStructure(doEffect);
 	}
 	this.ui.root.html(this.storyVm.getDesc());
 }
@@ -48,11 +48,11 @@ ViewStory.prototype.updateModel = function(model) {
 	this.storyVm = model;
 }
 
-ViewStory.prototype._createStructure = function() {
-	this.ui.parent = this.parentView.getChildRoot(this);
+ViewStory.prototype._createStructure = function(doEffect) {
+	this.ui.parent = this.parentView.getChildRoot(this, doEffect);
 	this.ui.root = $('<div></div>')
 		.attr('id', this.getViewId())
-		.appendTo(this.ui.parent);
+		.appendTo(this.ui.parent);	
 }
 
 ViewStory.prototype.getRoot = function() {

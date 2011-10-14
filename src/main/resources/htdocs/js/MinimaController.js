@@ -7,10 +7,6 @@ function MinimaController(options) {
 	this.store = options.store;
 	this.view = options.view;
 	
-	//this._initStore();
-	//this._initClient();
-	//this._initView();
-	
 	var view = this.view;
 	var client = this.client;
 	Minima.onCreateStory(function(storyModel) {
@@ -47,8 +43,6 @@ function MinimaController(options) {
 		console.log('[Controller] client.on.receiveStory');
 		view.setStory(storyModel);
 	}, this);
-	
-	
 	
 }
 
