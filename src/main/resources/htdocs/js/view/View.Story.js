@@ -80,6 +80,10 @@ ViewStory.prototype._setupUi = function() {
 	
 	this.ui.desc.editable(function(value, settings) {
 		console.log(value);
+		if (view.storyVm.getDesc() != value) {
+			view.storyVm.setDesc(value);
+			Minima.fireUpdateStory(view.storyVm);
+		}
 		return value;
 	}, {
 		type: 'textarea',
