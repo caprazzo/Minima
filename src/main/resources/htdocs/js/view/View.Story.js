@@ -60,7 +60,8 @@ ViewStory.prototype._createStructure = function() {
 	
 	this.ui.desc = $('<div class="ui-story-desc"></div>')
 		.appendTo(this.ui.root);
-				
+	
+	$('<br clear="both"/>').appendTo(this.ui.root);
 }
 
 ViewStory.prototype._handleArchiveSory = function() {
@@ -76,6 +77,14 @@ ViewStory.prototype._setupUi = function() {
 			console.log('archive btn handle');
 			view._handleArchiveSory();
 		});
+	
+	this.ui.desc.editable(function(value, settings) {
+		console.log(value);
+		return value;
+	}, {
+		type: 'textarea',
+		submit: 'OK'
+	});
 }
 
 ViewStory.prototype.getRoot = function() {
