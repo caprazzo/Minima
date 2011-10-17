@@ -55,19 +55,23 @@ ViewStory.prototype._createStructure = function() {
 		.attr('id', this.getViewId())
 		.appendTo(this.ui.parent);
 	
-	this.ui.archiveBtn = $('<span class="ui-story-archive-btn">x</span>')
+	this.ui.descRoot = $('<div class="ui-story-desc-root  ui-story-normal"></div>')
 		.appendTo(this.ui.root);
+	
+	this.ui.archiveBtn = $('<span class="ui-story-archive-btn">x</span>')
+		.appendTo(this.ui.descRoot);
 	
 	this.ui.desc = $('<div class="ui-story-desc"></div>')
+		.appendTo(this.ui.descRoot);
+	
+	this.ui.editRoot = $('<div class="ui-story-edit-root"></div>')	
+		.hide()
 		.appendTo(this.ui.root);
 	
+	this.ui.editArea = $('<textarea class="ui-story-textarea"></textarea>')
+		.appendTo(this.ui.editRoot);
+	
 	$('<br clear="both"/>').appendTo(this.ui.root);
-}
-
-ViewStory.prototype._handleArchiveSory = function() {
-	this.storyVm.setArchived(true);
-	this.parentView.removeStoryView(this.getViewId());
-	Minima.fireUpdateStory(this.storyVm);
 }
 
 ViewStory.prototype._setupUi = function() {
@@ -78,17 +82,49 @@ ViewStory.prototype._setupUi = function() {
 			view._handleArchiveSory();
 		});
 	
-	this.ui.desc.editable(function(value, settings) {
-		console.log(value);
-		if (view.storyVm.getDesc() != value) {
-			view.storyVm.setDesc(value);
-			Minima.fireUpdateStory(view.storyVm);
-		}
-		return value;
-	}, {
-		type: 'textarea',
-		submit: 'OK'
+	this.ui.descRoot.dblclick(function() {
+		view.ui.descRoot.hide();
+		view.ui.editArea.val(view.storyVm.getDesc());
+		view.ui.editRoot.show();
 	});
+	
+	this.ui.editArea
+		.keypress(function(e) {
+			if (e.keyCode == 13) {
+				view._txtStoryEdit();
+			}
+		}).keyup(function(e) {
+			if (e.keyCode == 27) {
+				view._resetEditUi();
+			} 
+		});
+}
+
+ViewStory.prototype._txtStoryEdit = function() {
+	var text = $.trim(this.ui.editArea.val());	
+	if (text) {
+		this._editStoryDesc(text);
+	}
+	this._resetEditUi();
+}
+
+ViewStory.prototype._resetEditUi = function() {
+	this.ui.descRoot.show();
+	this.ui.editRoot.hide();
+	this.ui.editArea.val('');
+}
+
+ViewStory.prototype._editStoryDesc = function(desc) {
+	this.storyVm.setDesc(desc);
+	this.updateDesc(desc);
+	Minima.fireUpdateStory(this.storyVm);
+	this._resetEditUi();
+}
+
+ViewStory.prototype._handleArchiveSory = function() {
+	this.storyVm.setArchived(true);
+	this.parentView.removeStoryView(this.getViewId());
+	Minima.fireUpdateStory(this.storyVm);
 }
 
 ViewStory.prototype.getRoot = function() {

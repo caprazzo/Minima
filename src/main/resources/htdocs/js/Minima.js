@@ -1,5 +1,6 @@
 function Minima() {}
 
+// global event handlers
 (function() {
 	var _onCreateStoryHandler = null;
 	Minima.fireCreateStory = function(storyModel) {
@@ -21,6 +22,7 @@ function Minima() {}
 	
 })();
 
+// static helper functions
 Minima.args = function(arguments) {
 	var arr = [];
 	Array.prototype.push.apply(arr, arguments)

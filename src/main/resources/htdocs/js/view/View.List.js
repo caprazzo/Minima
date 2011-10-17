@@ -111,13 +111,60 @@ ViewList.prototype._createStructure = function() {
 	this.ui.footer = $('<div class="list-footer"></div>')
 		.appendTo(this.ui.root);
 	
-	this.ui.textarea = $('<textarea></textarea>')
+	this.ui.textarea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.footer);
 	
 	this.ui.addBtn = $('<button>add card</button>')
 		.appendTo(this.ui.footer);
 	
 	this.parentView.addChildView(this);
+}
+
+ViewList.prototype._setupUi = function() {
+	var view = this;
+	this.ui.ul.attr('id', this.getViewId())
+		.sortable({
+			placeholder: "ui-state-highlight", 
+			connectWith:'.ui-list',
+			receive: function(event, ui) {
+				view._handleReceiveItem(ui.item);
+			},
+			remove: function(event, ui) {
+				view._handleRemoveItem(ui.item);
+			},
+			update: function(event, ui) {
+				// note: this is triggered also after receive
+				// in the receiving view
+				console.log(view.getViewId(), 'sort', event, ui );
+				var itemListViewId =  (ui.item.parent().attr('id'));
+				if (view.getViewId() != itemListViewId) {
+					console.log(view.getViewId(), 'ignoring sort from other list', itemListViewId);
+					return;
+				}
+				view._handleSortItem(ui.item);
+				
+			}			
+		});
+	
+	this.ui.textarea.hide()
+		.keypress(function(e) {
+			if (e.keyCode == 13) {
+				view._txtStoryEnter();
+			}
+		}).keyup(function(e) {
+			if (e.keyCode == 27) {
+				view._resetEnterUi();
+			} 
+		});
+	
+	this.ui.addBtn
+		.button()
+		.click(function() {
+			view._btnAddClick();
+		})
+		.keypress(function() {
+			view._btnAddClick();
+		});
 }
 
 ViewList.prototype.getStoryView = function(story_view_id) {
@@ -192,59 +239,12 @@ ViewList.prototype._handleSortItem = function(htmlItem) {
 	this.setStory(storyModel);
 }
 
-ViewList.prototype._setupUi = function() {
-	var view = this;
-	this.ui.ul.attr('id', this.getViewId())
-		.sortable({
-			placeholder: "ui-state-highlight", 
-			connectWith:'.ui-list',
-			receive: function(event, ui) {
-				view._handleReceiveItem(ui.item);
-			},
-			remove: function(event, ui) {
-				view._handleRemoveItem(ui.item);
-			},
-			update: function(event, ui) {
-				// note: this is triggered also after receive
-				// in the receiving view
-				console.log(view.getViewId(), 'sort', event, ui );
-				var itemListViewId =  (ui.item.parent().attr('id'));
-				if (view.getViewId() != itemListViewId) {
-					console.log(view.getViewId(), 'ignoring sort from other list', itemListViewId);
-					return;
-				}
-				view._handleSortItem(ui.item);
-				
-			}			
-		});
-	
-	this.ui.textarea.hide()
-		.keypress(function(e) {
-			if (e.keyCode == 13) {
-				view._txtStoryEnter();
-			}
-		}).keyup(function(e) {
-			if (e.keyCode == 27) {
-				view._resetEnterUi();
-			} 
-		});
-	
-	this.ui.addBtn
-		.button()
-		.click(function() {
-			view._btnAddClick();
-		})
-		.keypress(function() {
-			view._btnAddClick();
-		});
-}
-
 ViewList.prototype.getChildRoot = function(childView) {
 	this.log('getChildRoot', childView);
 	var childModel = childView.getModel();
 	var childRoot = this.ui.stories[childView.getViewId()];
 	if (childRoot == null) {
-		var childRoot = $('<li class="ui-story-normal"></li>');
+		var childRoot = $('<li></li>');
 		var rel_pos = childModel.getPos();
 		var ui = this.ui;
 		var inserted = false;

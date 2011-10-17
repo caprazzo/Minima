@@ -2,7 +2,6 @@ function MinimaController(options) {
 	console.log('[Controller] constructor', options);
 	
 	this.client = options.client;
-	this.store = options.store;
 	this.view = options.view;
 	
 	var view = this.view;
