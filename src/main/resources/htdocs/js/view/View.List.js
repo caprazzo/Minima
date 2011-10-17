@@ -124,11 +124,14 @@ ViewList.prototype._setupUi = function() {
 	var view = this;
 	this.ui.ul.attr('id', this.getViewId())
 		.sortable({
-			placeholder: "ui-state-highlight", 
+			placeholder: "ui-story-placeholder",
 			connectWith:'.ui-list',
 			receive: function(event, ui) {
 				view._handleReceiveItem(ui.item);
 			},
+			start: function(e, ui){
+		        ui.placeholder.height(ui.item.height());
+		    },
 			remove: function(event, ui) {
 				view._handleRemoveItem(ui.item);
 			},

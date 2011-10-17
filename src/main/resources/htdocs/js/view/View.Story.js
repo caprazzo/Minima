@@ -55,37 +55,61 @@ ViewStory.prototype._createStructure = function() {
 		.attr('id', this.getViewId())
 		.appendTo(this.ui.parent);
 	
-	this.ui.descRoot = $('<div class="ui-story-desc-root  ui-story-normal"></div>')
+	this.ui.descRoot = $('<div class="ui-story-view-root ui-story-display"></div>')
 		.appendTo(this.ui.root);
 	
-	this.ui.archiveBtn = $('<span class="ui-story-archive-btn">x</span>')
+	this.ui.archiveBtn = $('<span class="ui-story-archive-btn ui-icon ui-icon-trash"></span>')
 		.appendTo(this.ui.descRoot);
 	
 	this.ui.desc = $('<div class="ui-story-desc"></div>')
 		.appendTo(this.ui.descRoot);
 	
-	this.ui.editRoot = $('<div class="ui-story-edit-root"></div>')	
+	this.ui.editRoot = $('<div class="ui-story-edit-root ui-story-display"></div>')	
 		.hide()
 		.appendTo(this.ui.root);
 	
 	this.ui.editArea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.editRoot);
 	
-	$('<br clear="both"/>').appendTo(this.ui.root);
+	//$('<br clear="both"/>').appendTo(this.ui.root);
 }
 
 ViewStory.prototype._setupUi = function() {
 	var view = this;
 	this.ui.archiveBtn
+		.hide()
 		.click(function() {
 			console.log('archive btn handle');
 			view._handleArchiveSory();
+		});
+	
+	this.ui.descRoot.mousedown(function() {
+		view.ui.archiveBtn.hide();
+	});
+	
+	this.ui.descRoot.mouseup(function() {
+		view.ui.archiveBtn.show();
+	});
+	
+	this.ui.descRoot.hover(
+		function() {
+			var pos = $(this).offset();
+			var width = $(this).width();
+			view.ui.archiveBtn
+				.css({
+					left: (pos.left - 9 + width) + 'px',
+					top: pos.top + 'px'
+				})
+				.show();
+		}, function() {
+			view.ui.archiveBtn.hide();
 		});
 	
 	this.ui.descRoot.dblclick(function() {
 		view.ui.descRoot.hide();
 		view.ui.editArea.val(view.storyVm.getDesc());
 		view.ui.editRoot.show();
+		view.ui.editArea.focus();
 	});
 	
 	this.ui.editArea
