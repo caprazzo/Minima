@@ -2,12 +2,16 @@
 Minima is a to-do list board in the spirit of pivotaltracker and trello.
 
 ### Features:
-* live updates: all connected browsers are updated (well, only browsers that websockets)
-* standalone java server and embedded database - get up and running in seconds
+
+* can create, update, sort and move around cards between lists
+* live updates: all connected browsers are updated (well, only browsers with websockets)
+* standalone java server and embedded database: get up and running in seconds
+
 
 ### Un-features (things you may expect but that are not there):
 
 * no multiple board support: each instance has only one board
+* no multiple lists support: only 'todo', 'doing', 'done' 
 * no authentication & security: all viewers can update your board
  
 ### Getting started
