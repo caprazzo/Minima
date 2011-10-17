@@ -126,11 +126,21 @@ ViewList.prototype._setupUi = function() {
 		.sortable({
 			placeholder: "ui-story-placeholder",
 			connectWith:'.ui-list',
+			containment: view.ui.parent,
 			receive: function(event, ui) {
 				view._handleReceiveItem(ui.item);
 			},
-			start: function(e, ui){
+			start: function(e, ui) {
+				// this makes placeholder same height as dragged item
 		        ui.placeholder.height(ui.item.height());
+		        var viewId = Minima.getViewId(ui.item);
+		    	var storyView =  view.getStoryView(viewId);
+		    	storyView.startDrag();
+		    },
+		    stop: function(e, ui) {
+		    	var viewId = Minima.getViewId(ui.item);
+		    	var storyView =  view.getStoryView(viewId);
+		    	storyView.stopDrag();
 		    },
 			remove: function(event, ui) {
 				view._handleRemoveItem(ui.item);

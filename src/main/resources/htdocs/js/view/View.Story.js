@@ -76,28 +76,18 @@ ViewStory.prototype._createStructure = function() {
 
 ViewStory.prototype._setupUi = function() {
 	var view = this;
-	this.ui.archiveBtn
-		.hide()
-		.click(function() {
-			console.log('archive btn handle');
-			view._handleArchiveSory();
-		});
-	
-	this.ui.descRoot.mousedown(function() {
-		view.ui.archiveBtn.hide();
-	});
-	
-	this.ui.descRoot.mouseup(function() {
-		view.ui.archiveBtn.show();
-	});
-	
-	this.ui.descRoot.hover(
+	var timeout = null;
+	this.ui.descRoot.hover(		
 		function() {
-			var pos = $(this).offset();
-			var width = $(this).width();
+			// don't show the delete button if item is being dragged
+			if (view.isDragging) return;
+			var el = this;
+			timeout = null;
+			var pos = $(el).offset();
+			var width = $(el).width();
 			view.ui.archiveBtn
 				.css({
-					left: (pos.left - 9 + width) + 'px',
+					left: (pos.left - 11 + width) + 'px',
 					top: pos.top + 'px'
 				})
 				.show();
@@ -105,11 +95,17 @@ ViewStory.prototype._setupUi = function() {
 			view.ui.archiveBtn.hide();
 		});
 	
+	this.ui.archiveBtn		
+		.click(function() {
+			view._handleArchiveSory();
+		})
+		.hide();
+	
 	this.ui.descRoot.dblclick(function() {
 		view.ui.descRoot.hide();
-		view.ui.editArea.val(view.storyVm.getDesc());
 		view.ui.editRoot.show();
 		view.ui.editArea.focus();
+		view.ui.editArea.val(view.storyVm.getDesc());		
 	});
 	
 	this.ui.editArea
@@ -122,6 +118,15 @@ ViewStory.prototype._setupUi = function() {
 				view._resetEditUi();
 			} 
 		});
+}
+
+ViewStory.prototype.startDrag = function() {
+	this.isDragging = true;
+	this.ui.archiveBtn.hide();
+}
+
+ViewStory.prototype.stopDrag = function() {
+	this.isDragging = false;
 }
 
 ViewStory.prototype._txtStoryEdit = function() {
