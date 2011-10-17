@@ -9,14 +9,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.service.MinimaService;
-import net.caprazzi.minima.service.MinimaService.CreateStory;
-import net.caprazzi.minima.service.MinimaService.UpdateStory;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -36,7 +35,9 @@ public class MinimaServiceTest {
 	
 	@Test
 	public void create_should_put_new_story_in_db() {
-		byte[] data = service.asJson(new Story("key", "dsec", "tofo"));
+		Story story = new Story("key", "dsec", "tofo");
+		story.setPos(new BigDecimal(99));
+		byte[] data = service.asJson(story);
 		service.createStory("id", data, TestUtils.createStoryNoop);
 		verify(db).put(anyString(), eq(0), any(byte[].class), any(Put.class));
 	}

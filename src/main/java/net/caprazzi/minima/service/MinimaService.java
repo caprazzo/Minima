@@ -2,7 +2,6 @@ package net.caprazzi.minima.service;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -104,6 +103,11 @@ public class MinimaService {
 			@Override
 			public void collision(String key, int yourRev, int foundRev) {
 				cb.error("Collision while creating " + key + "@" + yourRev + ": " + foundRev + " found in db", null);
+			}
+
+			@Override
+			public void error(String key, Exception e) {
+				cb.error("Error while saving " + key, e);				
 			}
 			
 		});

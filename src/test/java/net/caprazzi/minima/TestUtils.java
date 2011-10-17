@@ -7,7 +7,10 @@ public class TestUtils {
 	
 	public final static CreateStory createStoryNoop = new CreateStory() {
 		@Override
-		public void error(String string, Exception e) {}
+		public void error(String string, Exception e) {
+			System.out.println("CreateStory error: " + string + " ex:" + e);
+			throw new RuntimeException(string, e);
+		}
 		
 		@Override
 		public void success(Story story) {}
@@ -15,7 +18,9 @@ public class TestUtils {
 	
 	public final static UpdateStory updateStoryNoop = new UpdateStory() {
 		@Override
-		public void error(String string, Exception e) {}
+		public void error(String string, Exception e) {
+			throw new RuntimeException(string, e);
+		}
 		
 		@Override
 		public void success(String key, int rev, byte[] data) {}
@@ -27,8 +32,8 @@ public class TestUtils {
 	public static class TestCreateStory extends CreateStory {
 
 		@Override
-		public void error(String string, Exception e) {
-			throw new RuntimeException("unexpected error");
+		public void error(String string, Exception e) {			
+			throw new RuntimeException("unexpected error: " + string, e);
 		}
 
 		@Override

@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import net.caprazzi.keez.Keez;
@@ -18,11 +19,15 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 
 public class MinimaServiceFunctionalTest {
 
+	Logger logger = LoggerFactory.getLogger(MinimaServiceFunctionalTest.class);
+	
 	private Keez.Db db;
 	private MinimaService service;
 	private File testDir;
@@ -30,6 +35,7 @@ public class MinimaServiceFunctionalTest {
 
 	@Before
 	public void setUp() {
+		flag = false;
 		testDir = Files.createTempDir();
 		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx");
 		service = new MinimaService(db, null);
@@ -38,12 +44,14 @@ public class MinimaServiceFunctionalTest {
 	@Test
 	public void create_story_should_return_story_with_id_and_rev() {
 		Story story = new Story(null,"desc","list");
+		story.setPos(new BigDecimal(99));
 		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
 			
 			@Override
 			public void success(Story stored) {
 				assertEquals("desc", stored.getDesc());
 				assertEquals("list", stored.getList());
+				assertEquals(99, stored.getPos().intValue());
 				assertNotNull(stored.getId());
 				assertEquals(1, stored.getRevision());
 				flag = true;
@@ -55,12 +63,13 @@ public class MinimaServiceFunctionalTest {
 	@Test
 	public void update_story_should_return_story_with_id_and_rev() {
 		Story story = new Story(null,"desc","list");
-		
+		story.setPos(new BigDecimal(99));
 		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
 			@Override
 			public void success(Story created) {
 				created.setDesc("newDesc");
 				created.setList("newList");
+				created.setPos(new BigDecimal(66));
 				byte[] updatedJson = service.asJson(created);
 				service.updateStory(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
 					@Override
@@ -68,6 +77,7 @@ public class MinimaServiceFunctionalTest {
 						Story updated = service.fromJson(jsonData);
 						assertEquals("newDesc", updated.getDesc());
 						assertEquals("newList", updated.getList());
+						assertEquals(66, updated.getPos().intValue());
 						assertEquals(key, updated.getId());
 						assertEquals(revision, updated.getRevision());
 						flag = true;
@@ -82,6 +92,7 @@ public class MinimaServiceFunctionalTest {
 	@Test
 	public void created_stories_should_be_in_board() throws JsonParseException, IOException {
 		Story story = new Story(null,"desc","list");
+		story.setPos(new BigDecimal(99));
 		service.createStory("id", service.asJson(story), TestUtils.createStoryNoop);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStreamWriter out = new OutputStreamWriter(baos);
@@ -97,18 +108,20 @@ public class MinimaServiceFunctionalTest {
 		assertEquals(1, s.getRevision());
 		assertEquals("desc", s.getDesc());
 		assertEquals("list", s.getList());
+		assertEquals(99, s.getPos().intValue());
 		assertNotNull(s.getId());
 	}
 	
 	@Test
 	public void updated_stories_should_be_in_board() throws JsonParseException, IOException {
 		Story story = new Story(null,"desc","list");
-		
+		story.setPos(new BigDecimal(99));
 		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
 			@Override
 			public void success(Story updated) {
 				updated.setDesc("newDesc");
 				updated.setList("newList");
+				updated.setPos(new BigDecimal(66));
 				byte[] updatedJson = service.asJson(updated);
 				service.updateStory(updated.getId(), updated.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
 					@Override

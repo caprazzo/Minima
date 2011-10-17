@@ -135,12 +135,14 @@ ViewList.prototype._setupUi = function() {
 		        ui.placeholder.height(ui.item.height());
 		        var viewId = Minima.getViewId(ui.item);
 		    	var storyView =  view.getStoryView(viewId);
-		    	storyView.startDrag();
+		    	if (storyView)
+		    		storyView.startDrag();
 		    },
 		    stop: function(e, ui) {
 		    	var viewId = Minima.getViewId(ui.item);
 		    	var storyView =  view.getStoryView(viewId);
-		    	storyView.stopDrag();
+		    	if (storyView)
+		    		storyView.stopDrag();
 		    },
 			remove: function(event, ui) {
 				view._handleRemoveItem(ui.item);
