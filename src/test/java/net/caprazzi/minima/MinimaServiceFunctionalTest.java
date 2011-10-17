@@ -14,6 +14,7 @@ import java.util.Collection;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.servlet.MinimaPushServlet;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -21,6 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.mockito.Mockito.*;
 
 import com.google.common.io.Files;
 
@@ -30,6 +33,7 @@ public class MinimaServiceFunctionalTest {
 	
 	private Keez.Db db;
 	private MinimaService service;
+	private MinimaPushServlet pushServlet;
 	private File testDir;
 	private boolean flag;
 
@@ -38,7 +42,8 @@ public class MinimaServiceFunctionalTest {
 		flag = false;
 		testDir = Files.createTempDir();
 		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx");
-		service = new MinimaService(db, null);
+		pushServlet = mock(MinimaPushServlet.class);
+		service = new MinimaService(db, pushServlet);
 	}
 	
 	@Test
@@ -58,6 +63,7 @@ public class MinimaServiceFunctionalTest {
 			}
 		});
 		assertTrue(flag);
+		verify(pushServlet).send(any(byte[].class));
 	}
 	
 	@Test
@@ -87,6 +93,7 @@ public class MinimaServiceFunctionalTest {
 		});
 		
 		assertTrue(flag);
+		verify(pushServlet).send(any(byte[].class));
 	}
 	
 	@Test
