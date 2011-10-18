@@ -35,3 +35,13 @@ Minima is a to-do list board in the spirit of pivotaltracker and trello. Minima 
 
 1. mvn assembly:assembly
 2. java -jar target/minima-0.5-jar-with-dependencies.jar
+
+## Changelog
+
+### V 0.5 18 October 2011
+ 
+* Add, create, archive cards
+* All changes are pushed to all clients (WebSockets only)
+* Http API
+* All data stored as plain text files using Keez/KeezFileDb
+* Web ui built with jquery and custom javascript 
