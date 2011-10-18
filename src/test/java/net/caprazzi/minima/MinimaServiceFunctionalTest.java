@@ -41,7 +41,7 @@ public class MinimaServiceFunctionalTest {
 	public void setUp() {
 		flag = false;
 		testDir = Files.createTempDir();
-		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx");
+		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx", false);
 		pushServlet = mock(MinimaPushServlet.class);
 		service = new MinimaService(db, pushServlet);
 	}
