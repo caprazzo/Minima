@@ -63,7 +63,42 @@ public class MinimaServiceFunctionalTest {
 			}
 		});
 		assertTrue(flag);
+	}
+	
+	@Test
+	public void create_story_should_push_created() {
+		Story story = new Story(null,"desc","list");
+		story.setPos(new BigDecimal(99));
+		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+			
+			@Override
+			public void success(Story stored) {
+				flag = true;
+			}
+		});
+		assertTrue(flag);
 		verify(pushServlet).send(any(byte[].class));
+	}
+	
+	@Test
+	public void create_story_should_push_updated() {
+		Story story = new Story(null,"desc","list");
+		story.setPos(new BigDecimal(99));
+		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+			@Override
+			public void success(Story created) {
+				byte[] updatedJson = service.asJson(created);
+				service.updateStory(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+					@Override
+					public void success(String key, int revision, byte[] jsonData) {
+						flag = true;
+					}
+				});
+			}
+		});
+		
+		assertTrue(flag);
+		verify(pushServlet, times(2)).send(any(byte[].class));
 	}
 	
 	@Test
@@ -93,7 +128,6 @@ public class MinimaServiceFunctionalTest {
 		});
 		
 		assertTrue(flag);
-		verify(pushServlet).send(any(byte[].class));
 	}
 	
 	@Test
