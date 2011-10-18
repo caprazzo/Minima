@@ -21,3 +21,15 @@ Minima is a to-do list board in the spirit of pivotaltracker and trello.
 2. java -jar minima-1.0-with-dependencies.jar
 3. http://localhost:8989/index
 
+## For developers
+
+### Eclipse setup
+
+1. clone project from github
+2. mvn eclipse:eclipse
+3. file -> import -> existing projects...
+
+### Building
+
+1. mvn assembly:assembly
+2. java -jar target/minima-0.5-jar-with-dependencies.jar
