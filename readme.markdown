@@ -1,6 +1,8 @@
 # Minima
 Minima is a to-do list board in the spirit of pivotaltracker and trello.
 
+![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshot-minima-0.5.png "Minima Screenshot")
+
 ### Features:
 
 * can create, update, sort and move around cards between lists
@@ -19,4 +21,3 @@ Minima is a to-do list board in the spirit of pivotaltracker and trello.
 2. java -jar minima-1.0-with-dependencies.jar
 3. http://localhost:8989/index
 
-![screenshot](/path/img.jpg "Minima Screenshot")
