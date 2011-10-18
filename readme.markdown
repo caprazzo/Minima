@@ -15,8 +15,10 @@ Minima is a to-do list board in the spirit of pivotaltracker and trello.
 * no multiple board support: each instance has only one board
 * no multiple lists support: only 'todo', 'doing', 'done' 
 * no authentication & security: all viewers can update your board
+
+## For users
  
-### Getting started
+### 5 minutes test
 1. Download the latest jar from ...
 2. java -jar minima-1.0-with-dependencies.jar
 3. http://localhost:8989/index
