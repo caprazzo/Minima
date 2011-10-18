@@ -18,7 +18,7 @@ Minima is a to-do list board in the spirit of pivotaltracker and trello.
 
 ## For users
  
-### 5 minutes test
+### Install and run
 1. Download the latest jar from ...
 2. java -jar minima-1.0-with-dependencies.jar
 3. http://localhost:8989/index

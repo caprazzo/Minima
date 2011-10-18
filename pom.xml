@@ -15,6 +15,12 @@
 		<jettyVersion>8.0.3.v20111011</jettyVersion>
 	</properties>
 
+	<repositories>
+	    <repository>
+	        <id>mcaprari-releases</id>
+	        <url>https://github.com/mcaprari/mcaprari-maven-repo/raw/master/releases</url>
+	    </repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -51,6 +57,12 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.caprazzi.keez</groupId>
+			<artifactId>Keez</artifactId>
+			<version>0.5</version>
+		</dependency>
+	
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
