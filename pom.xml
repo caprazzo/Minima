@@ -29,7 +29,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>nnet.caprazzi.minima.MiniMain</mainClass>
+							<mainClass>net.caprazzi.minima.MiniMain</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

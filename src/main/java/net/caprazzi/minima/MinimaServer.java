@@ -44,7 +44,7 @@ public class MinimaServer {
         context.addServlet(holder, "/socket");
         
         server.start();
+        System.out.println("Minima ready at http://localhost:8989/index");
         server.join();
-        
 	}
 }
