@@ -114,7 +114,7 @@ ViewList.prototype._createStructure = function() {
 	this.ui.textarea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.footer);
 	
-	this.ui.addBtn = $('<button>add card</button>')
+	this.ui.addBtn = $('<span class="ui-list-add-btn"></span>')
 		.appendTo(this.ui.footer);
 	
 	this.parentView.addChildView(this);
@@ -173,13 +173,17 @@ ViewList.prototype._setupUi = function() {
 		});
 	
 	this.ui.addBtn
-		.button()
 		.click(function() {
 			view._btnAddClick();
 		})
 		.keypress(function() {
 			view._btnAddClick();
-		});
+		})
+		.hover(function() {
+			$(this).addClass('ui-list-add-btn-hover');
+		}, function() {
+			$(this).removeClass('ui-list-add-btn-hover');
+		}).focus();
 }
 
 ViewList.prototype.getStoryView = function(story_view_id) {
@@ -322,12 +326,12 @@ ViewList.prototype.updateChildPosition = function(childView, newPos) {
 
 ViewList.prototype._btnAddClick = function() {
 	this.log('click add button');
-	this.ui.addBtn.button('disable').hide();
+	this.ui.addBtn.hide();
 	this.ui.textarea.show().focus();
 }
 
 ViewList.prototype._resetEnterUi = function() {
-	this.ui.addBtn.button('enable').show().focus();
+	this.ui.addBtn.show();
 	this.ui.textarea.hide();
 	this.ui.textarea.val('');
 }

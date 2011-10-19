@@ -156,12 +156,23 @@ ViewStory.prototype._handleArchiveSory = function() {
 	Minima.fireUpdateStory(this.storyVm);
 }
 
+ViewStory.prototype._atFilter = function(text) {
+	var pattern = /(@\b[\w]*)/gi;
+	return text.replace(pattern, '<span class="ui-tag ui-tag-at">$1</span>');
+}
+
+ViewStory.prototype._hashFilter = function(text) {
+	var pattern = /(#\b[\w]*)/gi;
+	return text.replace(pattern, '<span class="ui-tag ui-tag-hash">$1</span>');
+}
+
 ViewStory.prototype.getRoot = function() {
 	return this.ui.root;
 }
 
 ViewStory.prototype.updateDesc = function(desc) {
-	this.ui.desc.html(desc);
+	var filtered = this._hashFilter(this._atFilter(desc));
+	this.ui.desc.html(filtered);
 }
 
 ViewStory.prototype.updatePosition = function(pos) {

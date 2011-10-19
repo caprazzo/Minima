@@ -2,7 +2,7 @@ package net.caprazzi.minima;
 
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
-import net.caprazzi.minima.servlet.IndexServlet;
+import net.caprazzi.minima.servlet.MinimaIndexServlet;
 import net.caprazzi.minima.servlet.MinimaPushServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
 
@@ -14,10 +14,12 @@ public class MinimaServer {
 
 	private final MinimaService minimaService;
 	private final MinimaPushServlet pushServlet;
+	private final MinimaIndexServlet indexServlet;
 
-	public MinimaServer(MinimaService minimaService, MinimaPushServlet pushServlet) {
+	public MinimaServer(MinimaService minimaService, MinimaPushServlet pushServlet, MinimaIndexServlet indexServlet) {
 		this.minimaService = minimaService;
 		this.pushServlet = pushServlet;
+		this.indexServlet = indexServlet;
 	}
 
 	public void start(int port) throws Exception {
@@ -30,7 +32,7 @@ public class MinimaServer {
         MinimaServlet minimaServlet = new MinimaServlet(minimaService);
                 
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/");
-        context.addServlet(new ServletHolder(new IndexServlet()),"/index");
+        context.addServlet(new ServletHolder(indexServlet),"/index");
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         ServletHolder holder = new ServletHolder(pushServlet);
         holder.setName("socket");
