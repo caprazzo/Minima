@@ -110,4 +110,3 @@ body: { story }
 	400 if the update fails for malformed json
 	
 	500 any other error
-Returns the updated story, with revision number incremented by one
