@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.util.IO;
 
+@SuppressWarnings("serial")
 public class IndexServlet extends HttpServlet {
 
 	@Override
