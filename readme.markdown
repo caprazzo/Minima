@@ -55,14 +55,14 @@ All configurations are optional
 
 Story object:
 
-{
-"id": string, // unique id for this story
-"revision": int, // revision number
-"desc": string // body of the story
-"list": string // id of the list
-"archived": boolean // if this story is archived
-"pos": decimal // position of this story relative to others in the same list 
-}
+	{
+	"id": string, // unique id for this story
+	"revision": int, // revision number
+	"desc": string // body of the story
+	"list": string // id of the list
+	"archived": boolean // if this story is archived
+	"pos": decimal // position of this story relative to others in the same list 
+	}
 
 ### get all stories
 
