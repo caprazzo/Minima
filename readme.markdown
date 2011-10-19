@@ -68,7 +68,13 @@ Story object:
 
 GET /data/stories
 
-{"stories": [{ story }, { story }, ...]}
+	{
+		"stories": [
+			{ story }, 
+			{ story }, 
+			...
+		]
+	}
 
 ### create story
 
