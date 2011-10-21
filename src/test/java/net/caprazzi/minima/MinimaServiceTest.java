@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import model.Story;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Put;

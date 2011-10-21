@@ -5,13 +5,13 @@ import java.io.Writer;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import model.Stories;
+import model.Story;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.minima.Stories;
-import net.caprazzi.minima.Story;
 import net.caprazzi.minima.servlet.MinimaPushServlet;
 
 import org.codehaus.jackson.JsonFactory;
@@ -63,9 +63,9 @@ public class MinimaService {
 		});
 	}
 	
-	public void createStory(String key, byte[] data, final CreateStory cb) {
+	public void createStory(String key, byte[] jsonStory, final CreateStory cb) {
 		
-		Story story = fromJson(data);
+		Story story = fromJson(jsonStory);
 		story.setId(key);
 		story.setRevision(1);	
 		

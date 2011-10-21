@@ -1,5 +1,6 @@
 package net.caprazzi.minima;
 
+import model.Story;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
 import net.caprazzi.minima.service.MinimaService.UpdateStory;
 

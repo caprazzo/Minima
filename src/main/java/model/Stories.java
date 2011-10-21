@@ -1,7 +1,8 @@
-package net.caprazzi.minima;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class Stories {

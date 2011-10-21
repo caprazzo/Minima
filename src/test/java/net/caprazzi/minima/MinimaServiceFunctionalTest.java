@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+import model.Story;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.service.MinimaService;
