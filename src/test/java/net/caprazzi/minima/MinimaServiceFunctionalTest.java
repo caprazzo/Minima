@@ -14,6 +14,7 @@ import java.util.Collection;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.model.Story;
+import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.MinimaPushServlet;
 
@@ -196,6 +197,7 @@ public class MinimaServiceFunctionalTest {
 	private static class Board {
 		
 		private Collection<Story> stories;
+		private Collection<StoryList> lists;
 		
 		public Collection<Story> getStories() {
 			return stories;
@@ -203,6 +205,10 @@ public class MinimaServiceFunctionalTest {
 		
 		public void setStories(Collection<Story> stories) {
 			this.stories = stories;
+		}
+		
+		public void setLists(Collection<StoryList> lists) {
+			this.lists = lists;
 		}
 		
 	}
