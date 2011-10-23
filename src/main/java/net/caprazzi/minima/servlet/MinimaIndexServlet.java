@@ -19,7 +19,7 @@ public class MinimaIndexServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("htdocs/index.html");
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
 		PrintWriter writer = resp.getWriter();
 		writer.write(IO.toString(in).replaceAll("\\{\\{ BOARD_TITLE \\}\\}", boardTitle));
 
