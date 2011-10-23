@@ -276,7 +276,9 @@ ViewList.prototype.getChildRoot = function(childView) {
 			return view;
 		});
 		stories.sort(function(viewA, viewB) {
-			return viewB.getModel().isBefore(viewA.getModel());
+			return viewB.getModel().isBefore(viewA.getModel())
+				? -1
+				: 1;
 		});
 		
 		// if this model has lower relative position
