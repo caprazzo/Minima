@@ -26,7 +26,7 @@ function MinimaController(options) {
 		console.log('[Controller] client.on.board', board);
 		
 		board.lists.sort(function(objA, objB) {
-			return objA.pos > objB.pos;
+			return objA.pos - objB.pos;
 		});
 		
 		$.each(board.lists, function(idx, list_obj) {
