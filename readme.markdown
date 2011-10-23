@@ -131,7 +131,3 @@ body: { story }
 	
 	500 any other error
 
-
-### Wishlist
-
-* 
