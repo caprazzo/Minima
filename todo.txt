@@ -1,1 +1,1 @@
-- send meta with updates
+- add revision to lists

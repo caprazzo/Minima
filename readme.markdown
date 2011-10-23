@@ -56,13 +56,21 @@ All configurations are optional
 Story object:
 
 	{
-	"id": string, // unique id for this story
-	"revision": int, // revision number
-	"desc": string // body of the story
-	"list": string // id of the list
-	"archived": boolean // if this story is archived
-	"pos": decimal // position of this story relative to others in the same list 
+		"id": string, // unique id for this story
+		"revision": int, // revision number
+		"desc": string // body of the story
+		"list": string // id of the list
+		"archived": boolean // if this story is archived
+		"pos": decimal // position of this story relative to others in the same list 
 	}
+
+List object:
+
+	{
+		"id": string, // unique id for this list
+		"name": string // name for this list
+		"pos": decimal // position of this list relative to others in the same board
+	} 
 
 ### get all stories
 
@@ -73,6 +81,10 @@ GET /data/stories
 			{ story }, 
 			{ story }, 
 			...
+		],
+		"lists": [
+			{ list },
+			{ list }
 		]
 	}
 
