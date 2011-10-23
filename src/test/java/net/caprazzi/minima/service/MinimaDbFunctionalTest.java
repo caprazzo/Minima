@@ -6,8 +6,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
-import net.caprazzi.keez.simpleFileDb.KeezFileDbTest.GetTestHelp;
 import net.caprazzi.minima.TestUtils;
+import net.caprazzi.minima.TestUtils.*;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;

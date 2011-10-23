@@ -2,6 +2,7 @@ package net.caprazzi.minima;
 
 import java.util.Arrays;
 
+import net.caprazzi.keez.Keez.Delete;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
@@ -140,6 +141,70 @@ public class TestUtils {
 	
 	public static ListFound listFound(Entry[] entries) {
 		return new ListFound(entries);
+	}
+	
+	
+	public static class PutTestHelp extends Put {
+
+		@Override
+		public void ok(String key, int revision) {
+			throw new RuntimeException("unexpected put success");
+		}
+
+		@Override
+		public void collision(String key, int yourRev, int foundRev) {
+			throw new RuntimeException("unexpected put collision");			
+		}
+		
+		@Override
+		public void error(String key, Exception e) {
+			throw new RuntimeException("unexpected put error", e);
+		}
+		
+	}
+	
+	public static class DeleteTestHelp extends Delete {
+
+		@Override
+		public void deleted(String key, byte[] data) {
+			throw new RuntimeException("unexpected delete success");
+		}
+
+		@Override
+		public void notFound(String key) {
+			throw new RuntimeException("unexpected not found");			
+		}
+		
+		@Override
+		public void error(String key, Exception e) {
+			throw new RuntimeException("unexpected error", e);
+		}		
+	}
+	
+	public static class GetTestHelp extends Get {
+
+		@Override
+		public void found(String key, int rev, byte[] data) {
+			throw new RuntimeException("unexpected found");
+		}
+
+		@Override
+		public void notFound(String key) {
+			throw new RuntimeException("unexpected not found");
+		}
+		
+		@Override
+		public void error(String key, Exception e) {
+			throw new RuntimeException("unexpected error", e);
+		}
+		
+	}
+	
+	public static class ListTestHelp extends List {
+		@Override
+		public void entries(Iterable<Entry> entries) {
+			throw new RuntimeException("unexpected entries call");
+		}
 	}
 	
 }
