@@ -1,4 +1,4 @@
-package model;
+package net.caprazzi.minima.model;
 
 import java.util.ArrayList;
 import java.util.List;

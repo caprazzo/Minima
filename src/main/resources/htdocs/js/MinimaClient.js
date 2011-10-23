@@ -22,12 +22,10 @@ MinimaClient.prototype.fireReceiveStory = function(storyModel) {
 }
 
 MinimaClient.prototype.loadBoard = function() {
-	var staticLists = [ { name: 'todo', id: 'todo', pos:65536 }, { name: 'doing', id: 'doing', pos:131072 }, { name: 'done', id: 'done', pos:196608 }];
 	var store = this;
 	$.getJSON('/data/stories', function(board) {
 		console.log('[Client] loadBoard.success', board);
 		// add static lists because server does not support lists yet)
-		board.lists = staticLists;
 		board.name = 'A Board';
 		store.fireOnBoard(board);
 	});
@@ -58,7 +56,8 @@ MinimaClient.prototype.connectWebSocket = function() {
 	ws.onmessage = function(msg) {
 		console.log('WebSocket.onmsg', msg.data);
 		var obj = $.parseJSON(msg.data);
-		client.fireReceiveStory(ModelStory.fromObject(obj));
+		if (obj.name == "story")
+			client.fireReceiveStory(ModelStory.fromObject(obj.obj));
 	}
 	
 	ws.onerror = function(err) {

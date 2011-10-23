@@ -1,2 +1,1 @@
-- bubble db collisions up to minima service
-- return errors in json format
+- send meta with updates

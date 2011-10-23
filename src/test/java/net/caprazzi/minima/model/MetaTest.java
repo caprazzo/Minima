@@ -1,8 +1,10 @@
-package model;
+package net.caprazzi.minima.model;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+
+import net.caprazzi.minima.model.Meta;
 
 import org.codehaus.jackson.JsonParseException;
 import org.junit.Test;

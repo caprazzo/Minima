@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.io.Writer;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 
-import model.Stories;
-import model.Story;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
+import net.caprazzi.minima.model.Meta;
+import net.caprazzi.minima.model.Stories;
+import net.caprazzi.minima.model.Story;
+import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.servlet.MinimaPushServlet;
 
 import org.codehaus.jackson.JsonFactory;
@@ -25,7 +28,7 @@ import org.slf4j.LoggerFactory;
 public class MinimaService {
 
 	private static final Logger logger = LoggerFactory.getLogger("MinimaService");
-	
+
 	private final Keez.Db db;
 
 	private final MinimaPushServlet pushServlet;
@@ -40,23 +43,49 @@ public class MinimaService {
 
 			@Override
 			public void entries(Iterable<Entry> entries) {
+				
+				
 				JsonFactory factory = new JsonFactory();
 				try {
+					
+					ArrayList<Story> stories = new ArrayList<Story>();
+					ArrayList<StoryList> lists = new ArrayList<StoryList>();
+					
+					for(Entry e : entries) {
+						Meta meta = Meta.fromJson(e.getData());
+						if (meta.getName().equals("list")) {
+							lists.add((StoryList) meta.getObj());
+						}
+						else if (meta.getName().equals("story")) {
+							stories.add( (Story) meta.getObj());
+						}
+					}
+					
 					JsonGenerator json = factory.createJsonGenerator(out);
 					json.writeStartObject();
 					
 					json.writeFieldName("stories");
 					json.writeStartArray();
 					
-					for (Entry e : entries) {
-						json.writeRawValue(new String(e.getData()));
+					for (Story s : stories) {
+						json.writeRawValue(new String(s.toJson()));
 					}
 					
 					json.writeEndArray();
 					
+					json.writeFieldName("lists");
+					json.writeStartArray();
+					
+					for(StoryList l : lists) {
+						json.writeRawValue(new String(l.toJson()));
+					}
+					json.writeEndArray();
+					
+					
 					json.writeEndObject();
 					json.flush();
-				} catch (IOException e) {
+				} catch (Exception e) {
+					e.printStackTrace();
 					throw new RuntimeException("Error while wrinting board to output", e);
 				}
 			}
@@ -67,14 +96,16 @@ public class MinimaService {
 		
 		Story story = fromJson(jsonStory);
 		story.setId(key);
-		story.setRevision(1);	
+		story.setRevision(1);
+		
+		Meta<Story> meta = Meta.wrap("story", story);
 		
 		if (story.getPos() == null) {
 			cb.error("Position must be specified", null);
 			return;
 		}
 	
-		db.put(key, 0, asJson(story), new Put() {
+		db.put(key, 0, meta.toJson(), new Put() {
 
 			@Override
 			public void ok(String key, int rev) {
@@ -83,7 +114,8 @@ public class MinimaService {
 
 					@Override
 					public void found(String key, int rev, byte[] data) {
-						cb.success(fromJson(data));
+						Meta<Story> meta = Meta.fromJson(Story.class, data);
+						cb.success(meta.getObj());
 						pushServlet.send(data);
 					}
 
@@ -111,23 +143,22 @@ public class MinimaService {
 			}
 			
 		});
-		
 	}
 
 	public void updateStory(String id, final int revision, final byte[] storyData, final UpdateStory cb) {
 		if (!validateStoryData(storyData, cb)) 
 			return;
 		
-		Story story = fromJson(storyData);
+		final Story story = fromJson(storyData);
 		story.setId(id);
 		story.setRevision(revision+1);	
-		final byte[] writeData = asJson(story);
+		final byte[] writeData = Meta.wrap("story", story).toJson();
 		db.put(id, revision, writeData, new Put() {
 
 			@Override
 			public void ok(String key, int rev) {
 				logger.info("Saved story [" + key + "]@" + rev);
-				cb.success(key, rev, writeData);
+				cb.success(key, rev, story.toJson());
 				pushServlet.send(writeData);
 			}
 
@@ -216,6 +247,5 @@ public class MinimaService {
 	public static String randomString() {
 		return new BigInteger(32, random).toString(32);
 	}
-
 
 }

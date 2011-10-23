@@ -1,6 +1,7 @@
 package net.caprazzi.minima;
 
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.minima.service.MinimaDb;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
 import net.caprazzi.minima.servlet.MinimaPushServlet;
@@ -15,12 +16,13 @@ public class MiniMain {
 		String boardTitle = System.getProperty("minima.board.default.title", "Minima");
 		
 		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
-		
 		db.setAutoPurge(true);
 		
 		MinimaIndexServlet indexServlet = new MinimaIndexServlet();
 		indexServlet.setTitle(boardTitle);
 		MinimaPushServlet pushServlet = new MinimaPushServlet();	
+		MinimaDb minimaDbHelper = new MinimaDb(db);
+		minimaDbHelper.init();
 		MinimaService minimaService = new MinimaService(db, pushServlet);
 		MinimaServer minimaServer = new MinimaServer(minimaService, pushServlet, indexServlet);
 		minimaServer.start(port);
