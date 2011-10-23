@@ -1,1 +1,2 @@
 - add revision to lists
+- sort lists using pos

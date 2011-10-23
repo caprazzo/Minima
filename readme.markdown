@@ -43,6 +43,13 @@ All configurations are optional
 
 ## Changelog
 
+### V 0.6 - 23 October 2011
+
+* Refined user interface (simpler)
+* Highlighting #hash tags and @at tags
+* Moved lists definition on server
+* Changed database format on database + automatic upgrade
+
 ### V 0.5 - 18 October 2011
  
 * Add, create, archive cards
@@ -51,7 +58,7 @@ All configurations are optional
 * All data stored as plain text files using Keez/KeezFileDb
 * Web ui built with jquery and custom javascript
 
-### Http Api V 0.5
+### Http Api V 0.6
 
 Story object:
 

@@ -25,6 +25,10 @@ function MinimaController(options) {
 	this.client.onBoard(function(board) {
 		console.log('[Controller] client.on.board', board);
 		
+		board.lists.sort(function(objA, objB) {
+			return objA.pos > objB.pos;
+		});
+		
 		$.each(board.lists, function(idx, list_obj) {
 			view.setList(ModelList.fromObject(list_obj));
 		});
