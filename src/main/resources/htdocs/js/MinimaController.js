@@ -47,8 +47,35 @@ function MinimaController(options) {
 	
 }
 
+MinimaController.prototype.enableNotifications = function() {
+	if (!window.webkitNotifications) {
+		console.log('[Controller] notifications not supported');
+		$('#enableNotifications').hide();
+		return;
+	}
+	if (window.webkitNotifications.checkPermission() == 2) {
+		$('#enableNotifications').html('notifications denied');
+		return;
+	}
+	if (window.webkitNotifications.checkPermission() == 1) { // PERMISSION_NOT_ALLOWED (user has not said yes or no yet				
+		$('#enableNotifications').click(function() {
+			console.log('[Controller] request notification permission');
+			window.webkitNotifications.requestPermission();
+		}).show();
+		
+		return;
+	}
+	if (window.webkitNotifications.checkPermission() == 0) {
+		$('#enableNotifications').html('notifications enabled');
+		window.webkitNotifications.createNotification('/favicon.ico','bbbb','cccc').show();
+		return;
+	} 
+}
+
 MinimaController.prototype.start = function() {
 	console.log('[Contoller] start');
+	
 	this.client.connectWebSocket();
 	this.client.loadBoard();
+	this.enableNotifications();
 }

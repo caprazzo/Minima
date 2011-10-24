@@ -1,2 +1,6 @@
 - add revision to lists
-- sort lists using pos
+- rename lists
+- propagate updated lists
+
+- flash create story (remote)
+- flash remove story (remote)

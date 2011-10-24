@@ -3,6 +3,7 @@ if (!window.WebSocket)
 
 $(function() {
 	console.log('[Index] ready');
+	
 	var ws_location = document.location.toString()
 		.replace('http://', 'ws://')
 		.replace('/index','/socket');
