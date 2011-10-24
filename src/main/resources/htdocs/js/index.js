@@ -1,10 +1,6 @@
 if (!window.WebSocket)
 	alert("WebSocket not supported by this browser");
 
-
-
-
-
 $(function() {
 	console.log('[Index] ready');
 			
@@ -24,7 +20,7 @@ $(function() {
 	    clearTimeout(resizeTimer);
 	    resizeTimer = setTimeout(function() {
 	    	view.resize($(this).width());
-	    }, 50);
+	    }, 10);
 	});
 	
 	controller.start();

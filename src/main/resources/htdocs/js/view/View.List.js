@@ -119,7 +119,7 @@ ViewList.prototype._createStructure = function() {
 	this.ui.textarea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.footer);
 	
-	this.ui.addBtn = $('<span class="ui-list-add-btn"></span>')
+	this.ui.addBtn = $('<span class="ui-list-add-btn">add note</span>')
 		.appendTo(this.ui.footer);
 	
 }

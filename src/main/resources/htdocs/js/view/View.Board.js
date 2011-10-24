@@ -76,9 +76,9 @@ ViewBoard.prototype._createStructure = function() {
 }
 
 ViewBoard.prototype.resize = function(width) {
-	var newWidth = width - 80;
+	var newWidth = width - 45;
 	
-	var maxListSize = 375;
+	var maxListSize = 330;
 	var minListSize = 210;
 	var cutoffBoardSize = minListSize * 3;
 	var varticalBoradSize = minListSize;
