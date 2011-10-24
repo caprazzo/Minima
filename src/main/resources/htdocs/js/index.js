@@ -15,12 +15,8 @@ $(function() {
 		view: view
 	});
 	
-	var resizeTimer;
 	$(window).resize(function() {
-	    clearTimeout(resizeTimer);
-	    resizeTimer = setTimeout(function() {
-	    	view.resize($(this).width());
-	    }, 10);
+    	view.resize($(this).width());
 	});
 	
 	controller.start();

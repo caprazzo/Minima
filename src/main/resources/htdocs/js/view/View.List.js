@@ -102,7 +102,10 @@ ViewList.prototype._refreshStories = function() {
 }
 
 ViewList.prototype._createStructure = function() {
-	this.ui.root = this.parentView.getChildRoot(this);
+	this.ui.parent = this.parentView.getChildRoot(this); 
+	
+	this.ui.root = $('<div class="list-wrapper"></div>')
+		.appendTo(this.ui.parent);
 	
 	this.ui.header = $('<div class="list-header"></div>')
 		.appendTo(this.ui.root);
@@ -130,7 +133,8 @@ ViewList.prototype._setupUi = function() {
 		.sortable({
 			placeholder: "ui-story-placeholder",
 			connectWith:'.ui-list',
-			containment: view.ui.parent,
+			containment: view.ui.parent.parent(),
+			tolerance: 'intersect',
 			receive: function(event, ui) {
 				view._handleReceiveItem(ui.item);
 			},
@@ -183,7 +187,7 @@ ViewList.prototype._setupUi = function() {
 		.keypress(function() {
 			view._btnAddClick();
 		})
-		.hover(function() {
+		.hover(function() { 
 			$(this).addClass('ui-list-add-btn-hover');
 		}, function() {
 			$(this).removeClass('ui-list-add-btn-hover');

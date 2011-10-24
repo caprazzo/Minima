@@ -51,7 +51,7 @@ ViewBoard.prototype.getChildRoot = function(childView) {
 	var childModel = childView.getModel();
 	var childRoot = this.ui.lists[childView.getViewId()];
 	if (childRoot == null) {
-		var childRoot = $('<div class="list-wrapper"></div>');
+		var childRoot = $('<div class="ui-board-list-root"></div>');
 		this.ui.lists[childView.getViewId()] = childRoot;
 		this.ui.root.append(childRoot);
 	}
