@@ -42,6 +42,9 @@ function MinimaController(options) {
 	
 	this.client.onReceiveStory(function(storyModel) {
 		console.log('[Controller] client.on.receiveStory');
+		var found = view.findStoryView(ViewStory.viewId(storyModel.getId()));
+		if (!found)
+			Minima.notify("new story");
 		view.setStory(storyModel);
 	}, this);
 	
@@ -67,7 +70,6 @@ MinimaController.prototype.enableNotifications = function() {
 	}
 	if (window.webkitNotifications.checkPermission() == 0) {
 		$('#enableNotifications').html('notifications enabled');
-		window.webkitNotifications.createNotification('/favicon.ico','bbbb','cccc').show();
 		return;
 	} 
 }
