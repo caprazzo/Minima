@@ -103,9 +103,6 @@ ViewList.prototype._refreshStories = function() {
 
 ViewList.prototype._createStructure = function() {
 	this.ui.root = this.parentView.getChildRoot(this);
-	console.log('PARENT', this.ui.parent);
-	//this.ui.root = $('<div class="list-wrapper"></div>')
-	//	.appendTo(this.ui.parent);
 	
 	this.ui.header = $('<div class="list-header"></div>')
 		.appendTo(this.ui.root);
@@ -125,7 +122,6 @@ ViewList.prototype._createStructure = function() {
 	this.ui.addBtn = $('<span class="ui-list-add-btn"></span>')
 		.appendTo(this.ui.footer);
 	
-	//this.parentView.addChildView(this);
 }
 
 ViewList.prototype._setupUi = function() {

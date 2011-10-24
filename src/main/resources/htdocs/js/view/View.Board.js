@@ -75,14 +75,10 @@ ViewBoard.prototype._createStructure = function() {
 		.appendTo(this.ui.parent);
 }
 
-ViewBoard.prototype.addChildView = function(viewObject) {
-	//this.ui.root.append(viewObject.getRoot());
-}
-
 ViewBoard.prototype.resize = function(width) {
-	var newWidth = width * 0.95;
+	var newWidth = width - 80;
 	
-	var maxListSize = 400;
+	var maxListSize = 375;
 	var minListSize = 210;
 	var cutoffBoardSize = minListSize * 3;
 	var varticalBoradSize = minListSize;
@@ -91,7 +87,7 @@ ViewBoard.prototype.resize = function(width) {
 		calcSize = maxListSize;
 	}		
 	else {
-		var calcSize =  newWidth/3.5;
+		var calcSize =  (newWidth)/3;
 		if (calcSize > maxListSize)
 			calcSize = maxListSize;
 		if (calcSize < minListSize)
