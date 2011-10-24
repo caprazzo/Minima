@@ -4,6 +4,7 @@ function ViewList(parentView, listModel) {
 	this.viewId = ViewList.viewId(listModel.getId());
 	this.tag = '[ViewList:' + this.viewId +']';
 	this.ui = {
+		parent: null,
 		root: null,
 		header: null,
 		title: null,
@@ -19,6 +20,10 @@ function ViewList(parentView, listModel) {
 
 ViewList.viewId = function(model_id) {
 	return 'ViewList-' + model_id;
+}
+
+ViewList.prototype.getModel = function() {
+	return this.listVm;
 }
 
 ViewList.prototype.log = function() {
@@ -97,7 +102,10 @@ ViewList.prototype._refreshStories = function() {
 }
 
 ViewList.prototype._createStructure = function() {
-	this.ui.root = $('<div class="list-wrapper"></div>');
+	this.ui.root = this.parentView.getChildRoot(this);
+	console.log('PARENT', this.ui.parent);
+	//this.ui.root = $('<div class="list-wrapper"></div>')
+	//	.appendTo(this.ui.parent);
 	
 	this.ui.header = $('<div class="list-header"></div>')
 		.appendTo(this.ui.root);
@@ -117,7 +125,7 @@ ViewList.prototype._createStructure = function() {
 	this.ui.addBtn = $('<span class="ui-list-add-btn"></span>')
 		.appendTo(this.ui.footer);
 	
-	this.parentView.addChildView(this);
+	//this.parentView.addChildView(this);
 }
 
 ViewList.prototype._setupUi = function() {
@@ -363,4 +371,9 @@ ViewList.prototype._createStory = function(text) {
 
 ViewList.prototype.getRoot = function() {
 	return this.ui.root;
+}
+
+ViewList.prototype.resize = function(width) {
+	var diff = this.ui.root.outerWidth(true) - this.ui.root.width();
+	this.ui.root.width(width - diff);
 }

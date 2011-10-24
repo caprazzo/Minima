@@ -1,10 +1,12 @@
 function ViewBoard(options) {
 	this.ui = { 
 		parent: $(options.content_matcher),
-		root: null
+		root: null,
+		lists: {}
 	};
 	this.lists = {};
 	this.refresh();
+	this.listWidth = 250;
 }
 
 ViewBoard.prototype.refresh = function() {
@@ -19,6 +21,7 @@ ViewBoard.prototype.setList = function(listModel) {
 	
 	if (!listView) {
 		listView = new ViewList(this, listModel);
+		listView.resize(this.listWidth);
 		this.lists[listView.getViewId()] = listView;
 	}
 	else {
@@ -44,6 +47,17 @@ ViewBoard.prototype.getList = function(list_id) {
 	return this.lists[list_id];
 }
 
+ViewBoard.prototype.getChildRoot = function(childView) {
+	var childModel = childView.getModel();
+	var childRoot = this.ui.lists[childView.getViewId()];
+	if (childRoot == null) {
+		var childRoot = $('<div class="list-wrapper"></div>');
+		this.ui.lists[childView.getViewId()] = childRoot;
+		this.ui.root.append(childRoot);
+	}
+	return childRoot;
+}
+
 ViewBoard.prototype.findStoryView = function(story_view_id) {
 	var found = null;
 	$.each(this.lists, function(list_id, listView) {
@@ -62,5 +76,33 @@ ViewBoard.prototype._createStructure = function() {
 }
 
 ViewBoard.prototype.addChildView = function(viewObject) {
-	this.ui.root.append(viewObject.getRoot());
+	//this.ui.root.append(viewObject.getRoot());
+}
+
+ViewBoard.prototype.resize = function(width) {
+	var newWidth = width * 0.95;
+	
+	var maxListSize = 400;
+	var minListSize = 210;
+	var cutoffBoardSize = minListSize * 3;
+	var varticalBoradSize = minListSize;
+	if (newWidth < cutoffBoardSize) {
+		newWidth = maxListSize;
+		calcSize = maxListSize;
+	}		
+	else {
+		var calcSize =  newWidth/3.5;
+		if (calcSize > maxListSize)
+			calcSize = maxListSize;
+		if (calcSize < minListSize)
+			calcSize = minListSize;
+	}
+	
+	this.ui.root.width(newWidth);
+	this.listWidth = calcSize;
+	
+	$.each(this.lists, function(list_id, listView) {		
+		listView.resize(calcSize);
+	});
+	
 }
