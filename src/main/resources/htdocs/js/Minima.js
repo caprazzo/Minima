@@ -19,21 +19,30 @@ function Minima() {}
 	Minima.onUpdateStory= function(fn, ctx) {
 		_onUpdateStoryHandler = Minima.bindEvent(_onUpdateStoryHandler, fn, ctx);	
 	}
-	
+
+	var _notifications = [];
+	Minima.notify = function(title, msg) {
+		if (window.webkitNotifications.checkPermission() != 0)
+			return;
+		
+		var notification = window.webkitNotifications.createNotification('/favicon.ico',title, msg)
+		notification.onclick = function(x) {
+			window.focus();
+			this.cancel();
+			console.log('click', arguments);
+		}
+		notification.show();
+		
+		(function() {
+		setTimeout(function() {
+			if (notification)
+				notification.cancel();
+		}, 3000);
+		})();
+	}
 })();
 
-Minima.notify = function(msg) {
-	if (window.webkitNotifications.checkPermission() != 0)
-		return;
-	
-	var notification = window.webkitNotifications.createNotification('/favicon.ico','Minima',msg)
-	notification.onclick = function(x) {
-		window.focus();
-		this.cancel();
-		console.log('click', arguments);
-	}
-	notification.show();
-}
+
 
 // static helper functions
 Minima.args = function(arguments) {

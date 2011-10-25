@@ -43,9 +43,26 @@ function MinimaController(options) {
 	this.client.onReceiveStory(function(storyModel) {
 		console.log('[Controller] client.on.receiveStory');
 		var found = view.findStoryView(ViewStory.viewId(storyModel.getId()));
-		if (!found)
-			Minima.notify("new story");
 		view.setStory(storyModel);
+		
+		// story moved to new list
+		if (found && found.getModel().diff(storyModel) && found.getParentView().getViewId() != ViewList.viewId(storyModel.getListId())) {
+			var sourceListName = found.getParentView().getModel().getName();
+			var destListName = view.findListView(ViewList.viewId(storyModel.getListId())).getModel().getName();
+			Minima.notify('Note moved from "' + sourceListName + '" to "' + destListName + '"', storyModel.getDesc());
+			return;
+		}
+		
+		if (!found && !storyModel.getArchived()) {
+			Minima.notify('New new note', storyModel.getDesc());
+			return;
+		}
+		
+		if (found && storyModel.getArchived()) {
+			Minima.notify('Note archived', storyModel.getDesc());
+			return;
+		}
+		
 	}, this);
 	
 }

@@ -86,6 +86,7 @@ ModelStory.prototype.diff = function(other) {
 	
 	diff['desc'] = (other.getDesc() != this.getDesc());
 	diff['pos'] = (other.getPos() != this.getPos());
+	diff['list'] = (other.getListId() != this.getListId());
 
 	return diff;
 }

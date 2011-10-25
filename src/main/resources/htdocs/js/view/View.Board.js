@@ -70,6 +70,10 @@ ViewBoard.prototype.findStoryView = function(story_view_id) {
 	return found;
 }
 
+ViewBoard.prototype.findListView = function(list_view_id) {
+	return this.lists[list_view_id];
+}
+
 ViewBoard.prototype._createStructure = function() {
 	this.ui.root = $('<div id="board"></div>')
 		.appendTo(this.ui.parent);
