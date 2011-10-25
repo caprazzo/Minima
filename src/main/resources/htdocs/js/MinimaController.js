@@ -6,6 +6,9 @@ function MinimaController(options) {
 	
 	var view = this.view;
 	var client = this.client;
+	
+	var nModel = new NotificationsCtrlModel();
+	
 	Minima.onCreateStory(function(storyModel) {
 		console.log('[Controller] new story created');
 		client.saveStory(storyModel, function(recv) {
@@ -45,6 +48,9 @@ function MinimaController(options) {
 		var found = view.findStoryView(ViewStory.viewId(storyModel.getId()));
 		view.setStory(storyModel);
 		
+		if (!nModel.get('active'))
+			return;
+		
 		// story moved to new list
 		if (found && found.getModel().diff(storyModel) && found.getParentView().getViewId() != ViewList.viewId(storyModel.getListId())) {
 			var sourceListName = found.getParentView().getModel().getName();
@@ -66,7 +72,7 @@ function MinimaController(options) {
 	}, this);
 	
 	//console.log();		
-	var nModel = new NotificationsCtrlModel();
+	
 	var nView = new NotificationsCtrlView({model: nModel});	
 	console.log(nView.el);		
 	
@@ -75,34 +81,9 @@ function MinimaController(options) {
 	
 }
 
-MinimaController.prototype.enableNotifications = function() {
-	if (!window.webkitNotifications) {
-		console.log('[Controller] notifications not supported');
-		$('#enableNotifications').hide();
-		return;
-	}
-	if (window.webkitNotifications.checkPermission() == 2) {
-		$('#enableNotifications').html('notifications denied');
-		return;
-	}
-	if (window.webkitNotifications.checkPermission() == 1) { // PERMISSION_NOT_ALLOWED (user has not said yes or no yet				
-		$('#enableNotifications').click(function() {
-			console.log('[Controller] request notification permission');
-			window.webkitNotifications.requestPermission();
-		}).show();
-		
-		return;
-	}
-	if (window.webkitNotifications.checkPermission() == 0) {
-		$('#enableNotifications').html('notifications enabled');
-		return;
-	} 
-}
-
 MinimaController.prototype.start = function() {
 	console.log('[Contoller] start');
 	
 	this.client.connectWebSocket();
 	this.client.loadBoard();
-	this.enableNotifications();
 }
