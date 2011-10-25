@@ -79,6 +79,10 @@ NotificationsCtrlView = Backbone.View.extend({
 		var out = $topic.outerWidth();
 		var ins = $topic.width();
 		$topic.width($el.width() - (out - ins));
+		$topic.click(function() {
+			$topic.hide();
+			$el.find('.mn-tpl-notifications-ctrl-help').removeClass('mn-tpl-notifications-ctrl-help-active')
+		});
 	},
 	
 	activate: function() {
