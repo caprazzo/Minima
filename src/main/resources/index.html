@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Minima</title>
+	<title>{{ BOARD_TITLE }}</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 	
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" type="text/css" />
+	
+	<script src="js/lib/underscore-1.2.1.min.js" type="text/javascript"></script>
+	<script src="js/lib/backbone-0.5.3.min.js" type="text/javascript"></script>
+	<script src="js/lib/json2.js" type="text/javascript"></script>
+	
+	<script src="js/view/View.NotificationsCtrl.js" type="text/javascript"></script>
+	
+	<!-- 
+	 -->
 	
 	<script src="js/Minima.js" type="text/javascript"></script>
 	
@@ -20,7 +29,6 @@
 	<script src="js/MinimaController.js" type="text/javascript"></script>
 	<script src="js/MinimaClient.js" type="text/javascript"></script>
 	<script src="js/index.js" type="text/javascript"></script>
-	
 	
 	<style type="text/css">
 	html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{border:0;outline:0;vertical-align:baseline;background:transparent;margin:0;padding:0;}
@@ -205,12 +213,42 @@
 		line-height: 1.2em;
 	}			
 	
+	#controls {
+		float: right;
+		position: fixed;
+		right: 0;
+		top: 0;
+		margin: 6px;
+	}
+	
 	</style>
 </head>
 <body>
 	
-	<div id="header"><div class="minima-logo">&nbsp;</div><h1>{{ BOARD_TITLE }}</h1>
-	<span id="enableNotifications">allow notifications</span></div>
+	<div id="header">
+		<div class="minima-logo">&nbsp;</div>
+		<h1>{{ BOARD_TITLE }}</h1>
+		<div id="controls">
+			<div id="notifications_ctrl"></div>
+		</div>
+	</div>
 	<div id="content"></div>
+	
+	<script type="text/template" id="mn-tpl-notifications-ctrl">
+		  notifications:
+			<% if (active) { %>
+				on
+				(<button class="notifications-ctrl-off">turn off</button>)			
+			<% } else if (!active && (permission == 'allowed' || permission == 'not_allowed')) { %>
+				off
+				(<button class="notifications-ctrl-on">turn on</button>)
+			<% }  else if (permission == 'denied') { %>
+				denied
+			<% } else if (permission == 'not_supported') { %>
+				not supported
+			<% } %>
+
+			(<%= permission %>, <%= active %>)
+	</script>
 </body>
 </html>

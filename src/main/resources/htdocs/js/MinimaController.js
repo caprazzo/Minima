@@ -65,6 +65,14 @@ function MinimaController(options) {
 		
 	}, this);
 	
+	//console.log();		
+	var nModel = new NotificationsCtrlModel();
+	var nView = new NotificationsCtrlView({model: nModel});	
+	console.log(nView.el);		
+	
+	$('#notifications_ctrl').append(nView.el);
+	nView.render();	
+	
 }
 
 MinimaController.prototype.enableNotifications = function() {
