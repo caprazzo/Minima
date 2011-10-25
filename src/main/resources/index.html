@@ -221,6 +221,49 @@
 		margin: 6px;
 	}
 	
+	.mn-view-notifications-ctrl {
+		font-family: monospace;
+		padding: 6px;
+		color: gray;
+	}
+	
+	.mn-view-notifications-ctrl .mn-tpl-notifications-ctrl-radio {
+		font-size: 8px;
+		
+	} 
+	
+	.mn-view-notifications-ctrl .mn-tpl-notifications-ctrl-help {
+		opacity: 0.5;		
+		display: inline;
+		padding-right: 4px;
+		padding-left: 4px;
+		border-radius: 3px;
+		border: 1px solid gray;
+		cursor: pointer;
+	}
+	
+	.mn-tpl-notification-ctrl-help-topic {
+		display: none;
+		background-color: #ffffaa;
+		padding: 6px;		
+		border: 1px solid #eee;
+		margin-top: 6px;
+	}
+	
+	.mn-tpl-notifications-ctrl-help-topic-warn {
+		color: red;
+		margin-top: 6px;
+		font-style: italic;
+	}
+	
+	.mn-tpl-notifications-ctrl-help-hover {
+		background-color: #ffffaa;
+	}
+	
+	.mn-tpl-notifications-ctrl-help-active {
+		background-color: #ffffaa;
+	}
+	
 	</style>
 </head>
 <body>
@@ -234,21 +277,48 @@
 	</div>
 	<div id="content"></div>
 	
-	<script type="text/template" id="mn-tpl-notifications-ctrl">
+	<script type="text/template" id="mn-tpl-notifications-ctrl">		
 		  notifications:
-			<% if (active) { %>
-				on
-				(<button class="notifications-ctrl-off">turn off</button>)			
-			<% } else if (!active && (permission == 'allowed' || permission == 'not_allowed')) { %>
-				off
-				(<button class="notifications-ctrl-on">turn on</button>)
+			<% if  (permission == 'allowed' || permission == 'not_allowed') { %>
+				<span class="mn-tpl-notifications-ctrl-radio">
+						<input
+								type="radio" 
+								id="mn-tpl-notifications-ctrl-on" 
+								<% if (active) { %> checked="checked" <% } %>
+								name="mn-tpl-notifications-ctrl"/>
+								<label for="mn-tpl-notifications-ctrl-on">ON</label>						
+						<input
+								type="radio"								
+								<% if (!active) { %> checked="checked" <% } %> 
+								id="mn-tpl-notifications-ctrl-off" 
+								name="mn-tpl-notifications-ctrl"/>
+								<label for="mn-tpl-notifications-ctrl-off">OFF</label>					
+				</span>
 			<% }  else if (permission == 'denied') { %>
-				denied
+				<span>disabled</span>
 			<% } else if (permission == 'not_supported') { %>
-				not supported
-			<% } %>
-
-			(<%= permission %>, <%= active %>)
+				<span>not supported</span>
+			<% } %>		
+			<span class="ui-icon ui-icon-help mn-tpl-notifications-ctrl-help">&nbsp;</span>
+			<div class="mn-tpl-notification-ctrl-help-topic">
+				A notification is a popup displayed when there is an update for this board.
+				<% if  (permission == 'allowed' || permission == 'not_allowed') { %>
+						<% if (active) {  %>
+							<br/><br/><strong>Notifications are turned on.</strong>
+						<% } else { %>
+							<br/><br/><strong>Notifications are turned off.</strong>
+						<% } %>
+				<% }  else if (permission == 'denied') { %>
+						<p class="mn-tpl-notifications-ctrl-help-topic-warn">
+						Your browser disabled notifications for this page,
+						but you can change this setting in your browser options.
+						</p>
+				<% } else if (permission == 'not_supported') { %>
+						<p class="mn-tpl-notifications-ctrl-help-topic-warn">
+						Your browser does not support notifications.
+						</p>
+				<% } %>		
+			</div>	
 	</script>
 </body>
 </html>
