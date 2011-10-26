@@ -25,7 +25,7 @@ MinimaClient.prototype.fireReceiveStory = function(storyModel) {
 
 MinimaClient.prototype.loadBoard = function() {
 	var store = this;
-	$.getJSON('/data/stories', function(board) {
+	$.getJSON('/data/stories?' + new Date().getTime(), function(board) {
 		console.log('[Client] loadBoard.success', board);
 		// add static lists because server does not support lists yet)
 		board.name = 'A Board';
@@ -47,7 +47,8 @@ MinimaClient.prototype.connectComet = function() {
 	var client = this;
 	function listen() {
 		$.ajax({
-			url: client.comet_location,
+			url: client.comet_location + '?' + new Date().getTime(),
+			processData: false,
 			type: 'get',
 			cache: 'false',
 			success: function(data, textStatus, xhr) {
@@ -83,7 +84,7 @@ MinimaClient.prototype.connectWebsocket = function() {
 	ws.onclose = function() {
 		console.log('WebSocket.onclose');
 		setTimeout(function() {
-			client.connectWebSocket();
+			client.connectWebsocket();
 		}, 1500);
 	}
 	

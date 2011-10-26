@@ -283,17 +283,25 @@ ViewList.prototype.getChildRoot = function(childView) {
 		var stories = $.map(this.stories, function(view, view_id) {
 			return view;
 		});
+		
+		var sorted = _.sortBy(stories, function(storyView) {
+			return storyView.getModel().getPos();
+		});
+		console.log(this.stories);
+		console.log(sorted);
+		/*
 		stories.sort(function(viewA, viewB) {
 			return viewB.getModel().isBefore(viewA.getModel())
 				? -1
 				: 1;
-		});
+		})
+		;*/
 		
 		// if this model has lower relative position
 		// than an existing story, create its root in
 		// the correct position
 		
-		$.each(stories, function(idx, otherView) {
+		$.each(sorted, function(idx, otherView) {
 			var otherModel = otherView.getModel();
 			if (childModel.isBefore(otherModel)) {
 				var otherRoot = ui.stories[otherView.getViewId()];
@@ -317,7 +325,16 @@ ViewList.prototype.updateChildPosition = function(childView, newPos) {
 	childRoot.remove();
 	var ui = this.ui;
 	var inserted = false;
-	$.each(this.stories, function(key, otherView) {
+	
+	var stories = $.map(this.stories, function(view, view_id) {
+		return view;
+	});
+	
+	var sorted = _.sortBy(stories, function(storyView) {
+		return storyView.getModel().getPos();
+	});
+	
+	$.each(sorted, function(key, otherView) {
 		var other = otherView.getModel();
 		
 		if (childView.getViewId() == otherView.getViewId())

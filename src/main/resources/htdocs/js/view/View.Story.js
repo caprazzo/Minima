@@ -63,7 +63,7 @@ ViewStory.prototype._createStructure = function() {
 	
 	this.ui.desc = $('<div class="ui-story-desc"></div>')
 		.appendTo(this.ui.descRoot);
-	
+
 	this.ui.editRoot = $('<div class="ui-story-edit-root ui-story-display"></div>')	
 		.hide()
 		.appendTo(this.ui.root);
@@ -71,7 +71,6 @@ ViewStory.prototype._createStructure = function() {
 	this.ui.editArea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.editRoot);
 	
-	//$('<br clear="both"/>').appendTo(this.ui.root);
 }
 
 ViewStory.prototype._setupUi = function() {
