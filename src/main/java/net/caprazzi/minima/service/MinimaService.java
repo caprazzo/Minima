@@ -15,7 +15,7 @@ import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Stories;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-import net.caprazzi.minima.servlet.MinimaPushServlet;
+import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -31,9 +31,9 @@ public class MinimaService {
 
 	private final Keez.Db db;
 
-	private final MinimaPushServlet pushServlet;
+	private final MinimaWebsocketServlet pushServlet;
 
-	public MinimaService(final Keez.Db db, MinimaPushServlet pushServlet) {
+	public MinimaService(final Keez.Db db, MinimaWebsocketServlet pushServlet) {
 		this.db = db;
 		this.pushServlet = pushServlet;
 	}

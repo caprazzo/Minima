@@ -11,7 +11,7 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
 @SuppressWarnings("serial")
-public class MinimaPushServlet extends WebSocketServlet {
+public class MinimaWebsocketServlet extends WebSocketServlet {
 
 	private volatile Set<MinimaWebSocket> _consumers = new CopyOnWriteArraySet<MinimaWebSocket>();
 	

@@ -4,7 +4,7 @@ import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.service.MinimaDb;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
-import net.caprazzi.minima.servlet.MinimaPushServlet;
+import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 
 public class MiniMain {
 
@@ -20,7 +20,7 @@ public class MiniMain {
 		
 		MinimaIndexServlet indexServlet = new MinimaIndexServlet();
 		indexServlet.setTitle(boardTitle);
-		MinimaPushServlet pushServlet = new MinimaPushServlet();	
+		MinimaWebsocketServlet pushServlet = new MinimaWebsocketServlet();	
 		MinimaDb minimaDbHelper = new MinimaDb(db);
 		minimaDbHelper.init();
 		MinimaService minimaService = new MinimaService(db, pushServlet);

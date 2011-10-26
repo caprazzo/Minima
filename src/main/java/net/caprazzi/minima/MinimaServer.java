@@ -3,7 +3,7 @@ package net.caprazzi.minima;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
-import net.caprazzi.minima.servlet.MinimaPushServlet;
+import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
 
 import org.eclipse.jetty.server.Server;
@@ -13,10 +13,10 @@ import org.eclipse.jetty.servlet.ServletHolder;
 public class MinimaServer {
 
 	private final MinimaService minimaService;
-	private final MinimaPushServlet pushServlet;
+	private final MinimaWebsocketServlet pushServlet;
 	private final MinimaIndexServlet indexServlet;
 
-	public MinimaServer(MinimaService minimaService, MinimaPushServlet pushServlet, MinimaIndexServlet indexServlet) {
+	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet pushServlet, MinimaIndexServlet indexServlet) {
 		this.minimaService = minimaService;
 		this.pushServlet = pushServlet;
 		this.indexServlet = indexServlet;
