@@ -43,21 +43,26 @@ MinimaClient.prototype.connect = function() {
 
 MinimaClient.prototype.connectComet = function() {
 	console.log('connect comet');
-	$.stream(this.comet_location, {
-		//dataType: 'json',
-		open: function(event, stream) {
-			console.log('comet open', event, stream);
-		},
-		message: function(event) {
-			console.log('comet message', event)
-		},
-		error: function() {
-			console.log('comet error');
-		},
-		close: function() {
-			console.log('comet close');
-		}
-	});
+	console.log(this.comet_location);
+	var client = this;
+	function listen() {
+		$.ajax({
+			url: client.comet_location,
+			type: 'get',
+			cache: 'false',
+			success: function(data, textStatus, xhr) {
+				client.receiveMessage(data);
+				listen();
+			},
+			error: function(jqXhr, errorString) {
+				setTimeout(function() {
+					client.connectComet();
+				}, 1500);
+			}
+		});
+	}
+	
+	listen();
 }
 
 MinimaClient.prototype.connectWebsocket = function() {
@@ -84,9 +89,7 @@ MinimaClient.prototype.connectWebsocket = function() {
 	
 	ws.onmessage = function(msg) {
 		console.log('WebSocket.onmsg', msg.data);
-		var obj = $.parseJSON(msg.data);
-		if (obj.name == "story")
-			client.fireReceiveStory(ModelStory.fromObject(obj.obj));
+		client.receiveMessage(msg.data);
 	}
 	
 	ws.onerror = function(err) {
@@ -109,6 +112,14 @@ MinimaClient.prototype.saveStory = function(story, successFn) {
 			successFn(ModelStory.fromObject(data));
 		}
 	});	
+}
+
+MinimaClient.prototype.receiveMessage = function(msg) {
+	console.log('received message', msg);
+	var obj = $.parseJSON(msg);
+	console.log('parsed message', obj);
+	if (obj.name == "story")
+		this.fireReceiveStory(ModelStory.fromObject(obj.obj));
 }
 
 MinimaClient.prototype.updateStory = function(story, successFn) {

@@ -60,7 +60,7 @@ function MinimaController(options) {
 		}
 		
 		if (!found && !storyModel.getArchived()) {
-			Minima.notify('New new note', storyModel.getDesc());
+			Minima.notify('New note', storyModel.getDesc());
 			return;
 		}
 		
