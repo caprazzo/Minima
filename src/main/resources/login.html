@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Minima login</title>
+	<style type="text/css">
+		.login-form * {
+			line-height:1;
+			font: 20px "Helvetica Neue",Arial,Helvetica,sans-serif;
+		}
+		.login-form {			
+			margin-top: 100px;
+			color:#444444;
+			width: 400px;
+			margin-left: auto;
+  			margin-right: auto;
+  			border: 1px solid gray;
+  			padding: 1em;
+  			padding-top: 2em;
+  			padding-bottom: 2em;
+  			text-align: center;
+  			border-radius: 3px;
+		}
+		
+		.login-form form {
+			text-align: left;
+			margin-left: 100px;
+		}
+		.login-form .label {
+			padding-left: 1px;
+		}
+		.login-form h1 {
+		
+		}
+		
+		.login-form .password {
+			margin-top: 1em;
+			font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif;
+		}
+		
+		.login-form .submit {
+		}
+		
+		.login-form .error {
+			color: red;
+			font-size: small;
+			margin-top: 4px;
+			padding-left: 2px;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class="login-form">		
+		<form action="/login" method="POST">
+			<span class="label">Login to Minima</span><br/>
+			<input class="password" type="password" name="password"/>
+			<input class="submit" type="submit" value="login"/><br/>
+			<span class="error">{{ ERROR }}&nbsp;</span>
+		</form>		
+	</div>
+</body>
+</html>

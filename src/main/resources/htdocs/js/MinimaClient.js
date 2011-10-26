@@ -56,6 +56,7 @@ MinimaClient.prototype.connectComet = function() {
 				listen();
 			},
 			error: function(jqXhr, errorString) {
+				// TODO: if error is 403, do not retry
 				setTimeout(function() {
 					client.connectComet();
 				}, 1500);
@@ -94,6 +95,7 @@ MinimaClient.prototype.connectWebsocket = function() {
 	}
 	
 	ws.onerror = function(err) {
+		// TODO: if error is 403, do not retry
 		console.log('WebSocket.onerr', err);
 	}
 	
