@@ -336,13 +336,13 @@
 	<div id="content"></div>
 	
 	<script type="text/template" id="notify-template">		
-		  <span class="notify-ctrl-label">notifications</span>:
+		  <span class="notify-ctrl-label">notifications:</span>
 			<% if  (permission == 'allowed' || permission == 'not_allowed') { %>			
 				<span class="notify-on <% if (active) { %> notify-on-selected <% } %>">ON</span><span class="notify-off <% if (!active) { %> notify-off-selected <% } %>">OFF</span>
 			<% }  else if (permission == 'denied') { %>
-				<span>disabled</span>
+				<span class="notify-ctrl-label">disabled</span>
 			<% } else if (permission == 'not_supported') { %>
-				<span>not supported</span>
+				<span class="notify-ctrl-label">not supported</span>
 			<% } %>		
 			<span class="notify-help">?</span>
 			<div class="notify-help-topic">
