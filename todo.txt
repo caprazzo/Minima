@@ -1,6 +1,2 @@
-- add revision to lists
-- rename lists
-- propagate updated lists
-
-- flash create story (remote)
-- flash remove story (remote)
+if privacy is enabled:
+	only accept requests from urls with privacy key
