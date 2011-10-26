@@ -44,7 +44,7 @@ MinimaClient.prototype.connect = function() {
 MinimaClient.prototype.connectComet = function() {
 	console.log('connect comet');
 	$.stream(this.comet_location, {
-		dataType: 'json',
+		//dataType: 'json',
 		open: function(event, stream) {
 			console.log('comet open', event, stream);
 		},
