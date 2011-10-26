@@ -44,7 +44,7 @@ All configurations are optional
 
 ## Changelog
 
-### V 0.7 - xxx
+### V 0.7 - 26 October 2011
 
 * push updates on non-websocket browsers (using long polling)
 * User interface with window size 
