@@ -15,6 +15,7 @@ import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
+import net.caprazzi.minima.service.MinimaPushService;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 
@@ -35,7 +36,7 @@ public class MinimaServiceFunctionalTest {
 	
 	private Keez.Db db;
 	private MinimaService service;
-	private MinimaWebsocketServlet pushServlet;
+	private MinimaPushService pushServlet;
 	private File testDir;
 	private boolean flag;
 
@@ -44,7 +45,7 @@ public class MinimaServiceFunctionalTest {
 		flag = false;
 		testDir = Files.createTempDir();
 		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx", false);
-		pushServlet = mock(MinimaWebsocketServlet.class);
+		pushServlet = mock(MinimaPushService.class);
 		service = new MinimaService(db, pushServlet);
 	}
 	

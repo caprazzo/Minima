@@ -84,6 +84,6 @@ function MinimaController(options) {
 MinimaController.prototype.start = function() {
 	console.log('[Contoller] start');
 	
-	this.client.connectWebSocket();
+	this.client.connect();
 	this.client.loadBoard();
 }

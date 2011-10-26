@@ -44,6 +44,11 @@ All configurations are optional
 
 ## Changelog
 
+### V 0.7 - xxx
+
+* Ui scales with browser
+* Support for HTML 5 notifications
+
 ### V 0.6 - 23 October 2011
 
 * Refined user interface (simpler)

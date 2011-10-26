@@ -1,7 +1,10 @@
 package net.caprazzi.minima;
 
+import javax.servlet.AsyncContext;
+
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
+import net.caprazzi.minima.servlet.MinimaCometServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
 import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
@@ -13,12 +16,14 @@ import org.eclipse.jetty.servlet.ServletHolder;
 public class MinimaServer {
 
 	private final MinimaService minimaService;
-	private final MinimaWebsocketServlet pushServlet;
+	private final MinimaWebsocketServlet websocketServlet;
 	private final MinimaIndexServlet indexServlet;
+	private final MinimaCometServlet cometServlet;
 
-	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet pushServlet, MinimaIndexServlet indexServlet) {
+	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet, MinimaIndexServlet indexServlet) {
 		this.minimaService = minimaService;
-		this.pushServlet = pushServlet;
+		this.websocketServlet = websocketServlet;
+		this.cometServlet = cometServlet;
 		this.indexServlet = indexServlet;
 	}
 
@@ -34,9 +39,10 @@ public class MinimaServer {
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/");
         context.addServlet(new ServletHolder(indexServlet),"/index");
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
-        ServletHolder holder = new ServletHolder(pushServlet);
-        holder.setName("socket");
-        context.addServlet(holder, "/socket");
+        ServletHolder websocketholder = new ServletHolder(websocketServlet);
+        context.addServlet(websocketholder, "/websocket");
+        
+        context.addServlet(new ServletHolder(cometServlet), "/comet");
         
         server.start();
         System.out.println("Minima ready at http://localhost:8989/index");

@@ -31,11 +31,11 @@ public class MinimaService {
 
 	private final Keez.Db db;
 
-	private final MinimaWebsocketServlet pushServlet;
+	private final MinimaPushService pushServlet;
 
-	public MinimaService(final Keez.Db db, MinimaWebsocketServlet pushServlet) {
+	public MinimaService(final Keez.Db db, MinimaPushService pushService) {
 		this.db = db;
-		this.pushServlet = pushServlet;
+		this.pushServlet = pushService;
 	}
 
 	public void writeBoard(final Writer out) {

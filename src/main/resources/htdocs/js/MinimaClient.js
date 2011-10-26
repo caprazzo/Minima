@@ -1,7 +1,9 @@
 function MinimaClient(options) {
 	this.onBoardHandler = null;
 	this.onReceiveStoryHandler = null;
+	this.mode = options.mode;
 	this.web_socket_location = options.web_socket_location;
+	this.comet_location = options.comet_location;
 }
 
 MinimaClient.prototype.onBoard = function(handler, ctx) {
@@ -31,7 +33,19 @@ MinimaClient.prototype.loadBoard = function() {
 	});
 };
 
-MinimaClient.prototype.connectWebSocket = function() {
+MinimaClient.prototype.connect = function() {
+	if (this.mode == 'websocket')
+		this.connectWebsocket();
+	
+	if (this.mode == 'comet')
+		this.connectComet();
+}
+
+MinimaClient.prototype.connectComet = function() {
+	console.log('connect comet');
+}
+
+MinimaClient.prototype.connectWebsocket = function() {
 	var client = this;
 	if (!window.WebSocket) {
 		alert("WebSocket not supported by this browser");

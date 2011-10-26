@@ -2,7 +2,9 @@ package net.caprazzi.minima;
 
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.service.MinimaDb;
+import net.caprazzi.minima.service.MinimaPushService;
 import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.servlet.MinimaCometServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
 import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 
@@ -20,11 +22,15 @@ public class MiniMain {
 		
 		MinimaIndexServlet indexServlet = new MinimaIndexServlet();
 		indexServlet.setTitle(boardTitle);
-		MinimaWebsocketServlet pushServlet = new MinimaWebsocketServlet();	
+		MinimaWebsocketServlet websocketServlet = new MinimaWebsocketServlet();
+		MinimaCometServlet cometServlet = new MinimaCometServlet();
+		
+		MinimaPushService pushService = new MinimaPushService(websocketServlet, cometServlet);
+		
 		MinimaDb minimaDbHelper = new MinimaDb(db);
 		minimaDbHelper.init();
-		MinimaService minimaService = new MinimaService(db, pushServlet);
-		MinimaServer minimaServer = new MinimaServer(minimaService, pushServlet, indexServlet);
+		MinimaService minimaService = new MinimaService(db, pushService);
+		MinimaServer minimaServer = new MinimaServer(minimaService, websocketServlet, cometServlet, indexServlet);
 		minimaServer.start(port);
 	}
 }
