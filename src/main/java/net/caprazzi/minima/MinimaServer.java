@@ -1,13 +1,11 @@
 package net.caprazzi.minima;
 
-import javax.servlet.AsyncContext;
-
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.MinimaCometServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
-import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 import net.caprazzi.minima.servlet.MinimaServlet;
+import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;

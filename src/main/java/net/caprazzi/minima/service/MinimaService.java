@@ -15,7 +15,6 @@ import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Stories;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
