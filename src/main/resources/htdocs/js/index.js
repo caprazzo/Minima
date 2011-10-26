@@ -1,3 +1,6 @@
+if (!window.console)
+	window.console = { log: function() {} };
+	
 $(function() {
 	console.log('[Index] ready');
 			
