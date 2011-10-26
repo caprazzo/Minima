@@ -47,7 +47,7 @@ All configurations are optional
 ### V 0.7 - 26 October 2011
 
 * push updates on non-websocket browsers (using long polling)
-* User interface with window size 
+* User interface scales with window size 
 * Support for desktop notifications (HTML 5, supported browsers only)
 
 ### V 0.6 - 23 October 2011
