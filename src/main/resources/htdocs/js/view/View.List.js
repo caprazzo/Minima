@@ -167,7 +167,7 @@ ViewList.prototype._setupUi = function() {
 				view._handleSortItem(ui.item);
 				
 			}			
-		});
+		}).disableSelection();
 	
 	this.ui.textarea.hide()
 		.keypress(function(e) {
@@ -289,14 +289,7 @@ ViewList.prototype.getChildRoot = function(childView) {
 		});
 		console.log(this.stories);
 		console.log(sorted);
-		/*
-		stories.sort(function(viewA, viewB) {
-			return viewB.getModel().isBefore(viewA.getModel())
-				? -1
-				: 1;
-		})
-		;*/
-		
+	
 		// if this model has lower relative position
 		// than an existing story, create its root in
 		// the correct position
