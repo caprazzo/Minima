@@ -53,8 +53,8 @@ All configurations are optional
 
 * Refined user interface (simpler)
 * Highlighting #hash tags and @at tags
-* Moved lists definition on server
-* Changed database format on database + automatic upgrade
+* (Moved lists definition on server)
+* (Changed database format on database + automatic upgrade)
 
 ### V 0.5 - 18 October 2011
  
