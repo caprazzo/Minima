@@ -43,7 +43,6 @@ function Minima() {}
 })();
 
 
-
 // static helper functions
 Minima.args = function(arguments) {
 	var arr = [];

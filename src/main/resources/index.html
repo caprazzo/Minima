@@ -32,9 +32,22 @@
 	
 	<style type="text/css">
 	html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{border:0;outline:0;vertical-align:baseline;background:transparent;margin:0;padding:0;}
-	body,input,select,textarea{line-height:1;font:14px/18px "Helvetica Neue",Arial,Helvetica,sans-serif;color:#444444;}
-	ol,ul{list-style:none;}
-	h3,h4,h5,h6{font-size:16px;line-height:20px;margin-bottom:6px;}
+	
+	body, input, select, textarea {
+		line-height:1;
+		font: 14px/18px "Helvetica Neue",Arial,Helvetica,sans-serif;
+		color:#444444;
+	}
+	
+	ol,ul{
+		list-style:none;
+	}
+	
+	h3,h4,h5,h6 {
+		font-size:16px;
+		line-height:20px;
+		margin-bottom:6px;
+	}
 	h1,h2,h3,h4,h5,h6 { font-weight: bold; color: #222; }
 	
 	#content {
@@ -221,28 +234,80 @@
 		margin: 6px;
 	}
 	
-	.mn-view-notifications-ctrl {
+	
+	.notify-ctrl-label {
 		font-family: monospace;
-		padding: 6px;
-		color: gray;
+		font-size: 12px;
+	}
+	.mn-view-notifications-ctrl, .mn-view-notifications-ctrl * {
 	}
 	
-	.mn-view-notifications-ctrl .mn-tpl-notifications-ctrl-radio {
-		font-size: 8px;
+	.mn-view-notifications-ctrl {
+		padding: 6px;
+		color: gray;
+		vertical-align: baseline;
+	}
+	
+	.mn-view-notifications-ctrl span {
 		
 	} 
 	
-	.mn-view-notifications-ctrl .mn-tpl-notifications-ctrl-help {
-		opacity: 0.5;		
-		display: inline;
-		padding-right: 4px;
-		padding-left: 4px;
-		border-radius: 3px;
-		border: 1px solid gray;
-		cursor: pointer;
+	.mn-view-notifications-ctrl .mn-tpl-notifications-ctrl-radio span {
+		
+		
 	}
 	
-	.mn-tpl-notification-ctrl-help-topic {
+	.notify-on, .notify-off, .notify-help {
+ 		font-size: 10px;
+ 		padding: 1px;
+		width: 2.5em;
+		text-align: center;
+		cursor: pointer;
+		display: inline-block;		
+		border: 1px solid gray;		
+		background-color: #eee;		
+	}
+ 	.notify-on {		
+		border-top-left-radius: 3px;
+		border-bottom-left-radius: 3px;
+		border-right: 0;
+	}
+	.notify-off {
+		border-top-right-radius: 3px;
+		border-bottom-right-radius: 3px;
+		border-left: 0;
+	}
+	.notify-on-selected {
+		color: #555;
+		font-weight: bold;
+		background-color: #fefefe;
+		border: 1px solid #555;
+		fborder-right: 0;
+	}
+	.notify-off-selected {
+		font-weight: bold;
+		color: black;
+		color: #555;
+		background-color: #fefefe;
+		sbackground-color: gray;
+		border: 1px solid #555;
+		fborder-right: 0;
+	}
+	.notify-help {
+		border-radius: 3px;
+		width: 1em;
+		padding: 1px;
+		line-height: 14px;
+		backgroung-color: 
+	}
+	.notify-help-highlight {
+		background-color: #ffffaa;
+	}
+	.notify-help-active {
+		background-color: #ffffaa;
+	}
+
+	.notify-help-topic {
 		display: none;
 		background-color: #ffffaa;
 		padding: 6px;		
@@ -251,18 +316,10 @@
 		cursor: pointer;
 	}
 	
-	.mn-tpl-notifications-ctrl-help-topic-warn {
+	.notify-help-topic-warn {
 		color: red;
 		margin-top: 6px;
 		font-style: italic;
-	}
-	
-	.mn-tpl-notifications-ctrl-help-hover {
-		background-color: #ffffaa;
-	}
-	
-	.mn-tpl-notifications-ctrl-help-active {
-		background-color: #ffffaa;
 	}
 	
 	</style>
@@ -278,30 +335,17 @@
 	</div>
 	<div id="content"></div>
 	
-	<script type="text/template" id="mn-tpl-notifications-ctrl">		
-		  notifications:
-			<% if  (permission == 'allowed' || permission == 'not_allowed') { %>
-				<span class="mn-tpl-notifications-ctrl-radio">
-						<input
-								type="radio" 
-								id="mn-tpl-notifications-ctrl-on" 
-								<% if (active) { %> checked="checked" <% } %>
-								name="mn-tpl-notifications-ctrl"/>
-								<label for="mn-tpl-notifications-ctrl-on">ON</label>						
-						<input
-								type="radio"								
-								<% if (!active) { %> checked="checked" <% } %> 
-								id="mn-tpl-notifications-ctrl-off" 
-								name="mn-tpl-notifications-ctrl"/>
-								<label for="mn-tpl-notifications-ctrl-off">OFF</label>					
-				</span>
+	<script type="text/template" id="notify-template">		
+		  <span class="notify-ctrl-label">notifications</span>:
+			<% if  (permission == 'allowed' || permission == 'not_allowed') { %>			
+				<span class="notify-on <% if (active) { %> notify-on-selected <% } %>">ON</span><span class="notify-off <% if (!active) { %> notify-off-selected <% } %>">OFF</span>
 			<% }  else if (permission == 'denied') { %>
 				<span>disabled</span>
 			<% } else if (permission == 'not_supported') { %>
 				<span>not supported</span>
 			<% } %>		
-			<span class="ui-icon ui-icon-help mn-tpl-notifications-ctrl-help">&nbsp;</span>
-			<div class="mn-tpl-notification-ctrl-help-topic">
+			<span class="notify-help">?</span>
+			<div class="notify-help-topic">
 				A notification is a popup displayed when there is an update for this board.
 				<% if  (permission == 'allowed' || permission == 'not_allowed') { %>
 						<% if (active) {  %>
@@ -310,12 +354,12 @@
 							<br/><br/><strong>Notifications are turned off.</strong>
 						<% } %>
 				<% }  else if (permission == 'denied') { %>
-						<p class="mn-tpl-notifications-ctrl-help-topic-warn">
+						<p class="notify-help-topic-warn">
 						Your browser disabled notifications for this page,
 						but you can change this setting in your browser options.
 						</p>
 				<% } else if (permission == 'not_supported') { %>
-						<p class="mn-tpl-notifications-ctrl-help-topic-warn">
+						<p class="notify-help-topic-warn">
 						Your browser does not support notifications.
 						</p>
 				<% } %>		

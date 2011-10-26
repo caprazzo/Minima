@@ -51,38 +51,37 @@ window.NotificationsCtrlModel = Backbone.Model.extend({
 NotificationsCtrlView = Backbone.View.extend({
 	tagName: "div",
 	model: NotificationsCtrlModel,
-	className: "mn-view-notifications-ctrl",
-	id: "mn-view-notifications-ctrl-container",
+	className: "notify-container",
+	id: "notify-container",
 	
 	initialize: function() {
-		this.template = _.template($('#mn-tpl-notifications-ctrl').html())
+		this.template = _.template($('#notify-template').html())
 		this.model.bind('change', this.render, this);
 	},
 	  	  
 	events: {
-		'click #mn-tpl-notifications-ctrl-off': 'deactivate',
-		'click #mn-tpl-notifications-ctrl-on': 'activate'		
+		'click .notify-off': 'deactivate',
+		'click .notify-on': 'activate',
+		'click .notify-help': 'toggleHelpTopic',
+		'click .notify-help-topic': 'toggleHelpTopic'
 	},
 
 	render: function() {
 		var $el = $(this.el);
 		$el.html(this.template(this.model.toJSON()));
-		$el.find('.mn-tpl-notifications-ctrl-radio').buttonset();		
-		$el.find('.mn-tpl-notifications-ctrl-help').hover(
-			function() { $(this).addClass('mn-tpl-notifications-ctrl-help-hover'); },
-			function() { $(this).removeClass('mn-tpl-notifications-ctrl-help-hover'); }
-		).click(function() {
-			$el.find('.mn-tpl-notification-ctrl-help-topic').toggle();
-			$el.find('.mn-tpl-notifications-ctrl-help').toggleClass('mn-tpl-notifications-ctrl-help-active');
-		});
-		$topic = $el.find('.mn-tpl-notification-ctrl-help-topic');
+		
+		$help = $el.find('.notify-help');
+		$helpTopic = $el.find('.notify-help-topic');
+		$help.hover(
+			function() { $help.addClass('notify-help-highlight'); },
+			function() { $help.removeClass('notify-help-highlight'); }
+		);
+		
+		$topic = $el.find('.notify-help-topic');
+		
 		var out = $topic.outerWidth();
 		var ins = $topic.width();
 		$topic.width($el.width() - (out - ins));
-		$topic.click(function() {
-			$topic.hide();
-			$el.find('.mn-tpl-notifications-ctrl-help').removeClass('mn-tpl-notifications-ctrl-help-active')
-		});
 	},
 	
 	activate: function() {
@@ -93,5 +92,10 @@ NotificationsCtrlView = Backbone.View.extend({
 	deactivate: function() {
 		console.log('Notification Ctrl disable');
 		this.model.deactivate()
+	},
+	
+	toggleHelpTopic: function() {
+		$(this.el).find('.notify-help-topic').toggle();
+		$(this.el).find('.notify-help').toggleClass('notify-help-active');
 	}
 });
