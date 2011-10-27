@@ -7,6 +7,8 @@ $(function() {
 	var mode = (window.WebSocket) ? 'websocket' : 'comet';
 	
 	var readonly = ($('#minima-read-only').val() == "true");
+	if (readonly) 
+		$('#readonly-notice').show();
 	
 	var ws_location = document.location.toString()
 		.replace('http://', 'ws://')
