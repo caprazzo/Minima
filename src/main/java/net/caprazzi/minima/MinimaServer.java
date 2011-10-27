@@ -13,7 +13,9 @@ import net.caprazzi.minima.servlet.MinimaServlet;
 import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
 
+import org.eclipse.jetty.io.nio.SelectChannelEndPoint;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -41,9 +43,9 @@ public class MinimaServer {
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        context.getSessionHandler().getSessionManager().setMaxInactiveInterval(Integer.MAX_VALUE);
-        server.setHandler(context);
+        context.getSessionHandler().getSessionManager().setMaxInactiveInterval(Integer.MAX_VALUE);        
         
+        server.setHandler(context);
         
         context.setWelcomeFiles(new String[] { "/index" });
         if (privacyFilter != null) {
@@ -66,7 +68,7 @@ public class MinimaServer {
         context.addServlet(new ServletHolder(indexServlet),"/");
         
         server.start();
-        System.out.println("Minima ready at http://localhost:8989/index");
+        System.out.println("Minima ready at http://localhost:" + port + "/index");
         server.join();
 	}
 }

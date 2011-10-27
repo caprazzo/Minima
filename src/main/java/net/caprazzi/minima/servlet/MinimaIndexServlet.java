@@ -15,6 +15,11 @@ import org.eclipse.jetty.util.IO;
 public class MinimaIndexServlet extends HttpServlet {
 
 	private String boardTitle;
+	private final String websocketLocation;
+
+	public MinimaIndexServlet(String websocketLocation) {
+		this.websocketLocation = websocketLocation;
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -31,7 +36,8 @@ public class MinimaIndexServlet extends HttpServlet {
 		PrintWriter writer = resp.getWriter();
 		writer.write(IO.toString(in)
 			.replaceAll("\\{\\{ BOARD_TITLE \\}\\}", boardTitle)
-			.replaceAll("\\{\\{ READ_ONLY \\}\\}", req.getAttribute("minima.readonly").toString()));
+			.replaceAll("\\{\\{ READ_ONLY \\}\\}", req.getAttribute("minima.readonly").toString())
+			.replaceAll("\\{\\{ WEBSOCKET_LOCATION \\}\\}", websocketLocation));
 
 		writer.close();
 		in.close();

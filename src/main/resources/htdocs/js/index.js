@@ -10,9 +10,12 @@ $(function() {
 	if (readonly) 
 		$('#readonly-notice').show();
 	
-	var ws_location = document.location.toString()
-		.replace('http://', 'ws://')
-		.replace('/index','/websocket');
+	var ws_location = $('#minima-websocket-location').val()
+	if (ws_location == 'auto')
+		ws_location = 
+			document.location.toString()
+			.replace('http://', 'ws://')
+			.replace('/index','/websocket');
 	
 	var comet_location = document.location.toString()
 		.replace('/index', '/comet');

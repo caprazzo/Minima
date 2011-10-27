@@ -20,6 +20,7 @@ public class MiniMain {
 		String boardTitle = System.getProperty("minima.board.default.title", "Minima");
 		String password = System.getProperty("minima.password");
 		String publicView = System.getProperty("minima.readonly", "false");
+		String websocketLocation = System.getProperty("minima.websocket.location", "auto");
 		
 		boolean isPrivate = (password != null && password.length() > 0);
 		boolean hasPublicView = publicView.equalsIgnoreCase("true");
@@ -27,7 +28,7 @@ public class MiniMain {
 		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
 		db.setAutoPurge(true);
 		
-		MinimaIndexServlet indexServlet = new MinimaIndexServlet();
+		MinimaIndexServlet indexServlet = new MinimaIndexServlet(websocketLocation);
 		indexServlet.setTitle(boardTitle);
 		MinimaWebsocketServlet websocketServlet = new MinimaWebsocketServlet();
 		MinimaCometServlet cometServlet = new MinimaCometServlet();
