@@ -45,25 +45,25 @@ public class MinimaServer {
         server.setHandler(context);
         
         
-        
+        context.setWelcomeFiles(new String[] { "/index" });
         if (privacyFilter != null) {
         	context.addFilter(new FilterHolder(privacyFilter), "*", EnumSet.of(DispatcherType.REQUEST));
         }
         if (loginServlet != null) {
         	context.addServlet(new ServletHolder(loginServlet), "/login");
         }
-		
+        
         MinimaServlet minimaServlet = new MinimaServlet(minimaService);
-                
-        context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/");
-        context.addServlet(new ServletHolder(indexServlet),"/index");
-        
-        
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         ServletHolder websocketholder = new ServletHolder(websocketServlet);
         context.addServlet(websocketholder, "/websocket");
         
         context.addServlet(new ServletHolder(cometServlet), "/comet");
+		
+        context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/js/*");
+        context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")),"/favicon.ico");
+        context.addServlet(new ServletHolder(indexServlet),"/index");
+        context.addServlet(new ServletHolder(indexServlet),"/");
         
         server.start();
         System.out.println("Minima ready at http://localhost:8989/index");

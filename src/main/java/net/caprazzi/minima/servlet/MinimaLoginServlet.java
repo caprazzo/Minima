@@ -31,6 +31,7 @@ public class MinimaLoginServlet extends HttpServlet {
 			return;
 		}
 		
+		resp.setContentType("text/html");
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("login.html");
 		PrintWriter writer = resp.getWriter();
 		writer.write(IO.toString(in).replaceAll("\\{\\{ ERROR \\}\\}", "invalid-pass"));
@@ -46,6 +47,7 @@ public class MinimaLoginServlet extends HttpServlet {
 		if (req.getSession(false) != null) {
 			resp.sendRedirect("/index");
 		}
+		resp.setContentType("text/html");
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("login.html");
 		PrintWriter writer = resp.getWriter();
 		writer.write(IO.toString(in).replaceAll("\\{\\{ ERROR \\}\\}", ""));

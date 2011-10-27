@@ -28,6 +28,7 @@ All configurations are optional
 * -Dminima.port=8989 - http port, defaults to 8989
 * -Dminima.db.dir=./minima-db - database directory, defaults to ./minima-db and is created if it does not exist
 * -Dminima.board.default.title=Minima - default board title (as shown on the index page). Defaults to "Minima"
+* -Dminima.password="" - password to protect this minima instance. By default there is no password and the board is open to all
 
 ## For developers
 
