@@ -33,7 +33,7 @@ public class MinimaLoginServlet extends HttpServlet {
 		
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("login.html");
 		PrintWriter writer = resp.getWriter();
-		writer.write(IO.toString(in).replaceAll("\\{\\{ ERROR \\}\\}", "Invalid password"));
+		writer.write(IO.toString(in).replaceAll("\\{\\{ ERROR \\}\\}", "invalid-pass"));
 
 		writer.close();
 		in.close();

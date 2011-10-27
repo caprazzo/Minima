@@ -37,7 +37,6 @@ public class MiniMain {
 		MinimaLoginServlet loginServlet = null;
 		
 		if (password != null && password.length() > 0) {
-			System.out.println(password);
 			privacyFilter = new PrivacyFilter();
 			loginServlet = new MinimaLoginServlet(password);
 		}

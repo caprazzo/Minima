@@ -37,13 +37,23 @@
 			font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif;
 		}
 		
+		.login-form .invalid-pass {
+			color: #ff5656;
+		}
+		
 		.login-form .submit {
 		}
+		
 		
 		.login-form .error {
 			color: red;
 			font-size: small;
 			margin-top: 4px;
+			padding-left: 2px;
+		}
+		
+		.login-form .hint {
+			font-size: 12px;
 			padding-left: 2px;
 		}
 	</style>
@@ -55,8 +65,9 @@
 			<span class="label">Login to Minima</span><br/>
 			<input class="password" type="password" name="password"/>
 			<input class="submit" type="submit" value="login"/><br/>
-			<span class="error">{{ ERROR }}&nbsp;</span>
+			<span class="hint {{ ERROR }}">Enter your password</span>
 		</form>		
 	</div>
+	
 </body>
 </html>
