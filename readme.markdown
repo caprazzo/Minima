@@ -30,7 +30,7 @@ All configurations are optional
 * -Dminima.db.dir=./minima-db - database directory, defaults to ./minima-db and is created if it does not exist
 * -Dminima.board.default.title=Minima - default board title (as shown on the index page). Defaults to "Minima"
 * -Dminima.password="" - password to protect this minima instance. By default there is no password and the board is open to all
-* -Dminima.public.view=false - if this is set to true and a password is configured, non-authenticated users can see but not modify the board
+* -Dminima.readonly=false - if this is set to true and a password is configured, non-authenticated users can see but not modify the board
 
 ## For developers
 

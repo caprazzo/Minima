@@ -52,6 +52,11 @@ public class MinimaServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		if (req.getAttribute("minima.readonly").equals(true)) {
+			sendError(resp, 403, "not authorised");
+			return;
+		}
+		
 		String[] parts = req.getRequestURI().split("/");
 		if (!parts[2].equals("stories")) {
 			sendError(resp, 404, "not found");
@@ -86,6 +91,12 @@ public class MinimaServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		
+		if (req.getAttribute("minima.readonly").equals(true)) {
+			sendError(resp, 403, "not authorised");
+			return;
+		}
+		
 		String[] parts = req.getRequestURI().split("/");
 		
 		if (!parts[2].equals("stories")) {

@@ -19,7 +19,7 @@ public class MiniMain {
 		String dbPrefix = System.getProperty("minima.db.prefix", "minimav0");
 		String boardTitle = System.getProperty("minima.board.default.title", "Minima");
 		String password = System.getProperty("minima.password");
-		String publicView = System.getProperty("minima.public.view", "false");
+		String publicView = System.getProperty("minima.readonly", "false");
 		
 		boolean isPrivate = (password != null && password.length() > 0);
 		boolean hasPublicView = publicView.equalsIgnoreCase("true");

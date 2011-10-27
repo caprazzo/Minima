@@ -44,6 +44,7 @@ public class PrivacyFilter implements Filter {
 			return;
 		}
 		
+		request.setAttribute("minima.readonly", false);
 		if (privateAccess && !publicView && session == null) {
 			if (parts.length > 1 && !parts[1].equals("login") && session == null) {
 				HttpServletResponse resp = (HttpServletResponse) response;

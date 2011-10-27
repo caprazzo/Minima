@@ -7,6 +7,7 @@ function ViewBoard(options) {
 	this.lists = {};
 	this.refresh();
 	this.listWidth = 250;
+	this.readonly = options.readonly;
 }
 
 ViewBoard.prototype.refresh = function() {
@@ -20,7 +21,7 @@ ViewBoard.prototype.setList = function(listModel) {
 	var listView = this.lists[viewId];
 	
 	if (!listView) {
-		listView = new ViewList(this, listModel);
+		listView = new ViewList(this, listModel, this.readonly);
 		listView.resize(this.listWidth);
 		this.lists[listView.getViewId()] = listView;
 	}

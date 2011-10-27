@@ -6,6 +6,8 @@ $(function() {
 			
 	var mode = (window.WebSocket) ? 'websocket' : 'comet';
 	
+	var readonly = ($('#minima-read-only').val() == "true");
+	
 	var ws_location = document.location.toString()
 		.replace('http://', 'ws://')
 		.replace('/index','/websocket');
@@ -19,7 +21,11 @@ $(function() {
 		comet_location: comet_location
 	});
 	
-	var view = new ViewBoard({ content_matcher: '#content'});
+	var view = new ViewBoard({ 
+		content_matcher: '#content',
+		readonly: readonly
+	});
+	
 	view.resize($(window).width());
 	var controller = new MinimaController({
 		client: client,

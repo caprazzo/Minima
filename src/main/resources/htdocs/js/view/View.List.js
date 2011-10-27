@@ -1,5 +1,6 @@
-function ViewList(parentView, listModel) {
+function ViewList(parentView, listModel, readonly) {
 	this.parentView = parentView;
+	this.readonly = readonly;
 	this.listVm = listModel;
 	this.viewId = ViewList.viewId(listModel.getId());
 	this.tag = '[ViewList:' + this.viewId +']';
@@ -46,7 +47,7 @@ ViewList.prototype.setStory = function(storyModel) {
 	}
 	
 	if (!storyView) {
-		storyView = new ViewStory(this, storyModel);
+		storyView = new ViewStory(this, storyModel, this.readonly);
 		this.stories[storyView.getViewId()] = storyView;
 	}
 	else {		
@@ -121,7 +122,7 @@ ViewList.prototype._createStructure = function() {
 	
 	this.ui.textarea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.footer);
-	
+	if (!this.readonly)
 	this.ui.addBtn = $('<span class="ui-list-add-btn">add note</span>')
 		.appendTo(this.ui.footer);
 	
@@ -166,8 +167,10 @@ ViewList.prototype._setupUi = function() {
 				}
 				view._handleSortItem(ui.item);
 				
-			}			
-		}).disableSelection();
+			},
+			disabled: this.readonly
+		})
+		.disableSelection();
 	
 	this.ui.textarea.hide()
 		.keypress(function(e) {
@@ -180,6 +183,7 @@ ViewList.prototype._setupUi = function() {
 			} 
 		});
 	
+	if (!this.readonly)
 	this.ui.addBtn
 		.click(function() {
 			view._btnAddClick();

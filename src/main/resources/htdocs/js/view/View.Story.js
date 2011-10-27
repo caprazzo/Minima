@@ -1,15 +1,16 @@
-function ViewStory(parentView, storyVm, doEffect) {
+function ViewStory(parentView, storyVm, readonly) {
 	this.viewId = ViewStory.viewId(storyVm.getId());
 	this.tag = '['+this.viewId+']';
 	this.parentView = parentView;
 	console.log(this.tag, 'new ViewStory', storyVm, this.parentView);
 	
 	this.storyVm = storyVm;
+	this.readonly = readonly;
 	this.ui = {
 		parent: null,
 		root: null
 	};
-	this.refresh(doEffect);
+	this.refresh();
 }
 
 // static method to build a view id from a model id
@@ -58,18 +59,21 @@ ViewStory.prototype._createStructure = function() {
 	this.ui.descRoot = $('<div class="ui-story-view-root ui-story-display"></div>')
 		.appendTo(this.ui.root);
 	
+	if (!this.readonly)
 	this.ui.archiveBtn = $('<span class="ui-story-archive-btn ui-icon ui-icon-trash"></span>')
 		.appendTo(this.ui.descRoot);
 	
 	this.ui.desc = $('<div class="ui-story-desc"></div>')
 		.appendTo(this.ui.descRoot);
 
-	this.ui.editRoot = $('<div class="ui-story-edit-root ui-story-display"></div>')	
-		.hide()
-		.appendTo(this.ui.root);
-	
-	this.ui.editArea = $('<textarea class="ui-story-textarea"></textarea>')
-		.appendTo(this.ui.editRoot);
+	if (!this.readonly) {
+		this.ui.editRoot = $('<div class="ui-story-edit-root ui-story-display"></div>')	
+			.hide()
+			.appendTo(this.ui.root);
+		
+		this.ui.editArea = $('<textarea class="ui-story-textarea"></textarea>')
+			.appendTo(this.ui.editRoot);
+	}
 	
 }
 
@@ -93,6 +97,9 @@ ViewStory.prototype._setupUi = function() {
 		}, function() {
 			view.ui.archiveBtn.hide();
 		});
+	
+	if (this.readonly)
+		return;
 	
 	this.ui.archiveBtn		
 		.click(function() {
