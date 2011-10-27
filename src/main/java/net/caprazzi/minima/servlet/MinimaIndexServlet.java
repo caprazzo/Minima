@@ -44,7 +44,8 @@ public class MinimaIndexServlet extends HttpServlet {
 		writer.write(IO.toString(in)
 			.replaceAll("\\{\\{ BOARD_TITLE \\}\\}", boardTitle)
 			.replaceAll("\\{\\{ READ_ONLY \\}\\}", req.getAttribute("minima.readonly").toString())
-			.replaceAll("\\{\\{ WEBSOCKET_LOCATION \\}\\}", websocketLocation));
+			.replaceAll("\\{\\{ WEBSOCKET_LOCATION \\}\\}", websocketLocation)
+			.replaceAll("\\{\\{ LOGIN_URL \\}\\}", req.getContextPath() + "/login"));			
 
 		writer.close();
 		in.close();
