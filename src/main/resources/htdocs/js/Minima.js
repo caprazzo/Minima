@@ -25,7 +25,8 @@ function Minima() {}
 		if (window.webkitNotifications.checkPermission() != 0)
 			return;
 		
-		var notification = window.webkitNotifications.createNotification('/favicon.ico',title, msg)
+		var icon = document.location.toString().replace('/index','/favicon.ico');
+		var notification = window.webkitNotifications.createNotification(icon,title, msg)
 		notification.onclick = function(x) {
 			window.focus();
 			this.cancel();

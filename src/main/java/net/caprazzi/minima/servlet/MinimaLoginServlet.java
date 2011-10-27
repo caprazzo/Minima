@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.caprazzi.minima.framework.RequestInfo;
+
 import org.eclipse.jetty.util.IO;
 
 public class MinimaLoginServlet extends HttpServlet {
@@ -24,10 +26,16 @@ public class MinimaLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		RequestInfo info = RequestInfo.fromRequest(req);
+		if (!info.isPath(req.getContextPath() + "/login")) {
+			resp.sendError(404);
+			return;
+		}
+		
 		String password = req.getParameter("password");
 		if (this.password.equals(password)) {
 			HttpSession session = req.getSession(true);
-			resp.sendRedirect("/login");
+			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
@@ -45,7 +53,8 @@ public class MinimaLoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		if (req.getSession(false) != null) {
-			resp.sendRedirect("/index");
+			resp.sendRedirect(req.getContextPath() + "/index");
+			return;
 		}
 		resp.setContentType("text/html");
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("login.html");

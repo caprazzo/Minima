@@ -21,6 +21,7 @@ public class MiniMain {
 		String password = System.getProperty("minima.password");
 		String publicView = System.getProperty("minima.readonly", "false");
 		String websocketLocation = System.getProperty("minima.websocket.location", "auto");
+		String webroot = System.getProperty("minima.webroot", "");
 		
 		boolean isPrivate = (password != null && password.length() > 0);
 		boolean hasPublicView = publicView.equalsIgnoreCase("true");
@@ -45,13 +46,27 @@ public class MiniMain {
 		MinimaDb minimaDbHelper = new MinimaDb(db);
 		minimaDbHelper.init();
 		MinimaService minimaService = new MinimaService(db, pushService);
-		MinimaServer minimaServer = new MinimaServer(
+		final MinimaServer minimaServer = new MinimaServer(
 				minimaService,
 				websocketServlet, 
 				cometServlet, 
 				indexServlet,
 				loginServlet,
 				privacyFilter);
-		minimaServer.start(port);
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				System.out.println("Shutdown hook");
+				try {
+					minimaServer.shutdown();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		minimaServer.start(webroot, port);
 	}
 }

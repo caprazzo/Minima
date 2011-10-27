@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.caprazzi.minima.framework.RequestInfo;
+
 public class PrivacyFilter implements Filter {
 
 	
@@ -25,7 +27,6 @@ public class PrivacyFilter implements Filter {
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -34,37 +35,50 @@ public class PrivacyFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest req = (HttpServletRequest) request;
-		String[] parts = req.getRequestURI().split("/");
+		HttpServletResponse resp = (HttpServletResponse) response;
 		
-		HttpSession session = req.getSession(false);
+		RequestInfo info = RequestInfo.fromRequest(req);
 		
+		HttpSession session = req.getSession(false);		
+		
+
+		// if this board 
+		// - is private 
+		// AND has public view enabled
+		// THEN configure request for readonly access, if user is not logged in
 		if (privateAccess && publicView) {
 			request.setAttribute("minima.readonly", (session == null));
 			chain.doFilter(request, response);
 			return;
 		}
 		
-		request.setAttribute("minima.readonly", false);
+		// if this board 
+		// is private 
+		// AND does NOT have public view
+		// AND there is no session
+		// THEN send to login or deny access		
 		if (privateAccess && !publicView && session == null) {
-			if (parts.length > 1 && !parts[1].equals("login") && session == null) {
-				HttpServletResponse resp = (HttpServletResponse) response;
-				if (parts[1].equals("index")) {
-					resp.sendRedirect("/login");
-				}
-				else {
-					resp.sendError(403);
-				}
+			if (info.isPath(req.getContextPath() + "/login")) {
+				chain.doFilter(request, response);
 				return;
-			}	
+			}						
+			if (info.isPath(req.getContextPath() + "/index")) {
+				resp.sendRedirect(req.getContextPath() + "/login");
+			}
+			else {
+				resp.sendError(403);
+			}
+			return;
 		}
+		
+		// in all other cases set readonly to false and proceed
+		request.setAttribute("minima.readonly", false);
 		
 		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

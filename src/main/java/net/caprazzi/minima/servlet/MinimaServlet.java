@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
@@ -27,7 +28,10 @@ public class MinimaServlet extends HttpServlet {
 	
 	private final MinimaService minimaService;
 
-	public MinimaServlet(MinimaService minimaService) {
+	private final String webroot;
+
+	public MinimaServlet(String webroot, MinimaService minimaService) {
+		this.webroot = webroot;
 		this.minimaService = minimaService;
 	}
 	
@@ -35,8 +39,8 @@ public class MinimaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		String[] parts = req.getRequestURI().split("/");
-		if (!parts[2].equals("stories")) {
+		RequestInfo info = RequestInfo.fromRequest(req);
+		if (!info.isPath(webroot + "/data/stories")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
@@ -57,14 +61,14 @@ public class MinimaServlet extends HttpServlet {
 			return;
 		}
 		
-		String[] parts = req.getRequestURI().split("/");
-		if (!parts[2].equals("stories")) {
+		RequestInfo info = RequestInfo.fromRequest(req);
+		if (!info.isPath(webroot + "/data/stories/_/_")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
 		
-		String key = parts[3];
-		int revision = Integer.parseInt(parts[4]);
+		String key = info.get(-2);
+		int revision = Integer.parseInt(info.get(-1));
 		byte[] story = IO.readBytes(req.getInputStream());
 		minimaService.updateStory(key, revision, story, new UpdateStory() {
 
@@ -97,14 +101,14 @@ public class MinimaServlet extends HttpServlet {
 			return;
 		}
 		
-		String[] parts = req.getRequestURI().split("/");
 		
-		if (!parts[2].equals("stories")) {
+		RequestInfo info = RequestInfo.fromRequest(req);
+		if (!info.isPath(webroot + "/data/stories/_")) {
 			sendError(resp, 404, "not found");
 			return;
 		}
 		
-		String key = parts[3];
+		String key = info.get(-1);
 		
 		minimaService.createStory(key, IO.readBytes(req.getInputStream()), new CreateStory() {
 			@Override public void success(Story saved) {
@@ -152,7 +156,7 @@ public class MinimaServlet extends HttpServlet {
 	
 	protected void sendError(HttpServletResponse resp, int i, String message) {
 		try  {
-			resp.setStatus(500);	
+			resp.setStatus(i);	
 			Writer w = resp.getWriter();
 			w.write(message);
 			w.flush();

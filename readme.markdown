@@ -31,6 +31,8 @@ All configurations are optional
 * -Dminima.board.default.title=Minima - default board title (as shown on the index page). Defaults to "Minima"
 * -Dminima.password="" - password to protect this minima instance. By default there is no password and the board is open to all
 * -Dminima.readonly=false - if this is set to true and a password is configured, non-authenticated users can see but not modify the board
+* -Dminima.websocket.location=auto - allows to explicit the websocket url. This allows to use the main app trough a proxy that does not support
+	websockets, but send websocket connections directly to minima. Default to "auto" which should do the right thing for non-proxied minima instances
 
 ## For developers
 

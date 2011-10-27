@@ -4,6 +4,7 @@ function MinimaClient(options) {
 	this.mode = options.mode;
 	this.web_socket_location = options.web_socket_location;
 	this.comet_location = options.comet_location;
+	this.data_location = options.data_location;
 }
 
 MinimaClient.prototype.onBoard = function(handler, ctx) {
@@ -25,7 +26,7 @@ MinimaClient.prototype.fireReceiveStory = function(storyModel) {
 
 MinimaClient.prototype.loadBoard = function() {
 	var store = this;
-	$.getJSON('/data/stories?' + new Date().getTime(), function(board) {
+	$.getJSON(this.data_location + '/stories?' + new Date().getTime(), function(board) {
 		console.log('[Client] loadBoard.success', board);
 		// add static lists because server does not support lists yet)
 		board.name = 'A Board';
@@ -105,7 +106,7 @@ MinimaClient.prototype.saveStory = function(story, successFn) {
 	console.log('[Client] creating story', story);
 	$.ajax({
 		type: 'POST',
-		url: '/data/stories/' + story.getId(),
+		url: this.data_location + '/stories/' + story.getId(),
 		contentType: 'application/json',
 		data: JSON.stringify(story.asObject()),
 		dataType: 'json',
@@ -129,7 +130,7 @@ MinimaClient.prototype.updateStory = function(story, successFn) {
 	console.log('[Client] sending story update', story);
 	$.ajax({
 		type: 'PUT',
-		url: '/data/stories/' + story.getId() + '/' + story.getRevision(),
+		url: this.data_location + '/stories/' + story.getId() + '/' + story.getRevision(),
 		contentType: 'application/json',
 		data: JSON.stringify(story.asObject()),
 		dataType: 'json',

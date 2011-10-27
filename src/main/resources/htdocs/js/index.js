@@ -20,8 +20,12 @@ $(function() {
 	var comet_location = document.location.toString()
 		.replace('/index', '/comet');
 	
+	var data_location = document.location.toString()
+		.replace('/index','/data');
+	
 	var client = new MinimaClient({
 		mode: mode,
+		data_location: data_location,
 		web_socket_location: ws_location,
 		comet_location: comet_location
 	});
