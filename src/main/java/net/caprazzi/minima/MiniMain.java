@@ -1,8 +1,5 @@
 package net.caprazzi.minima;
 
-import org.codehaus.jackson.util.MinimalPrettyPrinter;
-import org.eclipse.jetty.security.LoginService;
-
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.service.MinimaDb;
 import net.caprazzi.minima.service.MinimaPushService;
@@ -22,6 +19,10 @@ public class MiniMain {
 		String dbPrefix = System.getProperty("minima.db.prefix", "minimav0");
 		String boardTitle = System.getProperty("minima.board.default.title", "Minima");
 		String password = System.getProperty("minima.password");
+		String publicView = System.getProperty("minima.public.view", "false");
+		
+		boolean isPrivate = (password != null && password.length() > 0);
+		boolean hasPublicView = publicView.equalsIgnoreCase("true");
 		
 		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
 		db.setAutoPurge(true);
@@ -33,11 +34,10 @@ public class MiniMain {
 		
 		MinimaPushService pushService = new MinimaPushService(websocketServlet, cometServlet);
 		
-		PrivacyFilter privacyFilter = null;
+		PrivacyFilter privacyFilter = new PrivacyFilter(isPrivate, hasPublicView);
 		MinimaLoginServlet loginServlet = null;
 		
-		if (password != null && password.length() > 0) {
-			privacyFilter = new PrivacyFilter();
+		if (isPrivate) {
 			loginServlet = new MinimaLoginServlet(password);
 		}
 		

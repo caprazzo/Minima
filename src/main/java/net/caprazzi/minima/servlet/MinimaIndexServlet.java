@@ -29,7 +29,9 @@ public class MinimaIndexServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
 		PrintWriter writer = resp.getWriter();
-		writer.write(IO.toString(in).replaceAll("\\{\\{ BOARD_TITLE \\}\\}", boardTitle));
+		writer.write(IO.toString(in)
+			.replaceAll("\\{\\{ BOARD_TITLE \\}\\}", boardTitle)
+			.replaceAll("\\{\\{ READ_ONLY \\}\\}", req.getAttribute("minima.readonly").toString()));
 
 		writer.close();
 		in.close();

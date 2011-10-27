@@ -5,20 +5,21 @@ Try the [online demo](http://caprazzi.net:8989/index "Minima live demo")
 
 Screenshot:
 
-![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.7.png "Minima Screenshot")
+![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.8.png "Minima Screenshot")
 
 ### Features:
 
 * can create, update, sort and move around cards between lists
 * live updates: all connected browsers are updated
-* standalone java server and embedded database: get up and running in seconds
 * desktop notifications (supported browsers only)
+* password protection - same password for all users (see configuration below to enable)
+* standalone java server and embedded database: get up and running in seconds
 
 ## For users
  
 ### Install and run
-1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.7-jar-with-dependencies.jar)
-2. java -jar Minima-0.7-with-dependencies.jar (or doubleclick)
+1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.8-jar-with-dependencies.jar)
+2. java -jar Minima-0.8-with-dependencies.jar (or doubleclick)
 3. browse to http://localhost:8989/index
 
 ### Configuration
@@ -29,6 +30,7 @@ All configurations are optional
 * -Dminima.db.dir=./minima-db - database directory, defaults to ./minima-db and is created if it does not exist
 * -Dminima.board.default.title=Minima - default board title (as shown on the index page). Defaults to "Minima"
 * -Dminima.password="" - password to protect this minima instance. By default there is no password and the board is open to all
+* -Dminima.public.view=false - if this is set to true and a password is configured, non-authenticated users can see but not modify the board
 
 ## For developers
 
@@ -44,6 +46,10 @@ All configurations are optional
 2. java -jar target/minima-0.7-jar-with-dependencies.jar
 
 ## Changelog
+
+### V 0.8 
+
+* simple privacy protection via password
 
 ### V 0.7 - 26 October 2011
 
