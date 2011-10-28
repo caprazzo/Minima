@@ -80,6 +80,8 @@ ViewStory.prototype._createStructure = function() {
 ViewStory.prototype._setupUi = function() {
 	var view = this;
 	var timeout = null;
+	if (this.readonly)
+		return;
 	this.ui.descRoot.hover(		
 		function() {
 			// don't show the delete button if item is being dragged
@@ -98,8 +100,7 @@ ViewStory.prototype._setupUi = function() {
 			view.ui.archiveBtn.hide();
 		});
 	
-	if (this.readonly)
-		return;
+
 	
 	this.ui.archiveBtn		
 		.click(function() {

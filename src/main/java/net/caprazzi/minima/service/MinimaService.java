@@ -144,20 +144,27 @@ public class MinimaService {
 		});
 	}
 
-	public void updateStory(String id, final int revision, final byte[] storyData, final UpdateStory cb) {
-		if (!validateStoryData(storyData, cb)) 
-			return;
+	public void update(String id, final int revision, final byte[] data, final Update cb) {
 		
-		final Story story = fromJson(storyData);
-		story.setId(id);
-		story.setRevision(revision+1);	
-		final byte[] writeData = Meta.wrap("story", story).toJson();
+		
+		Meta<?> meta = Meta.fromJson(data);
+		
+		if (meta.getName().equals("story")) {
+			Story story = (Story) meta.getObj(Story.class);
+			story.setId(id);
+			story.setRevision(revision+1);
+		}
+		
+		final byte[] writeData = meta.toJson();
+		
+			
+		//final byte[] writeData = Meta.wrap("story", story).toJson();
 		db.put(id, revision, writeData, new Put() {
 
 			@Override
 			public void ok(String key, int rev) {
-				logger.info("Saved story [" + key + "]@" + rev);
-				cb.success(key, rev, story.toJson());
+				logger.info("Saved object [" + key + "]@" + rev);
+				cb.success(key, rev, writeData);
 				pushServlet.send(writeData);
 			}
 
@@ -233,7 +240,7 @@ public class MinimaService {
 		public abstract void error(String string, Exception e);
 	}
 	
-	public static abstract class UpdateStory implements Callback {
+	public static abstract class Update implements Callback {
 		public abstract void success(String key, int revision, byte[] jsonData);
 		public abstract void collision(String key, int yourRev, int foundRev);
 	}

@@ -14,7 +14,7 @@ import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
-import net.caprazzi.minima.service.MinimaService.UpdateStory;
+import net.caprazzi.minima.service.MinimaService.Update;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
@@ -70,7 +70,7 @@ public class MinimaServlet extends HttpServlet {
 		String key = info.get(-2);
 		int revision = Integer.parseInt(info.get(-1));
 		byte[] story = IO.readBytes(req.getInputStream());
-		minimaService.updateStory(key, revision, story, new UpdateStory() {
+		minimaService.update(key, revision, story, new Update() {
 
 			@Override
 			public void success(String key, int rev, byte[] jsonData) {
@@ -79,7 +79,7 @@ public class MinimaServlet extends HttpServlet {
 			
 			@Override
 			public void collision(String key, int yourRev, int foundRev) {
-				logger.warn("Collision while updating story ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+				logger.warn("Collision while updating item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
 				sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
 			}
 			

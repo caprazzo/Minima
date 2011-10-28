@@ -9,7 +9,7 @@ import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
-import net.caprazzi.minima.service.MinimaService.UpdateStory;
+import net.caprazzi.minima.service.MinimaService.Update;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -44,7 +44,7 @@ public class TestUtils {
 		public void success(Story story) {}
 	};
 	
-	public final static UpdateStory updateStoryNoop = new UpdateStory() {
+	public final static Update updateStoryNoop = new Update() {
 		@Override
 		public void error(String string, Exception e) {
 			throw new RuntimeException(string, e);
@@ -70,7 +70,7 @@ public class TestUtils {
 		}
 	}
 	
-	public static class TestUpdateStory extends UpdateStory {
+	public static class TestUpdateStory extends Update {
 		@Override
 		public void error(String string, Exception e) {
 			throw new RuntimeException("unexpected error");

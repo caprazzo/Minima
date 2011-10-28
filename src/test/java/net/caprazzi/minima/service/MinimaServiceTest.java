@@ -66,7 +66,7 @@ public class MinimaServiceTest {
 	public void update_should_update_story_in_db() {
 		Story story = new Story("key", "dsec", "tofo");
 		byte[] data = service.asJson(story);
-		service.updateStory("key", 1, data, TestUtils.updateStoryNoop);
+		service.update("key", 1, data, TestUtils.updateStoryNoop);
 		
 		story.setRevision(2);
 		story.setId("key");
@@ -187,7 +187,7 @@ public class MinimaServiceTest {
 	@Test
 	public void should_reject_invalid_json() {
 		final AtomicBoolean flag = new AtomicBoolean();
-		service.updateStory("key", 0, "garbage".getBytes(), new TestUtils.TestUpdateStory() {
+		service.update("key", 0, "garbage".getBytes(), new TestUtils.TestUpdateStory() {
 			@Override
 			public void error(String message, Exception e) {
 				flag.set(true);

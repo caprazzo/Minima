@@ -92,7 +92,7 @@ public class MinimaServiceFunctionalTest {
 			@Override
 			public void success(Story created) {
 				byte[] updatedJson = service.asJson(created);
-				service.updateStory(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+				service.update(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
 					@Override
 					public void success(String key, int revision, byte[] jsonData) {
 						flag = true;
@@ -116,7 +116,7 @@ public class MinimaServiceFunctionalTest {
 				created.setList("newList");
 				created.setPos(new BigDecimal(66));
 				byte[] updatedJson = service.asJson(created);
-				service.updateStory(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+				service.update(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
 					@Override
 					public void success(String key, int revision, byte[] jsonData) {
 						Story updated = service.fromJson(jsonData);
@@ -168,7 +168,7 @@ public class MinimaServiceFunctionalTest {
 				updated.setList("newList");
 				updated.setPos(new BigDecimal(66));
 				byte[] updatedJson = service.asJson(updated);
-				service.updateStory(updated.getId(), updated.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+				service.update(updated.getId(), updated.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
 					@Override
 					public void success(String key, int rev, byte[] data) {
 						flag = true;

@@ -132,7 +132,7 @@ MinimaClient.prototype.updateStory = function(story, successFn) {
 		type: 'PUT',
 		url: this.data_location + '/stories/' + story.getId() + '/' + story.getRevision(),
 		contentType: 'application/json',
-		data: JSON.stringify(story.asObject()),
+		data: JSON.stringify({name:'story', obj:story.asObject()}),
 		dataType: 'json',
 		processData: false,
 		success: function(data) {
