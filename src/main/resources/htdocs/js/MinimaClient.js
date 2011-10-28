@@ -113,7 +113,7 @@ MinimaClient.prototype.saveStory = function(story, successFn) {
 		processData: false,
 		success: function(data) {
 			console.log('[Client] createStory.success', data);
-			successFn(ModelStory.fromObject(data));
+			successFn(ModelStory.fromObject(data.obj));
 		}
 	});	
 }
@@ -137,7 +137,7 @@ MinimaClient.prototype.updateStory = function(story, successFn) {
 		processData: false,
 		success: function(data) {
 			console.log('[Client] updateStory.success', data);	
-			successFn(ModelStory.fromObject(data));
+			successFn(ModelStory.fromObject(data.obj));
 		}
 	})
 }
