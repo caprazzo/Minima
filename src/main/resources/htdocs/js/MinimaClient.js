@@ -113,7 +113,7 @@ MinimaClient.prototype.saveStory = function(story, successFn) {
 		processData: false,
 		success: function(data) {
 			console.log('[Client] createStory.success', data);
-			successFn(ModelStory.fromObject(data.obj));
+			successFn(ModelStory.fromObject(data));
 		}
 	});	
 }
@@ -140,4 +140,20 @@ MinimaClient.prototype.updateStory = function(story, successFn) {
 			successFn(ModelStory.fromObject(data.obj));
 		}
 	})
+}
+
+MinimaClient.prototype.updateList = function(list, successFn) {
+	console.log('[Client] sending list update', list);
+	$.ajax({
+		type: 'PUT',
+		url: this.data_location + '/lists/' + list.getId() + '/' + list.getRevision(),
+		contentType: 'application/json',
+		data: JSON.stringify({name:'list', obj:list.asObject()}),
+		dataType: 'json',
+		processData: false,
+		success: function(data) {
+			console.log('[Client] updateStory.success', data);	
+			successFn(ModelList.fromObject(data.obj));
+		}
+	});
 }
