@@ -152,7 +152,7 @@ MinimaClient.prototype.updateList = function(list, successFn) {
 		dataType: 'json',
 		processData: false,
 		success: function(data) {
-			console.log('[Client] updateStory.success', data);	
+			console.log('[Client] updateList.success', data);	
 			successFn(ModelList.fromObject(data.obj));
 		}
 	});

@@ -114,6 +114,10 @@ ViewList.prototype._createStructure = function() {
 	this.ui.title = $('<h2></h2>')
 		.appendTo(this.ui.header);
 	
+	this.ui.titleInput = $('<input type="text" class="list-title-input"></input>')
+		.hide()
+		.appendTo(this.ui.header);
+	
 	this.ui.ul = $('<ul class="ui-list"></ul>')
 		.appendTo(this.ui.root);
 	
@@ -122,9 +126,10 @@ ViewList.prototype._createStructure = function() {
 	
 	this.ui.textarea = $('<textarea class="ui-story-textarea"></textarea>')
 		.appendTo(this.ui.footer);
-	if (!this.readonly)
-	this.ui.addBtn = $('<span class="ui-list-add-btn">add note</span>')
-		.appendTo(this.ui.footer);
+	if (!this.readonly) {
+		this.ui.addBtn = $('<span class="ui-list-add-btn">add note</span>')
+			.appendTo(this.ui.footer);
+	}
 	
 }
 
@@ -183,19 +188,24 @@ ViewList.prototype._setupUi = function() {
 			} 
 		});
 	
-	if (!this.readonly)
-	this.ui.addBtn
-		.click(function() {
-			view._btnAddClick();
-		})
-		.keypress(function() {
-			view._btnAddClick();
-		})
-		.hover(function() { 
-			$(this).addClass('ui-list-add-btn-hover');
-		}, function() {
-			$(this).removeClass('ui-list-add-btn-hover');
-		}).focus();
+	if (!this.readonly) {
+		this.ui.title.dblclick(function() {
+			view.ui.title.hide();
+			view.ui.titleInput.val(view.listVm.getName()).show().focus();
+		});
+		this.ui.addBtn
+			.click(function() {
+				view._btnAddClick();
+			})
+			.keypress(function() {
+				view._btnAddClick();
+			})
+			.hover(function() { 
+				$(this).addClass('ui-list-add-btn-hover');
+			}, function() {
+				$(this).removeClass('ui-list-add-btn-hover');
+			}).focus();
+	}
 }
 
 ViewList.prototype.getStoryView = function(story_view_id) {
