@@ -123,7 +123,7 @@ MinimaClient.prototype.receiveMessage = function(msg) {
 	var obj = $.parseJSON(msg);
 	console.log('parsed message', obj);
 	if (obj.name == "story")
-		this.fireReceiveStory(ModelStory.fromObject(obj.obj));
+		this.fireReceiveStory(obj.obj);
 }
 
 MinimaClient.prototype.updateStory = function(story, successFn) {

@@ -7,7 +7,6 @@ ListCollectionView = Backbone.View.extend({
 	    this.lists = args.lists;
 	    this.notes = args.notes;
 	    
-		var that = this;
 		this._listViews = [];
 		this.lists.each(this.addList);				
 						
@@ -28,7 +27,7 @@ ListCollectionView = Backbone.View.extend({
 	addList: function(list) {
 		var listView = new ListView({ 
 			model: list,
-			notes: this.notes
+			notes: this.notes,
 		});		
 		this._listViews.push(listView);
 		

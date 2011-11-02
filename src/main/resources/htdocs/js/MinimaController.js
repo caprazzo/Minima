@@ -25,6 +25,9 @@ function MinimaController(options) {
 		});
 	});
 	
+	var notes = new NoteCollection();
+	notes.url = options.data_location + '/stories/';
+	var lists = new ListCollection();
 	
 	
 	this.client.onBoard(function(board) {
@@ -38,19 +41,24 @@ function MinimaController(options) {
 			//view.setList(ModelList.fromObject(list_obj));
 		});
 		
-		var notes = new NoteCollection();
-		var lists = new ListCollection();
+		
 		lists.add(board.lists);
 		notes.add(board.stories);
+		
+		notes.bind('change', function(note, b, c) {
+			// according to documentation, this should
+			// not be necessary...
+			console.log('change', note);
+			notes.sort();			
+			
+		}, this);
 			
 		var listsView = new ListCollectionView({
 			lists: lists,
 			notes: notes
 		});
 		$('#board').append(listsView.render().el);
-		
-
-		
+				
 		$.each(board.stories, function(idx, story_obj) {
 			//var storyModel = ModelStory.fromObject(story_obj);
 			//view.setStory(storyModel);
@@ -59,31 +67,31 @@ function MinimaController(options) {
 		
 	}, this);
 	
-	this.client.onReceiveStory(function(storyModel) {
-		console.log('[Controller] client.on.receiveStory');
-		var found = view.findStoryView(ViewStory.viewId(storyModel.getId()));
-		view.setStory(storyModel);
+	this.client.onReceiveStory(function(storyModel) {		
+		console.log('[Controller] client.on.receiveStory', storyModel);
 		
-		if (!nModel.get('active'))
-			return;
+		var found = notes.get(storyModel.id);
+		if (found)
+			notes.remove(storyModel, {silent: true});
+		notes.add(storyModel);
 		
-		// story moved to new list
-		if (found && found.getModel().diff(storyModel) && found.getParentView().getViewId() != ViewList.viewId(storyModel.getListId())) {
-			var sourceListName = found.getParentView().getModel().getName();
-			var destListName = view.findListView(ViewList.viewId(storyModel.getListId())).getModel().getName();
-			Minima.notify('Note moved from "' + sourceListName + '" to "' + destListName + '"', storyModel.getDesc());
+		var model = notes.get(storyModel.id);
+				
+		if (found && found.get('list') != model.get('list')) {
+			var from = lists.get(found.get('list'));
+			var to = lists.get(model.get('list'));
+			Minima.notify('Note moved from "' + from.get('name') + '" to "' + to.get('name') + '"', model.get('desc'));
+		}
+		
+		if (!found && !model.get('archived')) {
+			Minima.notify('New note', model.get('desc'));
 			return;
 		}
 		
-		if (!found && !storyModel.getArchived()) {
-			Minima.notify('New note', storyModel.getDesc());
+		if (found && !found.get('archived') && model.get('archived')) {
+			Minima.notify('Note archived', model.get('desc'));
 			return;
-		}
-		
-		if (found && storyModel.getArchived()) {
-			Minima.notify('Note archived', storyModel.getDesc());
-			return;
-		}
+		}		
 		
 	}, this);
 	

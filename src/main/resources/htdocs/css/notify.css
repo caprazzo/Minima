@@ -1,0 +1,63 @@
+	.notify-ctrl-label {
+		font-family: monospace;
+		font-size: 12px;
+	}
+	.notify-on, .notify-off, .notify-help {
+ 		font-size: 10px;
+ 		padding: 1px;
+		width: 2.5em;
+		text-align: center;
+		cursor: pointer;
+		display: inline-block;		
+		border: 1px solid gray;		
+		font-weight: bold;
+		background-color: #eee;		
+		color: #bbb;
+	}
+ 	.notify-on {		
+		border-top-left-radius: 3px;
+		border-bottom-left-radius: 3px;
+		border-right: 0;
+	}
+	.notify-off {
+		border-top-right-radius: 3px;
+		border-bottom-right-radius: 3px;
+		border-left: 0;
+	}
+	.notify-on-selected {
+		color: black;
+		font-weight: bold;
+		background-color: #fefefe;
+		border: 1px solid #555;
+	}
+	.notify-off-selected {
+		color: black;
+		font-weight: bold;
+		background-color: #fefefe;
+		border: 1px solid #555;
+	}
+	.notify-help {
+		border-radius: 3px;
+		width: 1em;
+		padding: 1px;
+		line-height: 14px;
+	}
+	.notify-help-highlight {
+		background-color: #ffffaa;
+	}
+	.notify-help-active {
+		background-color: #ffffaa;
+	}
+	.notify-help-topic {
+		display: none;
+		background-color: #ffffaa;
+		padding: 6px;		
+		border: 1px solid #eee;
+		margin-top: 6px;
+		cursor: pointer;
+	}
+	.notify-help-topic-warn {
+		color: red;
+		margin-top: 6px;
+		font-style: italic;
+	}

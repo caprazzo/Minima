@@ -1,3 +1,6 @@
 NoteCollection = Backbone.Collection.extend({
-	model: Note
+	model: Note,
+	comparator: function(note) {
+		return note.get('pos');
+	}
 });

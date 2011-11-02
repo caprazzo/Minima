@@ -38,7 +38,8 @@ $(function() {
 	view.resize($(window).width());
 	var controller = new MinimaController({
 		client: client,
-		view: view
+		view: view,
+		data_location: data_location
 	});
 	
 	$(window).resize(function() {
