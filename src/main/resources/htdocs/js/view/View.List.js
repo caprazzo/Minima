@@ -76,7 +76,7 @@ ViewList.prototype.updateModel = function(model) {
 }
 
 ViewList.prototype.updateName = function(name) {
-	this.ui.title.html(name);
+	//this.ui.title.html(name);
 }
 
 ViewList.prototype.refresh = function() {
@@ -85,7 +85,7 @@ ViewList.prototype.refresh = function() {
 		this._createStructure();
 		this._setupUi();
 	}
-	this.ui.title.html(this.listVm.getName());
+	//this.ui.title.html(this.listVm.getName());
 	this._refreshStories();
 }
 
@@ -110,9 +110,17 @@ ViewList.prototype._createStructure = function() {
 	
 	this.ui.header = $('<div class="list-header"></div>')
 		.appendTo(this.ui.root);
-	
-	this.ui.title = $('<h2></h2>')
-		.appendTo(this.ui.header);
+
+	var listModel = new List();
+	listModel.bind('change', function(model, ev2, ev3) {
+		console.log(model.get('name'), ev2, ev3);
+	}, this);
+	var titleView = new ListNameView({ model: listModel });
+	this.ui.title =  $(titleView.el)
+		.appendTo(this.ui.root);
+	titleView.render();
+		//$('<h2></h2>')
+		//.appendTo(this.ui.header);
 	
 	this.ui.titleInput = $('<input type="text" class="list-title-input"></input>')
 		.hide()
@@ -189,10 +197,10 @@ ViewList.prototype._setupUi = function() {
 		});
 	
 	if (!this.readonly) {
-		this.ui.title.dblclick(function() {
-			view.ui.title.hide();
-			view.ui.titleInput.val(view.listVm.getName()).show().focus();
-		});
+		//this.ui.title.dblclick(function() {
+		//	view.ui.title.hide();
+		//	view.ui.titleInput.val(view.listVm.getName()).show().focus();
+		//});
 		this.ui.addBtn
 			.click(function() {
 				view._btnAddClick();

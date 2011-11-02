@@ -13,6 +13,7 @@
 	<script src="js/lib/json2.js" type="text/javascript"></script>
 	
 	<script src="js/view/View.NotificationsCtrl.js" type="text/javascript"></script>
+	<script src="js/view/View.ListTitle.js" type="text/javascript"></script>
 	
 	<!-- 
 	 -->
@@ -98,8 +99,7 @@
 		background-color: transparent;
 	}
 	
-	.ui-story-display {
-		
+	.ui-story-display {		
 		font-size: 18px;
 		line-height: 1.2em;		
 	}
@@ -186,6 +186,10 @@
 		margin-right: 1em;
 		font-weight: bold;
 		line-height: 15px;
+		display: none;
+	}
+	
+	.list-name-edit {
 		display: none;
 	}
 	
@@ -382,6 +386,12 @@
 						</p>
 				<% } %>		
 			</div>	
+	</script>
+	
+	
+	<script type="text/template" id="list-name-template">
+		<span class="list-name-view"><%= name %></span>
+		<input type="text" class="list-name-edit" value="<%= name %>"/>
 	</script>
 </body>
 </html>
