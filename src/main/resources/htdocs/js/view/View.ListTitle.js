@@ -1,9 +1,14 @@
 window.List = Backbone.Model.extend({
-	
 	defaults: function() {
 		return {
-			name: 'foo'
+			name: 'foo',
+			id: 'listId',
+			rev: 'listRev'
 		};
+	},
+	
+	url: function() {
+		return '/lists/' + this.id + '/' + this.get('rev');
 	}
 	
 });
@@ -15,11 +20,7 @@ ListNameView = Backbone.View.extend({
 	
 	initialize: function() {
 		this.template = _.template($('#list-name-template').html());
-		this.model.bind('change', this.render, this);
-		this.ui = {
-			edit: null,
-			view: null
-		}
+		this.model.bind('change:name', this.render, this);
 	},
 	
 	events: {
@@ -31,8 +32,10 @@ ListNameView = Backbone.View.extend({
 	render: function() {
 		var $el = $(this.el);
 		$el.html(this.template(this.model.toJSON()));
-		this.ui.edit = $el.find('.list-name-edit');
-		this.ui.view = $el.find('.list-name-view');
+		this.ui = {
+			edit: $el.find('.list-name-edit'),
+			view: $el.find('.list-name-view')
+		}
 	},
 	
 	activateEdit: function() {
@@ -49,6 +52,7 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	save: function() {
-		this.model.set({ name: $(this.el).find('.list-name-edit').val()});
+		this.model.set({ name: this.ui.edit.val() });
+		this.render();
 	}
 });
