@@ -25,6 +25,8 @@ function MinimaController(options) {
 		});
 	});
 	
+	
+	
 	this.client.onBoard(function(board) {
 		console.log('[Controller] client.on.board', board);
 		
@@ -33,13 +35,27 @@ function MinimaController(options) {
 		});
 		
 		$.each(board.lists, function(idx, list_obj) {
-			view.setList(ModelList.fromObject(list_obj));
+			//view.setList(ModelList.fromObject(list_obj));
 		});
 		
-		$.each(board.stories, function(idx, story_obj) {
-			var storyModel = ModelStory.fromObject(story_obj);
-			view.setStory(storyModel);
+		var notes = new NoteCollection();
+		var lists = new ListCollection();
+		lists.add(board.lists);
+		notes.add(board.stories);
+			
+		var listsView = new ListCollectionView({
+			lists: lists,
+			notes: notes
 		});
+		$('#board').append(listsView.render().el);
+		
+
+		
+		$.each(board.stories, function(idx, story_obj) {
+			//var storyModel = ModelStory.fromObject(story_obj);
+			//view.setStory(storyModel);
+		});
+		
 		
 	}, this);
 	

@@ -20,6 +20,7 @@ public class ClasspathFilesServlet extends DefaultServlet {
 		try {		
 			return Resource.newClassPathResource(basePath + pathInContext);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	};

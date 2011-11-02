@@ -1,0 +1,12 @@
+.list-container {
+	float:left;
+	width: 400px;
+	padding: 0;
+	min-height: 15px;
+	list-style-type: none;
+	background-color: white;
+	display: block;
+	border-radius: 3px;
+	border: 1px solid gray;
+	margin: 1em;
+}
