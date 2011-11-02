@@ -24,6 +24,7 @@ ListView = Backbone.View.extend({
 		el.find('.list-notes').append(notesView.render().el);
 		el.find('.list-header').append(nameView.render().el);
 		el.find('.list-footer').append(createView.render().el);
+		
 		return this;
 	}
 });
