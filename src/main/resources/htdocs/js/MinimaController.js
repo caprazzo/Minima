@@ -59,11 +59,14 @@ function MinimaController(options) {
 			width: $(window).width()
 		});
 		
+		
 		$(window).resize(function() {
 	    	listsView.resize($(this).width());
 		});
 		
 		$('#board').append(listsView.render().el);
+		
+		listsView.resize($(window).width());
 				
 		$.each(board.stories, function(idx, story_obj) {
 			//var storyModel = ModelStory.fromObject(story_obj);

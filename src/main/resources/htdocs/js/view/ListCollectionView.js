@@ -15,7 +15,7 @@ ListCollectionView = Backbone.View.extend({
 	},
 	
 	resize: function(availableWidth) {
-		var newWidth = availableWidth - 145;
+		var newWidth = availableWidth - 45;
 		var maxListWidth = 330;
 		var minListWidth = 210;
 		var cutoffBoardSize = minListWidth * 3;
