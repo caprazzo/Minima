@@ -9,10 +9,12 @@ Screenshot:
 
 ### Features:
 
-* can create, update, sort and move around cards between lists
+* create, edit and rearrange notes between lists
+* edit list names
 * live updates: all connected browsers are updated
 * desktop notifications (supported browsers only)
 * password protection - same password for all users (see configuration below to enable)
+* optional readonly view for access without password (see configuration below to enable)
 * standalone java server and embedded database: get up and running in seconds
 
 ## For users
@@ -31,7 +33,7 @@ All configurations are optional
 * -Dminima.board.default.title=Minima - default board title (as shown on the index page). Defaults to "Minima"
 * -Dminima.password="" - password to protect this minima instance. By default there is no password and the board is open to all
 * -Dminima.readonly=false - if this is set to true and a password is configured, non-authenticated users can see but not modify the board
-* -Dminima.websocket.location=auto - allows to explicit the websocket url. This allows to use the main app trough a proxy that does not support
+* -Dminima.websocket.location=auto - explicit the websocket url. This allows to use the main app trough a proxy that does not support
 	websockets, but send websocket connections directly to minima. Default to "auto" which should do the right thing for non-proxied minima instances
 
 ## For developers
@@ -45,13 +47,18 @@ All configurations are optional
 ### Build and run (maven)
 
 1. mvn assembly:assembly
-2. java -jar target/minima-0.7-jar-with-dependencies.jar
+2. java -jar target/minima-0.8-jar-with-dependencies.jar
 
 ## Changelog
 
-### V 0.8 
+### V 0.8 - 03 November 2011
 
-* simple privacy protection via password
+* board can be protected by password
+* protected boards can be made available in readonly mode
+* list name can be edited
+* now using backbone.js and underscore.js templates
+* optionally configure webapp root 
+* websockets friendly with proxies
 
 ### V 0.7 - 26 October 2011
 
