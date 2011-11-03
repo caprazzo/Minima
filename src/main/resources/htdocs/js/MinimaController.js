@@ -57,6 +57,12 @@ function MinimaController(options) {
 			lists: lists,
 			notes: notes
 		});
+		
+		listsView.resize($(window).width());
+		$(window).resize(function() {
+	    	listsView.resize($(this).width());
+		});
+		
 		$('#board').append(listsView.render().el);
 				
 		$.each(board.stories, function(idx, story_obj) {
