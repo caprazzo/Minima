@@ -4,6 +4,7 @@ NoteCollectionView = Backbone.View.extend({
 	initialize: function(args) {
 		_(this).bindAll('addNote');
 		this.notes = args.notes;
+		this.readonly = args.readonly;
 		this.listId = args.listId;
 		var that = this;
 		this._filter = function(note) { 
@@ -67,8 +68,11 @@ NoteCollectionView = Backbone.View.extend({
 															
 					note.set({list: that.listId, pos: that._newPosition(prevModel, nextModel)});
 					note.save();
-				}
+				},
+				
+				disabled: this.readonly
 			});
+			
 		}
 		
 		var that = this;
@@ -93,7 +97,8 @@ NoteCollectionView = Backbone.View.extend({
 	addNote: function(note) {
 		console.log('add note with list', note.get('list'), 'to collectionvew', this.listId);
 		var noteView = new NoteView({
-			model: note
+			model: note,
+			readonly: this.readonly
 		});
 		
 		this._noteViews.push(noteView);

@@ -4,6 +4,8 @@ function MinimaController(options) {
 	this.client = options.client;
 	this.view = options.view;
 	
+	this.readonly = options.readonly;
+	
 	var view = this.view;
 	var client = this.client;
 	
@@ -56,7 +58,8 @@ function MinimaController(options) {
 		var listsView = new ListCollectionView({
 			lists: lists,
 			notes: notes,
-			width: $(window).width()
+			width: $(window).width(),
+			readonly: this.readonly
 		});
 		
 		

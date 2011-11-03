@@ -6,6 +6,7 @@ NoteView = Backbone.View.extend({
 	
 	initialize: function(args) {
 		this.template = _.template($('#note-template').html());	
+		this.readonly = args.readonly;
 	},
 	
 	events: {
@@ -46,7 +47,7 @@ NoteView = Backbone.View.extend({
 	},
 	
 	showArchive: function() {
-		if (this._isDragging) return;		
+		if (this._isDragging || this.readonly) return;		
 		var pos = this.ui.el.offset();
 		var width = this.ui.el.width();
 		this.ui.archive.css({
@@ -56,6 +57,8 @@ NoteView = Backbone.View.extend({
 	},
 	
 	activateEdit: function() {
+		if (this.readonly)
+			return;
 		this.ui.view.hide();		
 		this.ui.edit.show();
 		this.ui.textarea.val(this.model.get('desc')).focus();

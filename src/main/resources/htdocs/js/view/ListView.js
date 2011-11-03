@@ -5,6 +5,7 @@ ListView = Backbone.View.extend({
 	
 	initialize: function(args) {
 		this.notes = args.notes;
+		this.readonly = args.readonly;
 		this.template = _.template($('#list-template').html());
 		this.width = args.width;
 		console.log(this.model.get('name'));
@@ -25,15 +26,23 @@ ListView = Backbone.View.extend({
 		
 		var notesView = new NoteCollectionView({ 
 			notes: this.notes,
-			listId: this.model.id
+			listId: this.model.id,
+			readonly: this.readonly
 		});
-		
-		var nameView = new ListNameView({ model: this.model });
-		var createView = new ListCreateView({ model: this.model, notes: this.notes });
-		createView.bind('create', notesView.addNote, notesView);
 		el.find('.list-notes').append(notesView.render().el);
+		
+		var nameView = new ListNameView({
+			model: this.model,
+			readonly: this.readonly
+		});
 		el.find('.list-header').append(nameView.render().el);
-		el.find('.list-footer').append(createView.render().el);
+		
+		
+		if (!this.readonly) {
+			var createView = new ListCreateView({ model: this.model, notes: this.notes });
+			createView.bind('create', notesView.addNote, notesView);
+			el.find('.list-footer').append(createView.render().el);
+		}
 		
 		this.resize(this.width);
 		this._rendered = true;

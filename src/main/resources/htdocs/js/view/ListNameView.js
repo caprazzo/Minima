@@ -3,9 +3,10 @@ ListNameView = Backbone.View.extend({
 	model: List,
 	className: 'list-name-container',
 	
-	initialize: function() {
+	initialize: function(args) {
 		this.template = _.template($('#list-name-template').html());
 		this.model.bind('change:name', this.render, this);
+		this.readonly = args.readonly;
 	},
 	
 	events: {
@@ -25,6 +26,8 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	activateEdit: function() {
+		if (this.readonly)
+			return;
 		this.ui.view.hide();
 		this.ui.edit.show().focus();
 	},

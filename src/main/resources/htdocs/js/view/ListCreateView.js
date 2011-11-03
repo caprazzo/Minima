@@ -55,12 +55,14 @@ ListCreateView = Backbone.View.extend({
 			return !note.get('archived') && note.get('list') == that.model.id;
 		})).last();
 		
+		var pos = (lastNote) ? lastNote.get('pos') : 0;
+		
 		var note = new Note({
 			id: Minima.makeId(),
 			revision: 0,
 			desc: text,
 			list: this.model.id,
-			pos: lastNote.get('pos') + 65536
+			pos: pos + 65536
 		});
 		
 		this.trigger('create', note);

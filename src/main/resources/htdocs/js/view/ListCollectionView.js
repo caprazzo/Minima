@@ -4,6 +4,7 @@ ListCollectionView = Backbone.View.extend({
 	initialize: function(args) {
 		// bind the functions 'add' and 'remove' to the view.
 	    _(this).bindAll('addList');
+	    this.readonly = args.readonly;
 	    this.lists = args.lists;
 	    this.notes = args.notes;
 	    this.width = args.width;
@@ -59,7 +60,8 @@ ListCollectionView = Backbone.View.extend({
 		var listView = new ListView({ 
 			model: list,
 			notes: this.notes,
-			width: this.listWidth
+			width: this.listWidth,
+			readonly: this.readonly
 		});		
 		this._listViews.push(listView);
 		
