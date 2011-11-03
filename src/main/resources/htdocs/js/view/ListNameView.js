@@ -29,8 +29,8 @@ ListNameView = Backbone.View.extend({
 	activateEdit: function() {
 		if (this.readonly)
 			return;
-		this.ui.view.hide();
 		this.ui.edit.show().focus();
+		this.ui.view.hide();		
 	},
 	
 	onEditEnter: function(e) {
