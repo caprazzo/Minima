@@ -39,15 +39,8 @@ function MinimaController(options) {
 	}, this);
 	
 	this.client.onReceiveStory(function(note) {		
-		var found = notes.get(note.id);
-		if (found) {
-			found.set(note);
-		}
-		else {
-			notes.add(note);
-		}
-		
-		var model = notes.get(note.id);
+		var found = notes.get(note.id);		
+		var model = new Note(note);
 				
 		if (found && found.get('list') != model.get('list')) {
 			var from = lists.get(found.get('list'));
@@ -55,15 +48,20 @@ function MinimaController(options) {
 			Minima.notify('Note moved from "' + from.get('name') + '" to "' + to.get('name') + '"', model.get('desc'));
 		}
 		
-		if (!found && !model.get('archived')) {
+		else if (!found && !model.get('archived')) {
 			Minima.notify('New note', model.get('desc'));
-			return;
 		}
 		
-		if (found && !found.get('archived') && model.get('archived')) {
+		else if (found && !found.get('archived') && model.get('archived')) {
 			Minima.notify('Note archived', model.get('desc'));
-			return;
 		}		
+		
+		if (found) {
+			found.set(note);
+		}
+		else {
+			notes.add(note);
+		}
 		
 	}, this);
 	
