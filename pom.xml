@@ -27,6 +27,8 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
+					<finalName> ${project.build.finalName}-standalone</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
 					<archive>
 						<manifest>
 							<mainClass>net.caprazzi.minima.MiniMain</mainClass>
