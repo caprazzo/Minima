@@ -7,11 +7,9 @@ ListView = Backbone.View.extend({
 		this.notes = args.notes;
 		this.readonly = args.readonly;
 		this.template = _.template($('#list-template').html());
-		this.width = args.width;
 	},
 	
 	resize: function(width) {
-		this.width = width;
 		if (this._rendered) {
 			var el = $(this.el);
 			var diff = el.outerWidth(true) - el.width();
@@ -43,7 +41,6 @@ ListView = Backbone.View.extend({
 			el.find('.list-footer').append(createView.render().el);
 		}
 		
-		this.resize(this.width);
 		this._rendered = true;
 		return this;
 	}
