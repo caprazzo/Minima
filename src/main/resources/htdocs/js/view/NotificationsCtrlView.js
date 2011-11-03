@@ -1,4 +1,3 @@
-
 NotificationsCtrlView = Backbone.View.extend({
 	tagName: "div",
 	model: NotificationsCtrlModel,
