@@ -6,12 +6,17 @@ ListView = Backbone.View.extend({
 	initialize: function(args) {
 		this.notes = args.notes;
 		this.template = _.template($('#list-template').html());
+		this.width = args.width;
 		console.log(this.model.get('name'));
 	},
 	
 	resize: function(width) {
-		if (this._rendered)
-			$(this.el).width(width);
+		this.width = width;
+		if (this._rendered) {
+			var el = $(this.el);
+			var diff = el.outerWidth(true) - el.width();
+			el.width(width - diff);
+		}
 	},
 	
 	render: function() {
@@ -30,6 +35,7 @@ ListView = Backbone.View.extend({
 		el.find('.list-header').append(nameView.render().el);
 		el.find('.list-footer').append(createView.render().el);
 		
+		this.resize(this.width);
 		this._rendered = true;
 		return this;
 	}

@@ -6,7 +6,8 @@ ListCollectionView = Backbone.View.extend({
 	    _(this).bindAll('addList');
 	    this.lists = args.lists;
 	    this.notes = args.notes;
-	    this.listWidth = 250;
+	    this.width = args.width;
+	    this.resize(this.width);
 		this._listViews = [];
 		this.lists.each(this.addList);				
 						
@@ -32,8 +33,9 @@ ListCollectionView = Backbone.View.extend({
 			if (calcSize < minListWidth) calcSize = minListWidth;
 		}
 		
+		this.width = newWidth;
 		if (this._rendered)
-			$(this.el).width(newWidth);
+			$(this.el).width(this.width);
 		
 		this.listWidth = calcSize;
 		
@@ -48,6 +50,8 @@ ListCollectionView = Backbone.View.extend({
 		_(this._listViews).each(function(listView) {
 			$(that.el).append(listView.render().el);
 		});
+		
+		$(this.el).width(this.width);
 		return this;
 	},
 	

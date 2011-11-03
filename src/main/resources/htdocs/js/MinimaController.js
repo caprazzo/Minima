@@ -55,10 +55,10 @@ function MinimaController(options) {
 			
 		var listsView = new ListCollectionView({
 			lists: lists,
-			notes: notes
+			notes: notes,
+			width: $(window).width()
 		});
 		
-		listsView.resize($(window).width());
 		$(window).resize(function() {
 	    	listsView.resize($(this).width());
 		});
