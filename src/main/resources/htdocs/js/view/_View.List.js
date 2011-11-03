@@ -115,7 +115,6 @@ ViewList.prototype._createStructure = function() {
 	listModel.bind('change:name', function(model, ev2, ev3) {
 		// TODO: send list update to server
 		model.save();
-		console.log(model.get('name'), ev2, ev3);
 	}, this);
 	var titleView = new ListNameView({ model: listModel });
 	this.ui.title =  $(titleView.el)

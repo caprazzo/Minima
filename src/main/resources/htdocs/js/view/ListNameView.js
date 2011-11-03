@@ -10,17 +10,18 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	events: {
-		'dblclick .list-name-view': 'activateEdit',
+		'dblclick .list-name-display': 'activateEdit',
 		'keypress .list-name-edit': 'onEditEnter',
 		'keyup .list-name-edit': 'onEditEsc'
 	},
 	
 	render: function() {
 		var $el = $(this.el);
-		$el.html(this.template(this.model.toJSON()));
+		var json = this.model.toJSON();
+		$el.html(this.template(json));
 		this.ui = {
 			edit: $el.find('.list-name-edit'),
-			view: $el.find('.list-name-view')
+			view: $el.find('.list-name-display')
 		}
 		return this;
 	},
@@ -41,7 +42,11 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	save: function() {
-		this.model.set({ name: this.ui.edit.val() });
+		var text = $.trim(this.ui.edit.val());
+		if (text.length == 0)
+			return;
+		this.model.set({ name: text });
+		this.model.save();
 		this.render();
 	}
 });

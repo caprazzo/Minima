@@ -1,7 +1,7 @@
 ListCreateView = Backbone.View.extend({
 	tagName: 'div',
 	model: List,
-	className: 'list-name-container',
+	className: 'list-create-container',
 	
 	events: {
 		'mouseenter .list-add-note-btn': 'toggleBtnHighlight',
@@ -57,6 +57,8 @@ ListCreateView = Backbone.View.extend({
 		
 		var pos = (lastNote) ? lastNote.get('pos') : 0;
 		
+		this.render();
+		
 		var note = new Note({
 			id: Minima.makeId(),
 			revision: 0,
@@ -67,8 +69,6 @@ ListCreateView = Backbone.View.extend({
 		
 		this.trigger('create', note);
 		this.notes.create(note);
-		this.render();
-		
 	}
 	
 });

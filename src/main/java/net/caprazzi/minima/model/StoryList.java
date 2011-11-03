@@ -9,6 +9,7 @@ public class StoryList {
 	private BigDecimal pos;
 	private String id;
 	private String name;
+	private int revision;
 
 	public StoryList(String id, String name, BigDecimal pos) {
 		this.id = id;
@@ -59,6 +60,14 @@ public class StoryList {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void setRevision(int revision) {
+		this.revision = revision;		
+	}
+	
+	public int getRevision() {
+		return revision;
 	}
 
 }

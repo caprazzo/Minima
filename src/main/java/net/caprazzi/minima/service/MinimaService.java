@@ -43,7 +43,6 @@ public class MinimaService {
 			@Override
 			public void entries(Iterable<Entry> entries) {
 				
-				
 				JsonFactory factory = new JsonFactory();
 				try {
 					
@@ -53,10 +52,12 @@ public class MinimaService {
 					for(Entry e : entries) {
 						Meta meta = Meta.fromJson(e.getData());
 						if (meta.getName().equals("list")) {
-							lists.add((StoryList) meta.getObj());
+							StoryList list = (StoryList) meta.getObj();
+							list.setRevision(e.getRevision());
+							lists.add(list);
 						}
 						else if (meta.getName().equals("story")) {
-							stories.add( (Story) meta.getObj());
+							stories.add((Story) meta.getObj());
 						}
 					}
 					
@@ -146,13 +147,18 @@ public class MinimaService {
 
 	public void update(String id, final int revision, final byte[] data, final Update cb) {
 		
-		
 		Meta<?> meta = Meta.fromJson(data);
 		
 		if (meta.getName().equals("story")) {
 			Story story = (Story) meta.getObj(Story.class);
 			story.setId(id);
 			story.setRevision(revision+1);
+		}
+		
+		if (meta.getName().equals("list")) {
+			StoryList list = (StoryList) meta.getObj(StoryList.class);
+			list.setId(id);
+			list.setRevision(revision+1);
 		}
 		
 		final byte[] writeData = meta.toJson();

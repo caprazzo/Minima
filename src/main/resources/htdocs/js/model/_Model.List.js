@@ -12,7 +12,6 @@ ModelList.fromObject = function(json_list) {
 }
 
 ModelList.prototype.addStory = function(story) {
-	console.log('[ModelList] addStory', this.getId(), story);
 	this.stories[story.getId()] = story;
 }
 

@@ -11,48 +11,20 @@ function MinimaController(options) {
 	
 	var nModel = new NotificationsCtrlModel();
 	
-	Minima.onCreateStory(function(storyModel) {
-		console.log('[Controller] new story created');
-		client.saveStory(storyModel, function(recv) {
-			var listViewId = ViewList.viewId(recv.getListId());
-			view.getList(listViewId).setStory(recv);
-		});
-	}, this);
-	
-	Minima.onUpdateStory(function(storyModel) {
-		console.log('[Controller] story updated', storyModel);
-		client.updateStory(storyModel, function(recv) {
-			var listViewId = ViewList.viewId(recv.getListId());
-			view.getList(listViewId).setStory(recv);
-		});
-	});
-	
 	var notes = new NoteCollection();
 	notes.url = options.data_location + '/stories/';
 	var lists = new ListCollection();
-	
+	lists.url = options.data_location + '/lists/';
 	
 	this.client.onBoard(function(board) {
 		console.log('[Controller] client.on.board', board);
-		
-		board.lists.sort(function(objA, objB) {
-			return objA.pos - objB.pos;
-		});
-		
-		$.each(board.lists, function(idx, list_obj) {
-			//view.setList(ModelList.fromObject(list_obj));
-		});
-		
 		
 		lists.add(board.lists);
 		notes.add(board.stories);
 		
 		notes.bind('change', function(note, b, c) {
-			// according to documentation, this should
-			// not be necessary...
-			console.log('change', note);
+			// according to documentation this is not necessary
 			notes.sort();			
-			
 		}, this);
 			
 		var listsView = new ListCollectionView({
@@ -62,7 +34,6 @@ function MinimaController(options) {
 			readonly: this.readonly
 		});
 		
-		
 		$(window).resize(function() {
 	    	listsView.resize($(this).width());
 		});
@@ -71,23 +42,20 @@ function MinimaController(options) {
 		
 		listsView.resize($(window).width());
 				
-		$.each(board.stories, function(idx, story_obj) {
-			//var storyModel = ModelStory.fromObject(story_obj);
-			//view.setStory(storyModel);
-		});
-		
-		
 	}, this);
 	
-	this.client.onReceiveStory(function(storyModel) {		
-		console.log('[Controller] client.on.receiveStory', storyModel);
+	this.client.onReceiveStory(function(note) {		
+		console.log('[Controller] client.on.receiveStory', note);
 		
-		var found = notes.get(storyModel.id);
-		if (found)
-			notes.remove(storyModel, {silent: true});
-		notes.add(storyModel);
+		var found = notes.get(note.id);
+		if (found) {
+			found.set(note);
+		}
+		else {
+			notes.add(note);
+		}
 		
-		var model = notes.get(storyModel.id);
+		var model = notes.get(note.id);
 				
 		if (found && found.get('list') != model.get('list')) {
 			var from = lists.get(found.get('list'));
@@ -107,7 +75,14 @@ function MinimaController(options) {
 		
 	}, this);
 	
-	//console.log();		
+	this.client.onReceiveList(function(list) {		
+		var found = lists.get(list.id);
+		if (found) {
+			found.set(list);
+		} else {
+			lists.add(list);
+		}
+	}, this);
 	
 	var nView = new NotificationsCtrlView({model: nModel});			
 	
@@ -117,8 +92,6 @@ function MinimaController(options) {
 }
 
 MinimaController.prototype.start = function() {
-	console.log('[Contoller] start');
-	
 	this.client.connect();
 	this.client.loadBoard();
 }

@@ -16,7 +16,6 @@ NoteCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log('render ' + this.listId);
 		var that = this;
 		
 		$(this.el).attr('id', 'lists-' + this.listId);
@@ -38,11 +37,8 @@ NoteCollectionView = Backbone.View.extend({
 					view.stopDrag();
 				},
 				update: function(e, ui) {
-					console.log(ui.item.parent(), that.el);
-					
 					if (ui.item.parent().attr('id') != that.el.id)
 						return;
-					console.log('update', that.listId);
 					var view = that._findView(ui.item.attr('id'));
 					if (!view) return;
 					
@@ -59,7 +55,6 @@ NoteCollectionView = Backbone.View.extend({
 				receive: function(e, ui) {
 					var noteId = ui.item.attr('id').substring('note-'.length);
 					var note = that.notes.get(noteId);
-					console.log(that.listId);
 					var prevView = that._findView(ui.item.prev().attr('id'));
 					var nextView = that._findView(ui.item.next().attr('id'));
 					
@@ -81,7 +76,6 @@ NoteCollectionView = Backbone.View.extend({
 		this._noteViews = [];
 		
 		var filtered = this.notes.filter(this._filter);
-		console.log('filtered stories for list', this.listId, filtered);
 		_(filtered).each(this.addNote);
 		
 		if (!this._rendered) {
@@ -95,7 +89,6 @@ NoteCollectionView = Backbone.View.extend({
 	},
 	
 	addNote: function(note) {
-		console.log('add note with list', note.get('list'), 'to collectionvew', this.listId);
 		var noteView = new NoteView({
 			model: note,
 			readonly: this.readonly

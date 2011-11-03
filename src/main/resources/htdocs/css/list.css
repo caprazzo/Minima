@@ -9,15 +9,36 @@
 	border-radius: 3px;
 	border: 1px solid gray;
 	margin: 1em;
-	padding: 6px;
+	padding: 7px;
 }
 
-.list-title-input {
-	width: 98%%;
-	margin-right: 1em;
+.list-header {
+	margin-bottom: 0px;
+}
+
+.list-footer {
+	margin-top: 0px;
+}
+
+.list-name-container {
+	margin-bottom: 6px;
+}
+
+.list-name-display {
+	border: 2px solid white;
+	border-left: 1px;
+	display: inline-block;
+	height: 22px;	
+}
+
+.list-name-display, .list-name-edit {
+	font-size: 18px;
 	font-weight: bold;
 	line-height: 15px;
-	display: none;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 
 .list-name-edit {
@@ -25,7 +46,7 @@
 }
 
 .notes-container {
-	min-height: 3em;
+	min-height: 2.5em;
 }
 
 .list-add-note-textarea {

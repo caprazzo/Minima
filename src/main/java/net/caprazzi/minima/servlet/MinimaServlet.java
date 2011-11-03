@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.RequestInfo;
+import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
+import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.service.MinimaService.CreateStory;
 import net.caprazzi.minima.service.MinimaService.Update;
@@ -62,11 +64,57 @@ public class MinimaServlet extends HttpServlet {
 		}
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
-		if (!info.isPath(webroot + "/data/stories/_/_")) {
-			sendError(resp, 404, "not found");
+		
+		if (info.isPath(webroot + "/data/stories/_/_")) {
+			saveStory(req, resp, info);
 			return;
 		}
 		
+		if (info.isPath(webroot + "/data/lists/_/_")) {
+			saveList(req, resp, info);
+			return;
+		}
+		
+		sendError(resp, 404, "not found");
+	}
+
+	private void saveList(HttpServletRequest req, final HttpServletResponse resp,
+			RequestInfo info) throws IOException {
+		
+		String key = info.get(-2);
+		int revision = Integer.parseInt(info.get(-1));
+		byte[] data = IO.readBytes(req.getInputStream());
+		
+		StoryList list = StoryList.fromJson(data);
+		Meta<StoryList> wrap = Meta.wrap("list", list);
+		
+		minimaService.update(key, revision, wrap.toJson(), new Update() {
+
+			@Override
+			public void error(String message, Exception e) {
+				logger.error("Error while updating story " + message, e);
+				sendError(resp, 500, "Internal Server Error");
+			}
+
+			@Override
+			public void success(String key, int revision, byte[] jsonData) {
+				Meta<StoryList> meta = Meta.fromJson(StoryList.class, jsonData);
+				sendJson(resp, 201, meta.getObj().toJson());
+			}
+
+			@Override
+			public void collision(String key, int yourRev, int foundRev) {
+				logger.warn("Collision while updating item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+				sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+			}
+		
+		});
+		
+	}
+
+	private void saveStory(HttpServletRequest req,
+			final HttpServletResponse resp, RequestInfo info)
+			throws IOException {
 		String key = info.get(-2);
 		int revision = Integer.parseInt(info.get(-1));
 		byte[] story = IO.readBytes(req.getInputStream());
@@ -100,7 +148,6 @@ public class MinimaServlet extends HttpServlet {
 			sendError(resp, 403, "not authorised");
 			return;
 		}
-		
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
 		if (!info.isPath(webroot + "/data/stories/_")) {

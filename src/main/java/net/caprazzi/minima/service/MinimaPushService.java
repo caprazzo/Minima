@@ -7,7 +7,7 @@ public class MinimaPushService {
 
 	private final MinimaWebsocketServlet websocketServlet;
 	private final MinimaCometServlet cometServlet;
-
+	
 	public MinimaPushService(MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet) {
 		this.websocketServlet = websocketServlet;
 		this.cometServlet = cometServlet;
@@ -17,4 +17,5 @@ public class MinimaPushService {
 		this.websocketServlet.send(data);
 		this.cometServlet.send(data);
 	}
+	
 }

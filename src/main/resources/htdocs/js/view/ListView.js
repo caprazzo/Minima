@@ -8,7 +8,6 @@ ListView = Backbone.View.extend({
 		this.readonly = args.readonly;
 		this.template = _.template($('#list-template').html());
 		this.width = args.width;
-		console.log(this.model.get('name'));
 	},
 	
 	resize: function(width) {

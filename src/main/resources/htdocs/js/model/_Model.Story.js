@@ -92,7 +92,6 @@ ModelStory.prototype.diff = function(other) {
 }
 
 ModelStory.prototype.reposition = function(prevModel, nextModel) {
-	console.log('[ModelStory:' + this.id +']', 'reposition between', prevModel, 'and', nextModel);
 	
 	// this is the only item in its list
 	if (prevModel == null && nextModel == null) {

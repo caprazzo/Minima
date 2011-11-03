@@ -29,22 +29,10 @@ $(function() {
 		web_socket_location: ws_location,
 		comet_location: comet_location
 	});
-	
-	var view = new ViewBoard({ 
-		content_matcher: '#content',
-		readonly: readonly
-	});
-	
-	view.resize($(window).width());
 	var controller = new MinimaController({
 		client: client,
-		view: view,
 		data_location: data_location,
 		readonly: readonly
-	});
-	
-	$(window).resize(function() {
-    	view.resize($(this).width());
 	});
 	
 	controller.start();

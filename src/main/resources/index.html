@@ -30,22 +30,11 @@
 		
 	<script src="js/view/NoteCollectionView.js" type="text/javascript"></script>
 			
-	<script src="js/view/View.NotificationsCtrl.js" type="text/javascript"></script>
-	<script src="js/view/View.ListTitle.js" type="text/javascript"></script>
-	
-	<!-- 
-	 -->
+	<script src="js/model/NotificationsCtrlModel.js" type="text/javascript"></script>
+	<script src="js/view/NotificationsCtrlView.js" type="text/javascript"></script>
 	
 	<script src="js/Minima.js" type="text/javascript"></script>
-	
-	<script src="js/model/Model.Board.js" type="text/javascript"></script>
-	<script src="js/model/Model.List.js" type="text/javascript"></script>
-	<script src="js/model/Model.Story.js" type="text/javascript"></script>
-	
-	<script src="js/view/View.List.js" type="text/javascript"></script>
-	<script src="js/view/View.Story.js" type="text/javascript"></script>
-	<script src="js/view/View.Board.js" type="text/javascript"></script>
-	
+		 
 	<script src="js/MinimaController.js" type="text/javascript"></script>
 	<script src="js/MinimaClient.js" type="text/javascript"></script>
 	<script src="js/index.js" type="text/javascript"></script>
@@ -122,29 +111,12 @@
 		line-height: 1.2em;		
 	}
 		
-	.ui-story-edit-root {	}
-	
-	.ui-story-archive-btn {
-		
-	}
-	
 	.ui-tag {
 		color: #3C3EBA;
 	}
 	
-	.ui-story-textarea {
-		
-	}	
-	
-	.ui-story-normal {
-		
-	}
 	.ui-story-highlight {
 		background-color: yellow;
-	}
-	
-	.ui-story-desc-root {
-	
 	}
 	
 	.ui-story-archive-desc {
@@ -183,18 +155,6 @@
 		background-color: #ddd;
 		color: #888;
 	}
-	
-	.ui-list li {
-		
-	}	
-	
-	.list-header {
-		margin-bottom: 11px;
-	}
-	
-	.list-footer {
-		margin-top: 0px;
-	}		
 	
 	.list-wrapper {
 		float:left;
@@ -255,7 +215,7 @@
 				<div id="notifications_ctrl"></div>	
 			</div>
 		</div>
-		<div id="content"></div>
+		<div id="content"><div id="board"></div></div>
 		<div class="push"></div>
 	</div>
 	
@@ -301,7 +261,7 @@
 	</script>
 	
 	<script type="text/template" id="list-name-template">
-		<span class="list-name-view"><%= name %></span>
+		<span class="list-name-display"><%= name %></span>
 		<input type="text" class="list-name-edit" value="<%= name %>"/>
 	</script>
 	

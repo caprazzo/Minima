@@ -12,7 +12,8 @@ ListCollectionView = Backbone.View.extend({
 		this._listViews = [];
 		this.lists.each(this.addList);				
 						
-		this.lists.bind('add', this.addList);
+		this.notes.bind('add', this.render, this);
+		this.notes.bind('change', this.render, this);
 	},
 	
 	resize: function(availableWidth) {
