@@ -21,7 +21,11 @@ NoteView = Backbone.View.extend({
 	render: function() {
 		var el = $(this.el);	
 		el.attr('id', 'note-'+ this.model.id);
-		el.html(this.template(this.model.toJSON()));
+		var json = this.model.toJSON();
+		console.log(json);
+		json.obj.desc = this._hashFilter(this._atFilter(json.obj.desc));
+		
+		el.html(this.template(json));
 		this.ui = {
 			el: el,
 			archive: el.find('.note-archive-btn').hide(),
@@ -80,5 +84,15 @@ NoteView = Backbone.View.extend({
 		this.model.set({ desc: this.ui.textarea.val() });
 		this.model.save();
 		this.render();
+	},
+	
+	_atFilter: function(text) {
+		var pattern = /(@\b[\w]*)/gi;
+		return text.replace(pattern, '<span class="ui-tag ui-tag-at">$1</span>');
+	},
+
+	_hashFilter: function(text) {
+		var pattern = /(#\b[\w]*)/gi;
+		return text.replace(pattern, '<span class="ui-tag ui-tag-hash">$1</span>');
 	}
 });
