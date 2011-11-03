@@ -65,12 +65,13 @@ public class MinimaServiceTest {
 	@Test
 	public void update_should_update_story_in_db() {
 		Story story = new Story("key", "dsec", "tofo");
-		byte[] data = service.asJson(story);
+		Meta<Story> meta = Meta.wrap("story", story);
+		byte[] data = meta.toJson();
 		service.update("key", 1, data, TestUtils.updateStoryNoop);
 		
 		story.setRevision(2);
 		story.setId("key");
-		byte[] json = Meta.wrap("story", story).toJson();
+		byte[] json = meta.toJson();
 		verify(db).put(eq("key"), eq(1), aryEq(json), any(Put.class));
 	}
 	

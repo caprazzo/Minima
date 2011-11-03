@@ -147,44 +147,51 @@ public class MinimaService {
 
 	public void update(String id, final int revision, final byte[] data, final Update cb) {
 		
-		Meta<?> meta = Meta.fromJson(data);
-		
-		if (meta.getName().equals("story")) {
-			Story story = (Story) meta.getObj(Story.class);
-			story.setId(id);
-			story.setRevision(revision+1);
-		}
-		
-		if (meta.getName().equals("list")) {
-			StoryList list = (StoryList) meta.getObj(StoryList.class);
-			list.setId(id);
-			list.setRevision(revision+1);
-		}
-		
-		final byte[] writeData = meta.toJson();
-		
+		try {
+			Meta<?> meta = Meta.fromJson(data);
 			
-		//final byte[] writeData = Meta.wrap("story", story).toJson();
-		db.put(id, revision, writeData, new Put() {
-
-			@Override
-			public void ok(String key, int rev) {
-				logger.info("Saved object [" + key + "]@" + rev);
-				cb.success(key, rev, writeData);
-				pushServlet.send(writeData);
-			}
-
-			@Override
-			public void collision(String key, int yourRev, int foundRev) {
-				cb.collision(key, yourRev, foundRev);
+			if (meta.getName().equals("story")) {
+				Story story = (Story) meta.getObj(Story.class);
+				story.setId(id);
+				story.setRevision(revision+1);
 			}
 			
-			@Override
-			public void error(String key, Exception e) {
-				logger.warn("Error on storing story [" + key + "]", e);
-				cb.error(key, e);
+			if (meta.getName().equals("list")) {
+				StoryList list = (StoryList) meta.getObj(StoryList.class);
+				list.setId(id);
+				list.setRevision(revision+1);
 			}
-		});
+			
+			final byte[] writeData = meta.toJson();
+			
+			//final byte[] writeData = Meta.wrap("story", story).toJson();
+			db.put(id, revision, writeData, new Put() {
+
+				@Override
+				public void ok(String key, int rev) {
+					logger.info("Saved object [" + key + "]@" + rev);
+					cb.success(key, rev, writeData);
+					pushServlet.send(writeData);
+				}
+
+				@Override
+				public void collision(String key, int yourRev, int foundRev) {
+					cb.collision(key, yourRev, foundRev);
+				}
+				
+				@Override
+				public void error(String key, Exception e) {
+					logger.warn("Error on storing story [" + key + "]", e);
+					cb.error(key, e);
+				}
+			});
+			
+		}
+		catch (Exception e) {
+			cb.error("Error while updating item", e);
+			return;
+		}
+		
 	}
 	
 	public Story fromPostStoryJson(byte[] story) {

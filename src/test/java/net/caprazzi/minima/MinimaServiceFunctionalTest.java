@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.service.MinimaPushService;
@@ -88,11 +89,13 @@ public class MinimaServiceFunctionalTest {
 	public void create_story_should_push_updated() {
 		Story story = new Story(null,"desc","list");
 		story.setPos(new BigDecimal(99));
-		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+		service.createStory("id", story.toJson(), new TestUtils.TestCreateStory() {
 			@Override
 			public void success(Story created) {
-				byte[] updatedJson = service.asJson(created);
-				service.update(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+
+				Meta<Story> meta = Meta.wrap("story", created);
+				
+				service.update(created.getId(), created.getRevision(), meta.toJson(), new TestUtils.TestUpdateStory() {
 					@Override
 					public void success(String key, int revision, byte[] jsonData) {
 						flag = true;
@@ -109,17 +112,17 @@ public class MinimaServiceFunctionalTest {
 	public void update_story_should_return_story_with_id_and_rev() {
 		Story story = new Story(null,"desc","list");
 		story.setPos(new BigDecimal(99));
-		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+		service.createStory("id", story.toJson(), new TestUtils.TestCreateStory() {
 			@Override
 			public void success(Story created) {
 				created.setDesc("newDesc");
 				created.setList("newList");
 				created.setPos(new BigDecimal(66));
-				byte[] updatedJson = service.asJson(created);
-				service.update(created.getId(), created.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+				Meta<Story> meta = Meta.wrap("story", created);
+				service.update(created.getId(), created.getRevision(), meta.toJson(), new TestUtils.TestUpdateStory() {
 					@Override
 					public void success(String key, int revision, byte[] jsonData) {
-						Story updated = service.fromJson(jsonData);
+						Story updated = Meta.fromJson(Story.class, jsonData).getObj();
 						assertEquals("newDesc", updated.getDesc());
 						assertEquals("newList", updated.getList());
 						assertEquals(66, updated.getPos().intValue());
@@ -167,8 +170,8 @@ public class MinimaServiceFunctionalTest {
 				updated.setDesc("newDesc");
 				updated.setList("newList");
 				updated.setPos(new BigDecimal(66));
-				byte[] updatedJson = service.asJson(updated);
-				service.update(updated.getId(), updated.getRevision(), updatedJson, new TestUtils.TestUpdateStory() {
+				Meta<Story> meta = Meta.wrap("story", updated);
+				service.update(updated.getId(), updated.getRevision(), meta.toJson(), new TestUtils.TestUpdateStory() {
 					@Override
 					public void success(String key, int rev, byte[] data) {
 						flag = true;

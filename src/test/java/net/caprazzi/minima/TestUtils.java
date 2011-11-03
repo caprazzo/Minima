@@ -73,7 +73,7 @@ public class TestUtils {
 	public static class TestUpdateStory extends Update {
 		@Override
 		public void error(String string, Exception e) {
-			throw new RuntimeException("unexpected error");
+			throw new RuntimeException("unexpected error", e);
 		}
 
 		@Override
