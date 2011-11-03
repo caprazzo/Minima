@@ -7,8 +7,6 @@ ListCollectionView = Backbone.View.extend({
 	    this.readonly = args.readonly;
 	    this.lists = args.lists;
 	    this.notes = args.notes;
-	    this.width = args.width;
-	    this.resize(this.width);
 		this._listViews = [];
 		this.lists.each(this.addList);				
 						
@@ -36,6 +34,7 @@ ListCollectionView = Backbone.View.extend({
 		}
 		
 		this.width = newWidth;
+		
 		if (this._rendered)
 			$(this.el).width(this.width);
 		
@@ -51,6 +50,7 @@ ListCollectionView = Backbone.View.extend({
 		
 		_(this._listViews).each(function(listView) {
 			$(that.el).append(listView.render().el);
+			listView.resize(that.listWidth);
 		});
 		
 		$(this.el).width(this.width);
@@ -66,8 +66,10 @@ ListCollectionView = Backbone.View.extend({
 		});		
 		this._listViews.push(listView);
 		
-		if (this._rendered)
+		if (this._rendered) {
 			$(this.el).append(listView.render().el);
+			listView.resize(this.listWidth);
+		}
 	}
 	
 });

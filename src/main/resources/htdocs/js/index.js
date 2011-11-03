@@ -29,6 +29,7 @@ $(function() {
 		web_socket_location: ws_location,
 		comet_location: comet_location
 	});
+	
 	var controller = new MinimaController({
 		client: client,
 		data_location: data_location,

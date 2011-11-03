@@ -33,6 +33,7 @@ NotificationsCtrlView = Backbone.View.extend({
 		var out = $topic.outerWidth();
 		var ins = $topic.width();
 		$topic.width($el.width() - (out - ins));
+		return this;
 	},
 	
 	activate: function() {

@@ -9,10 +9,9 @@ function MinimaController(options) {
 	var view = this.view;
 	var client = this.client;
 	
-	var nModel = new NotificationsCtrlModel();
-	
 	var notes = new NoteCollection();
 	notes.url = options.data_location + '/stories/';
+	
 	var lists = new ListCollection();
 	lists.url = options.data_location + '/lists/';
 	
@@ -30,7 +29,6 @@ function MinimaController(options) {
 		var listsView = new ListCollectionView({
 			lists: lists,
 			notes: notes,
-			width: $(window).width(),
 			readonly: this.readonly
 		});
 		
@@ -84,10 +82,9 @@ function MinimaController(options) {
 		}
 	}, this);
 	
-	var nView = new NotificationsCtrlView({model: nModel});			
-	
-	$('#notifications_ctrl').append(nView.el);
-	nView.render();	
+	var nModel = new NotificationsCtrlModel();
+	var nView = new NotificationsCtrlView({model: nModel});	
+	$('#notifications_ctrl').append(nView.render().el);
 	
 }
 
