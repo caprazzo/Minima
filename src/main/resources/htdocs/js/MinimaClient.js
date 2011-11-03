@@ -36,7 +36,6 @@ MinimaClient.prototype.fireReceiveList = function(list) {
 MinimaClient.prototype.loadBoard = function() {
 	var store = this;
 	$.getJSON(this.data_location + '/stories?' + new Date().getTime(), function(board) {
-		console.log('[Client] loadBoard.success', board);
 		board.name = 'A Board';
 		store.fireOnBoard(board);
 	});

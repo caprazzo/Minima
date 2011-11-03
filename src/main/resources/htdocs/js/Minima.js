@@ -30,7 +30,6 @@ function Minima() {}
 		notification.onclick = function(x) {
 			window.focus();
 			this.cancel();
-			console.log('click', arguments);
 		}
 		notification.show();
 		
@@ -51,15 +50,6 @@ Minima.args = function(arguments) {
 	return arr;
 }
 
-Minima.log = function(tag, args) {
-	var ar = Minima.args(args);
-	ar.unshift(tag);
-	console.log.apply(console, ar);
-}
-
-Minima.getViewId = function($htmlItem) {
-	return $htmlItem.children(':first').attr('id')
-}
 
 Minima.fireEvent = function(handlers) {
 	if (!handlers) {

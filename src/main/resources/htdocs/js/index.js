@@ -2,8 +2,6 @@ if (!window.console)
 	window.console = { log: function() {} };
 	
 $(function() {
-	console.log('[Index] ready');
-			
 	var mode = (window.WebSocket) ? 'websocket' : 'comet';
 	
 	var readonly = ($('#minima-read-only').val() == "true");

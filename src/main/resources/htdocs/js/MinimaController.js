@@ -1,6 +1,4 @@
 function MinimaController(options) {
-	console.log('[Controller] constructor', options);
-	
 	this.client = options.client;
 	this.view = options.view;
 	
@@ -16,8 +14,6 @@ function MinimaController(options) {
 	lists.url = options.data_location + '/lists/';
 	
 	this.client.onBoard(function(board) {
-		console.log('[Controller] client.on.board', board);
-		
 		lists.add(board.lists);
 		notes.add(board.stories);
 		
@@ -43,8 +39,6 @@ function MinimaController(options) {
 	}, this);
 	
 	this.client.onReceiveStory(function(note) {		
-		console.log('[Controller] client.on.receiveStory', note);
-		
 		var found = notes.get(note.id);
 		if (found) {
 			found.set(note);

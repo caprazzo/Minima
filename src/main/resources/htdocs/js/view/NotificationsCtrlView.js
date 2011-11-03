@@ -37,12 +37,10 @@ NotificationsCtrlView = Backbone.View.extend({
 	},
 	
 	activate: function() {
-		console.log('Notification Ctrl enable');
 		this.model.activate();
 	},
 	
 	deactivate: function() {
-		console.log('Notification Ctrl disable');
 		this.model.deactivate()
 	},
 	
