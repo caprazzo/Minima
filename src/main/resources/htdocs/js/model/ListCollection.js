@@ -1,3 +1,6 @@
 ListCollection = Backbone.Collection.extend({
-	model: List
+	model: List,
+	comparator: function(list) {
+		return list.get('pos');
+	}
 });
