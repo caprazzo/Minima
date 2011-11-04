@@ -8,7 +8,8 @@ ListCollectionView = Backbone.View.extend({
 	    this.lists = args.lists;
 	    this.notes = args.notes;
 		this._listViews = [];
-		this.lists.each(this.addList);						
+		this.lists.each(this.addList);		
+		this.tag = '[ListCollectionView]';
 	},
 	
 	resize: function(availableWidth) {
@@ -41,6 +42,7 @@ ListCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
+		console.log(this.tag, 'render', this._rendered);
 		this._rendered = true;
 		var that = this;
 		

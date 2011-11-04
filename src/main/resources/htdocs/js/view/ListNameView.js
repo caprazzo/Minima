@@ -7,6 +7,7 @@ ListNameView = Backbone.View.extend({
 		this.template = _.template($('#list-name-template').html());
 		this.model.bind('change:name', this.render, this);
 		this.readonly = args.readonly;
+		this.tag = '[ListNameView ' + this.model.id + ']';
 	},
 	
 	events: {
@@ -16,6 +17,7 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	render: function() {
+		console.log(this.tag, 'render', this._rendered);
 		var $el = $(this.el);
 		var json = this.model.toJSON();
 		$el.html(this.template(json));
@@ -23,6 +25,7 @@ ListNameView = Backbone.View.extend({
 			edit: $el.find('.list-name-edit'),
 			view: $el.find('.list-name-display')
 		}
+		this._rendered = true;
 		return this;
 	},
 	

@@ -8,6 +8,7 @@ ListView = Backbone.View.extend({
 		this.filteredNotes = args.filteredNotes;
 		this.readonly = args.readonly;
 		this.template = _.template($('#list-template').html());
+		this.tag = '[ListView  ' + this.model.name +']';
 	},
 	
 	resize: function(width) {
@@ -19,6 +20,7 @@ ListView = Backbone.View.extend({
 	},
 	
 	render: function() {
+		console.log(this.tag, 'render', this._rendered);
 		var el = $(this.el);		
 		el.html(this.template());		
 		

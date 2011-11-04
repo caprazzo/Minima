@@ -13,18 +13,11 @@ NoteCollectionView = Backbone.View.extend({
 		};
 		this._noteViews = [];
 		
-		this.filteredNotes.bind('change', this.onChange, this);
 		this.filteredNotes.bind('remove', this.onRemove, this);
-		this.filteredNotes.bind('add', this.onAdd, this);
+		this.filteredNotes.bind('add', this.addNote, this);
 		this.filteredNotes.bind('sort', this.onSort, this);
-	},
-	
-	onChange: function(note) {
 		
-	},
-	
-	onAdd: function(note) {
-		this.addNote(note);
+		this.tag = '[NoteCollectionView ' + this.listId +']';
 	},
 	
 	onRemove: function(note) {
@@ -54,28 +47,19 @@ NoteCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log('render ' + this.listId);
+		console.log(this.tag, 'render', this._rendered);
 		var that = this;
+		if (this._rendered)
+			return;
+		this._rendered = true;
 		
-		if (!this._rendered) {
-			$(this.el).attr('id', 'lists-' + this.listId);
-			this._noteViews = {};
-			this._setupContainer();
-			this._rendered = true;
-		}
-		
-		var that = this;
-		$(this.el).empty();
-		this._oldViews = _.clone(this._noteViews);
+		$(this.el).attr('id', 'lists-' + this.listId);
 		this._noteViews = {};
+		this._setupContainer();		
 		
+		var that = this;
+		this._noteViews = {};
 		this.filteredNotes.each(this.addNote);
-		
-		if (!this._rendered) {
-			_(this._noteViews).each(function(noteView) {
-				$(that.el).append(noteView.render().el)
-			});
-		}
 		return this;
 	},
 	
@@ -97,16 +81,12 @@ NoteCollectionView = Backbone.View.extend({
 		if (noteView)
 			return;
 		
-		if (!noteView) {		
-			noteView = new NoteView({
-				model: note,
-				readonly: this.readonly
-			});
-			this._noteViews[note.id] = noteView;
-			// keep noteViews sorted by pos
-			this._sortViewCache();
-				
-		}
+		noteView = new NoteView({
+			model: note,
+			readonly: this.readonly
+		});
+		this._noteViews[note.id] = noteView;
+		this._sortViewCache();
 		
 		// add note in correct position
 		if (!this._rendered)
