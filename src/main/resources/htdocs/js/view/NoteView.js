@@ -23,7 +23,7 @@ NoteView = Backbone.View.extend({
 		var el = $(this.el);	
 		el.attr('id', 'note-'+ this.model.id);
 		var json = this.model.toJSON();
-		json.obj.desc = this._hashFilter(this._atFilter(json.obj.desc));
+		json.obj.desc = this._linkFilter(this._hashFilter(this._atFilter(json.obj.desc)));
 		el.html(this.template(json));
 		this.ui = {
 			el: el,
@@ -94,13 +94,20 @@ NoteView = Backbone.View.extend({
 		this.render();
 	},
 	
+	_linkFilter: function(text) {
+		var p1 = /\b((http[s]?:\/\/){1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\b/gi;
+		var text = text.replace(p1, '<a href="$1">$1</a>');
+		var p2 = /\b((http[s]?:\/\/){0}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\b/gi;
+		return text.replace(p2, '<a href="http://$1">$1</a>');
+	},
+	
 	_atFilter: function(text) {
-		var pattern = /(@\b[\w]*)/gi;
+		var pattern = /(@\b[^\s]*)/gi;
 		return text.replace(pattern, '<span class="ui-tag ui-tag-at">$1</span>');
 	},
 
 	_hashFilter: function(text) {
-		var pattern = /(#\b[\w]*)/gi;
+		var pattern = /(#\b[^\s]*)/gi;
 		return text.replace(pattern, '<span class="ui-tag ui-tag-hash">$1</span>');
 	}
 });
