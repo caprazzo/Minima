@@ -95,9 +95,11 @@ NoteView = Backbone.View.extend({
 	},
 	
 	_linkFilter: function(text) {
-		var p1 = /\b((http[s]?:\/\/){1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\b/gi;
+		var parts = text.split(/\s+/);
+		console.log(parts);
+		var p1 = /^\s*(http[s]?:\/\/(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
 		var text = text.replace(p1, '<a href="$1">$1</a>');
-		var p2 = /\b((http[s]?:\/\/){0}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\b/gi;
+		var p2 = /^\s*((www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
 		return text.replace(p2, '<a href="http://$1">$1</a>');
 	},
 	
