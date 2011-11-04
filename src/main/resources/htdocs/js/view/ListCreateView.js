@@ -7,6 +7,7 @@ ListCreateView = Backbone.View.extend({
 		'mouseenter .list-add-note-btn': 'toggleBtnHighlight',
 		'mouseleave .list-add-note-btn': 'toggleBtnHighlight',
 		'click .list-add-note-btn': 'activateTextarea',
+		'keypress .list-add-note-btn': 'activateTextarea',
 		'keypress .list-add-note-textarea': 'onTextEnter',
 		'keyup .list-add-note-textarea': 'onTextEsc',
 	},
