@@ -68,7 +68,6 @@ ListCreateView = Backbone.View.extend({
 		});
 		
 		this.trigger('create', note);
-		this.notes.create(note);
 	}
 	
 });

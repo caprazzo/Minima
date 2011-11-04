@@ -70,6 +70,7 @@ public class MinimaServer {
         context.addServlet(new ServletHolder(cometServlet), "/comet");
 		
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/css/*");
+        context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/test.html");
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/js/*");
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/favicon.ico");
         context.addServlet(new ServletHolder(indexServlet), "/index");

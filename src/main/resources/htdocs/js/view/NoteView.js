@@ -7,6 +7,7 @@ NoteView = Backbone.View.extend({
 	initialize: function(args) {
 		this.template = _.template($('#note-template').html());	
 		this.readonly = args.readonly;
+		this.model.bind('change', this.render, this);
 	},
 	
 	events: {
@@ -22,10 +23,7 @@ NoteView = Backbone.View.extend({
 		var el = $(this.el);	
 		el.attr('id', 'note-'+ this.model.id);
 		var json = this.model.toJSON();
-		console.log(json.obj.desc);
 		json.obj.desc = this._hashFilter(this._atFilter(json.obj.desc));
-		console.log(json.obj.desc);
-		
 		el.html(this.template(json));
 		this.ui = {
 			el: el,
@@ -34,6 +32,7 @@ NoteView = Backbone.View.extend({
 			edit: el.find('.note-edit'),
 			textarea: el.find('.note-textarea')
 		}		
+		this._rendered = true;
 		return this;
 	},
 	
@@ -42,12 +41,17 @@ NoteView = Backbone.View.extend({
 		this.ui.archive.hide();
 	},
 	
+	remove: function() {
+		$(this.el).remove();
+	},
+	
 	stopDrag: function() {
 		this._isDragging = false;
 	},
 	
 	archiveNote: function() {
 		this.model.set({archived: true});
+		this.remove();
 		this.model.save();
 	},
 	

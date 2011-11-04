@@ -8,10 +8,7 @@ ListCollectionView = Backbone.View.extend({
 	    this.lists = args.lists;
 	    this.notes = args.notes;
 		this._listViews = [];
-		this.lists.each(this.addList);				
-						
-		this.notes.bind('add', this.render, this);
-		this.notes.bind('change', this.render, this);
+		this.lists.each(this.addList);						
 	},
 	
 	resize: function(availableWidth) {
@@ -46,8 +43,8 @@ ListCollectionView = Backbone.View.extend({
 	render: function() {
 		this._rendered = true;
 		var that = this;
-		$(this.el).empty();
 		
+		$(this.el).empty();		
 		_(this._listViews).each(function(listView) {
 			$(that.el).append(listView.render().el);
 			listView.resize(that.listWidth);
@@ -58,16 +55,28 @@ ListCollectionView = Backbone.View.extend({
 	},
 	
 	addList: function(list) {
+		
+		var filteredNotes = new FilteredCollection([], {
+			parent: this.notes, 
+			filter: function(note) {
+				return !note.get('archived') && note.get('list') == list.id; 
+			},
+			comparator: function(note) {
+				return note.get('pos');
+			}
+		});
+		
 		var listView = new ListView({ 
 			model: list,
 			notes: this.notes,
+			filteredNotes: filteredNotes,
 			width: this.listWidth,
 			readonly: this.readonly
 		});		
 		this._listViews.push(listView);
 		
 		if (this._rendered) {
-			$(this.el).append(listView.render().el);
+			$(this.el).append(listView.el);
 			listView.resize(this.listWidth);
 		}
 	}
