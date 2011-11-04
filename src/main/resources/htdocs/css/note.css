@@ -30,6 +30,7 @@
 	border-radius: 4px;
 	font-size: 18px;
 	line-height: 1.2em;
+	word-wrap: break-word;
 }
 
 .note-edit {	
