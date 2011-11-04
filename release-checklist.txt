@@ -1,6 +1,8 @@
-- tag trunk as old release
 - create and upload artifact
 - update readme with upload link
 - deploy new version to server
 - restart all instances
 - take screenshot
+- merge dev branch in trunk
+- tag trunk as current release
+
