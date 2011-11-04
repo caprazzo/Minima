@@ -81,3 +81,6 @@ html {
 #readonly-notice {
 	display: none;
 }
+.ui-tag {
+	color: #3C3EBA;
+}

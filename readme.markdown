@@ -20,8 +20,8 @@ Screenshot:
 ## For users
  
 ### Install and run
-1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.8-jar-with-dependencies.jar)
-2. java -jar Minima-0.8-with-dependencies.jar (or doubleclick)
+1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.8-standalone.jar)
+2. java -jar Minima-0.8-standalone.jar (or doubleclick)
 3. browse to http://localhost:8989/index
 
 ### Configuration
