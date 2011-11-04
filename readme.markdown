@@ -53,7 +53,7 @@ All configurations are optional
 
 ## Changelog
 
-### V 0.8 - 03 November 2011
+### V 0.8 - 04 November 2011
 
 * board can be protected by password
 * protected boards can be made available in readonly mode
