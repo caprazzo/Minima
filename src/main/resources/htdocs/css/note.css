@@ -5,14 +5,12 @@
 	min-height: 1.5em;
 	line-height: 1.2em;
 }
-
 .notes-placeholder {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-bottom: 8px;
 	background-color: #8C8C8C;
 }
-
 .note-archive-btn {
 	float: right;
 	display: block;
@@ -23,7 +21,6 @@
 	background-color: #eee;
 	cursor: pointer;
 }
-
 .note-view {
 	padding: 6px;
 	border: 1px solid #ccc;
@@ -32,11 +29,9 @@
 	line-height: 1.2em;
 	word-wrap: break-word;
 }
-
 .note-edit {	
 	display: none;
 }
-
 .note-textarea {
 	background-color: #ffffcc;
 	resize: none;

@@ -1,7 +1,9 @@
 # Minima
 Minima is a to-do list board in the spirit of pivotaltracker and trello. Minima is a standalone server that you can run on your host.
 
-Try the [online demo](http://caprazzi.net:8989/index "Minima live demo") 
+Try the [online demo](http://minima.caprazzi.net/demo/ "Minima live demo")
+
+Peek at [this project board](http://minima.caprazzi.net/minima/ "Minima project board") (read only) 
 
 Screenshot:
 
