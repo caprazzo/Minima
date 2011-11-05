@@ -64,6 +64,7 @@ ListCollectionView = Backbone.View.extend({
 			else {	
 				$(listView.el).appendTo(this.ui.ul);
 			}
+			listView.render();
 		}
 	},
 	

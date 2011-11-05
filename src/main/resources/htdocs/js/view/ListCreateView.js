@@ -4,71 +4,32 @@ ListCreateView = Backbone.View.extend({
 	className: 'list-create-container',
 	
 	events: {
-		'mouseenter .list-add-note-btn': 'toggleBtnHighlight',
-		'mouseleave .list-add-note-btn': 'toggleBtnHighlight',
-		'click .list-add-note-btn': 'activateTextarea',
-		'keypress .list-add-note-btn': 'activateTextarea',
-		'keypress .list-add-note-textarea': 'onTextEnter',
-		'keyup .list-add-note-textarea': 'onTextEsc',
+		'click .list-create-btn': 'createNewList'
 	},
 	
 	initialize: function(args) {
-		this.notes = args.notes;
+		this.lists = args.lists;
 		this.template = _.template($('#list-create-template').html());
 	},
 	
 	render: function() {
 		var el = $(this.el);
-		el.html(this.template(this.model.toJSON()));
+		el.html(this.template({}));
 		this.ui = {
 			el: el,
-			btn: el.find('.list-add-note-btn'),
-			text: el.find('.list-add-note-textarea')
+			btn: el.find('.list-create-btn'),
 		}
 		return this;
 	},
 	
-	toggleBtnHighlight: function() {
-		this.ui.btn.toggleClass('list-add-note-btn-hover');
-	},
-	
-	activateTextarea: function() {
-		this.ui.text.show().focus();
-		this.ui.btn.hide();
-	},
-	
-	onTextEnter: function(e) {
-		if (e.keyCode == 13) this.create();
-	},
-	
-	onTextEsc: function(e) {
-		if (e.keyCode == 27) this.render();
-	},
-	
-	create: function() {
-		var text = $.trim(this.ui.text.val());
-		if (!text) {
-			this.render();
-			return;	
-		}
-		var that = this;
-		var lastNote = _(this.notes.filter(function(note) {
-			return !note.get('archived') && note.get('list') == that.model.id;
-		})).last();
-		
-		var pos = (lastNote) ? lastNote.get('pos') : 0;
-		
-		this.render();
-		
-		var note = new Note({
-			id: Minima.makeId(),
+	createNewList: function() {
+		var last = this.lists.last();
+		var pos = 65536 + ((last) ? last.get('pos') : 0);
+		this.lists.create({
+			id: 'list' + Minima.makeId(),
+			pos: pos,
 			revision: 0,
-			desc: text,
-			list: this.model.id,
-			pos: pos + 65536
+			name: 'New List'
 		});
-		
-		this.trigger('create', note);
 	}
-	
 });

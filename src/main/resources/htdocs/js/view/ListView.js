@@ -56,7 +56,7 @@ ListView = Backbone.View.extend({
 		
 		
 		if (!this.readonly) {
-			var createView = new ListCreateView({ model: this.model, notes: this.notes });
+			var createView = new NoteCreateView({ model: this.model, notes: this.notes });
 			createView.bind('create', function(note) {
 				this.notes.create(note);
 				notesView.addNote(note);				

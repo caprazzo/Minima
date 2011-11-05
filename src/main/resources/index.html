@@ -26,6 +26,7 @@
 	<script src="js/view/ListView.js" type="text/javascript"></script>
 	<script src="js/view/ListNameView.js" type="text/javascript"></script>
 	<script src="js/view/ListCreateView.js" type="text/javascript"></script>
+	<script src="js/view/NoteCreateView.js" type="text/javascript"></script>
 	
 	<script src="js/model/ListCollection.js" type="text/javascript"></script>
 	<script src="js/view/ListCollectionView.js" type="text/javascript"></script>
@@ -38,6 +39,7 @@
 			
 	<script src="js/model/NotificationsCtrlModel.js" type="text/javascript"></script>
 	<script src="js/view/NotificationsCtrlView.js" type="text/javascript"></script>
+	<script src="js/view/ListCreateView.js" type="text/javascript"></script>
 	
 	<script src="js/Minima.js" type="text/javascript"></script>
 		 
@@ -56,6 +58,7 @@
 			<h1>{{ BOARD_TITLE }}</h1>
 			<div id="controls">
 				<div id="notifications_ctrl"></div>	
+				<div id="list-create-ctrl"></div>
 			</div>
 		</div>
 		<div id="content"><div id="board"></div></div>
@@ -97,6 +100,10 @@
 			</div>	
 	</script>
 	
+	<script type="text/template" id="list-create-template">
+		<span class="list-create-btn">add a list</span>
+	</script>
+	
 	<script type="text/template" id="list-template">
 		<div class="list-header"></div>
 		<div class="list-notes"></div>
@@ -108,9 +115,9 @@
 		<input type="text" class="list-name-edit" value="<%= name %>"/>
 	</script>
 	
-	<script type="text/template" id="list-create-template">	
-		<textarea class="list-add-note-textarea"></textarea>
-		<span class="list-add-note-btn">add note</span>
+	<script type="text/template" id="note-create-template">	
+		<textarea class="note-create-textarea"></textarea>
+		<span class="note-create-btn">add note</span>
 	</script>
 	
 	<script type="text/template" id="note-template">

@@ -62,39 +62,3 @@
 	border-radius: 3px;
 	width: 98%;
 }
-.notes-container {
-	min-height: 2.5em;
-}
-.list-add-note-textarea {
-	display: none;	
-	background-color: #ffffcc;
-	resize: none;
-	width: 100%;
-	height: 100px;
-	padding: 6px;
-	border: 1px solid #ccc;
-	font-size: 18px;
-	line-height: 1.2em;		
-	margin: 0;	
-	box-sizing: border-box;         /* For IE and modern versions of Chrome */
-	-moz-box-sizing: border-box;    /* For Firefox                          */
-	-webkit-box-sizing: border-box; 
-	
-}
-.list-add-note-btn {
-	border: 1px solid #ccc;
-	background-color: #efefef;
-	color: #efefef;
-	border-radius: 4px;
-	margin-bottom: 1px;
-	cursor: pointer;	
-	padding-top: 6px;
-	padding-bottom: 6px;	
-	min-height: 1em;
-	display:block;
-	text-align: center;
-}
-.list-add-note-btn-hover {
-	background-color: #ddd;
-	color: #888;
-}
