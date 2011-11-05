@@ -10,6 +10,7 @@ ListCollectionView = Backbone.View.extend({
 		this._listViews = {};
 		this.lists.each(this.addList);		
 		this.lists.bind('change:pos', this.onChangePos, this);
+		this.lists.bind('add', this.addList, this);
 		this.tag = '[ListCollectionView]';
 	},
 	
@@ -145,6 +146,9 @@ ListCollectionView = Backbone.View.extend({
 		else {		
 			$(this.el).append(listView.el);
 		}
+		listView.render();
+		listView.resize(this.listWidth);
+		this.resize($(window).width());
 	},
 	
 	_sortViewCache: function() {
