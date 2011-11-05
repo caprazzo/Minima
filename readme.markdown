@@ -53,6 +53,10 @@ All configurations are optional
 
 ## Changelog
 
+### V 0.9
+
+* lists can be rearranged
+
 ### V 0.8 - 04 November 2011
 
 * board can be protected by password

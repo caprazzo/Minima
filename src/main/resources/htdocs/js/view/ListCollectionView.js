@@ -53,6 +53,21 @@ ListCollectionView = Backbone.View.extend({
 				ui.placeholder.css({backgroundColor: '#8C8C8C', visibility: 'visible'});
 				ui.placeholder.height(ui.item.height());
 				ui.placeholder.width(ui.item.width());
+			},
+			update: function(e, ui) {
+				var thisView = _.find(that._listViews, function(view) {
+					return view.el == ui.item.get(0);
+				});
+				
+				var prevView = _.find(that._listViews, function(view) {
+					return view.el == ui.item.prev().get(0);
+				});
+				
+				var nextView = _.find(that._listViews, function(view) {
+					return view.el == ui.item.next().get(0);
+				});
+				
+				thisView.reposition(prevView, nextView);
 			}
 		});
 		this.ui = {

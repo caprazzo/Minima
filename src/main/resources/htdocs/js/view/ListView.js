@@ -19,6 +19,21 @@ ListView = Backbone.View.extend({
 		}
 	},
 	
+	reposition: function(prevView, nextView) {
+		var pos = null;
+		if (!prevView) {
+			pos = nextView.model.get('pos') / 2;
+		}
+		else if (!nextView) {
+			pos = nextView.model.get('pos') / 2;
+		}
+		else {
+			pos = prevView.model.get('pos') + ((nextView.model.get('pos') - prevView.model.get('pos')) / 2);
+		}
+		this.model.set({pos: pos});
+		this.model.save();
+	},
+	
 	render: function() {
 		console.log(this.tag, 'render', this._rendered);
 		var el = $(this.el);		
