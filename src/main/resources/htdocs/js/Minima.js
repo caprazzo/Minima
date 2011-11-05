@@ -22,7 +22,7 @@ function Minima() {}
 
 	var _notifications = [];
 	Minima.notify = function(title, msg) {
-		if (window.webkitNotifications.checkPermission() != 0)
+		if (!window.webkitNotifications || window.webkitNotifications.checkPermission() != 0)
 			return;
 		
 		var icon = document.location.toString().replace('/index','/favicon.ico');

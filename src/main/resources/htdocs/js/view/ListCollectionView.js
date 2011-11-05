@@ -17,7 +17,7 @@ ListCollectionView = Backbone.View.extend({
 		var newWidth = availableWidth - 45;
 		var maxListWidth = 330;
 		var minListWidth = 210;
-		var cutoffBoardSize = minListWidth * 3;
+		var cutoffBoardSize = minListWidth * this.lists.size();
 		var verticalBoradSize = minListWidth;
 		
 		var calcSize = 0;
@@ -27,7 +27,7 @@ ListCollectionView = Backbone.View.extend({
 			calcSize = maxListWidth;
 		}		
 		else {
-			var calcSize =  (newWidth)/3;
+			var calcSize =  (newWidth)/this.lists.size();
 			if (calcSize > maxListWidth) calcSize = maxListWidth;
 			if (calcSize < minListWidth) calcSize = minListWidth;
 		}
