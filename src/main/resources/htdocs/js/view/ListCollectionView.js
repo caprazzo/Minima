@@ -7,8 +7,9 @@ ListCollectionView = Backbone.View.extend({
 	    this.readonly = args.readonly;
 	    this.lists = args.lists;
 	    this.notes = args.notes;
-		this._listViews = [];
+		this._listViews = {};
 		this.lists.each(this.addList);		
+		this.lists.bind('change:pos', this.onChangePos, this);
 		this.tag = '[ListCollectionView]';
 	},
 	
@@ -38,7 +39,29 @@ ListCollectionView = Backbone.View.extend({
 		
 		this.listWidth = calcSize;
 		
-		_(this._listViews).each(function(l) { l.resize(calcSize); });
+		_(this._listViews).chain().values().each(function(l) { l.resize(calcSize); });
+	},
+	
+	onChangePos: function(list) {
+		var listView = this._listViews[list.id];
+		if (!listView)
+			return;
+		
+		this._sortViewCache();
+		
+		var target = _.indexOf(_.keys(this._listViews), list.id);
+		var current = $(listView.el).index();
+		
+		if (target != current) {
+			$(listView.el).remove();
+			var tel = $(this.el).children().get(target);
+			if (tel) {
+				$(listView.el).insertBefore(tel);
+			}
+			else {	
+				$(listView.el).appendTo(this.el);
+			}
+		}
 	},
 	
 	render: function() {
@@ -75,7 +98,7 @@ ListCollectionView = Backbone.View.extend({
 			ul: ul
 		}		
 		ul.empty();		
-		_(this._listViews).each(function(listView) {
+		_(this._listViews).chain().values().each(function(listView) {
 			ul.append(listView.render().el);
 			listView.resize(that.listWidth);
 		});
@@ -103,12 +126,33 @@ ListCollectionView = Backbone.View.extend({
 			width: this.listWidth,
 			readonly: this.readonly
 		});		
-		this._listViews.push(listView);
+		this._listViews[listView.model.id] = listView;
 		
-		if (this._rendered) {
-			$(this.el).append(listView.el);
-			listView.resize(this.listWidth);
+		this._sortViewCache();
+		
+		var target = _.indexOf(_.keys(this._listViews), list.id);
+		
+		// insert view in correct position
+		var tel = $(this.el).children().get(target);
+		if (tel) {
+			if (tel != listView.el)
+				$(listView.el).insertBefore(tel);
 		}
-	}
+		else {		
+			$(this.el).append(listView.el);
+		}
+	},
+	
+	_sortViewCache: function() {
+		var sorted = _.sortBy(this._listViews, function(val, key) {
+			return val.model.get('pos');
+		});
+		
+		var sortedObj = {};
+		_.each(sorted, function(val) {
+			sortedObj[val.model.id] = val;
+		});
+		this._listViews = sortedObj;
+	},
 	
 });
