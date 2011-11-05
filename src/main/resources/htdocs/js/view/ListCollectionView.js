@@ -74,6 +74,16 @@ ListCollectionView = Backbone.View.extend({
 		this._rendered = true;
 		var that = this;
 		
+		// when draggin an item that is below the fold
+		// the container is momentarily resized
+		// and the scroll position is lost.
+		// I keep track of the current scroll and reapply
+		// it on drag start.
+		var scroll = document.body.scrollTop;
+		$(window).scroll(function() {
+			scroll = document.body.scrollTop;
+		});
+		
 		var el = $(this.el);
 		var ul = $('<ul class="lists-ul-container"></ul>').appendTo(el).sortable({
 			tolerance: 'pointer',
@@ -81,6 +91,10 @@ ListCollectionView = Backbone.View.extend({
 				ui.placeholder.css({backgroundColor: '#8C8C8C', visibility: 'visible'});
 				ui.placeholder.height(ui.item.height());
 				ui.placeholder.width(ui.item.width());
+				$(window).scrollTop(scroll);
+			},
+			stop: function(el, ui) {
+				
 			},
 			update: function(e, ui) {
 				var thisView = _.find(that._listViews, function(view) {
@@ -149,6 +163,8 @@ ListCollectionView = Backbone.View.extend({
 		listView.render();
 		listView.resize(this.listWidth);
 		this.resize($(window).width());
+		if (this._rendered)
+			this.render();
 	},
 	
 	_sortViewCache: function() {

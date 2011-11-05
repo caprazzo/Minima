@@ -82,7 +82,6 @@ function MinimaController(options) {
 	var listCreateView = new ListCreateView({lists: lists});
 	$('#list-create-ctrl').append(listCreateView.el);
 	listCreateView.render();
-	
 }
 
 MinimaController.prototype.start = function() {
