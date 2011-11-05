@@ -1,5 +1,5 @@
 ListView = Backbone.View.extend({
-	tagName: 'div',
+	tagName: 'li',
 	model: List,
 	className: 'list-container',
 	

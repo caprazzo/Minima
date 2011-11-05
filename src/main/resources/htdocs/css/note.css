@@ -5,6 +5,9 @@
 	min-height: 1.5em;
 	line-height: 1.2em;
 }
+.note-container-readonly {
+	cursor: auto;
+}
 .notes-placeholder {
 	border: 1px solid #ccc;
 	border-radius: 4px;

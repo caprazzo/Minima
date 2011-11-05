@@ -1,18 +1,37 @@
 .list-container {
-	float:left;
-	
+	float: left;
 	padding: 0;
 	min-height: 15px;
 	list-style-type: none;
 	background-color: white;
-	display: block;
+	_display: block;
 	border-radius: 3px;
 	border: 1px solid gray;
 	margin: 1em;
 	padding: 7px;
 }
+._list-container {
+	margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 100px; font-size: 4em; text-align: center;
+	overflow: hidden;
+}
+
+#sortable li {  }
+	
 .list-header {
 	margin-bottom: 0px;
+}
+.lists-ul-container {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.lists-placeholder {
+	_width: 100px;
+	_height: 100px;
+	_border: 1px solid #ccc;
+	_border-radius: 4px;
+	_margin-bottom: 8px;
+	background-color: #8C8C8C;	
 }
 .list-footer {
 	margin-top: 0px;

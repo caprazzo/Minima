@@ -23,7 +23,7 @@ NoteView = Backbone.View.extend({
 		var el = $(this.el);	
 		el.attr('id', 'note-'+ this.model.id);
 		var json = this.model.toJSON();
-		json.obj.desc = this._linkFilter(this._hashFilter(this._atFilter(json.obj.desc)));
+		json.obj.desc = this._filter(json.obj.desc);
 		el.html(this.template(json));
 		this.ui = {
 			el: el,
@@ -32,6 +32,8 @@ NoteView = Backbone.View.extend({
 			edit: el.find('.note-edit'),
 			textarea: el.find('.note-textarea')
 		}		
+		if (this.readonly)
+			this.ui.el.addClass('note-container-readonly');
 		this._rendered = true;
 		return this;
 	},
@@ -94,22 +96,48 @@ NoteView = Backbone.View.extend({
 		this.render();
 	},
 	
-	_linkFilter: function(text) {
+	_filter: function(text) {
 		var parts = text.split(/\s+/);
-		console.log(parts);
+		var filters = [this._mailFilter, this._atFilter, this._hashFilter, this._linkFilter];
+		return _.map(parts, function(part, idx) {
+			var rt = null;
+			var found = _.any(filters, function(filter) {
+				var filtered = filter(part);
+				if (filtered != null) {
+					rt = filtered;
+					return true;
+				}				
+			});
+			console.log('replaced', part, 'with', rt);
+			return found ? rt : part;
+		}).join(' ');
+	},
+	
+	_mailFilter: function(text) {
+		if (text.indexOf('mailto:') == 0)
+			return '<a href="' + text + '">'+text+'</a>';
+		if (text.match(/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/))
+			return '<a href="mailto:' + text + '">'+text+'</a>';
+		return null;
+	},
+	
+	_linkFilter: function(text) {
 		var p1 = /^\s*(http[s]?:\/\/(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
 		var text = text.replace(p1, '<a href="$1">$1</a>');
+		
 		var p2 = /^\s*((www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
 		return text.replace(p2, '<a href="http://$1">$1</a>');
 	},
 	
 	_atFilter: function(text) {
 		var pattern = /(@\b[^\s]*)/gi;
-		return text.replace(pattern, '<span class="ui-tag ui-tag-at">$1</span>');
+		var repl = text.replace(pattern, '<span class="ui-tag ui-tag-at">$1</span>');
+		return (repl != text) ? repl : null;
 	},
 
 	_hashFilter: function(text) {
 		var pattern = /(#\b[^\s]*)/gi;
-		return text.replace(pattern, '<span class="ui-tag ui-tag-hash">$1</span>');
+		var repl = text.replace(pattern, '<span class="ui-tag ui-tag-hash">$1</span>');
+		return (repl != text) ? repl : null;
 	}
 });

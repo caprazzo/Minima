@@ -46,9 +46,22 @@ ListCollectionView = Backbone.View.extend({
 		this._rendered = true;
 		var that = this;
 		
-		$(this.el).empty();		
+		var el = $(this.el);
+		var ul = $('<ul class="lists-ul-container"></ul>').appendTo(el).sortable({
+			tolerance: 'pointer',
+			start: function(e, ui) {
+				ui.placeholder.css({backgroundColor: '#8C8C8C', visibility: 'visible'});
+				ui.placeholder.height(ui.item.height());
+				ui.placeholder.width(ui.item.width());
+			}
+		});
+		this.ui = {
+			el: el,
+			ul: ul
+		}		
+		ul.empty();		
 		_(this._listViews).each(function(listView) {
-			$(that.el).append(listView.render().el);
+			ul.append(listView.render().el);
 			listView.resize(that.listWidth);
 		});
 		
