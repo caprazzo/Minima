@@ -52,14 +52,17 @@ ListCollectionView = Backbone.View.extend({
 		var target = _.indexOf(_.keys(this._listViews), list.id);
 		var current = $(listView.el).index();
 		
+		console.log(_.keys(this._listViews), list.id, target, current);
+		
 		if (target != current) {
 			$(listView.el).remove();
-			var tel = $(this.el).children().get(target);
+			var children = this.ui.ul.children();
+			var tel = children.get(target);
 			if (tel) {
 				$(listView.el).insertBefore(tel);
 			}
 			else {	
-				$(listView.el).appendTo(this.el);
+				$(listView.el).appendTo(this.ui.ul);
 			}
 		}
 	},
