@@ -8,18 +8,9 @@ $(function() {
 	if (readonly) 
 		$('#readonly-notice').show();
 	
-	var ws_location = $('#minima-websocket-location').val()
-	if (ws_location == 'auto')
-		ws_location = 
-			document.location.toString()
-			.replace('http://', 'ws://')
-			.replace('/index','/websocket');
-	
-	var comet_location = document.location.toString()
-		.replace('/index', '/comet');
-	
-	var data_location = document.location.toString()
-		.replace('/index','/data');
+	var ws_location = $('#minima-websocket-location').val();
+	var comet_location = $('#minima-comet-location').val();	
+	var data_location = $('#minima-data-location').val();
 	
 	var client = new MinimaClient({
 		mode: mode,

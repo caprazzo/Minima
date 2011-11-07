@@ -7,6 +7,7 @@ import javax.servlet.DispatcherType;
 
 import net.caprazzi.minima.service.MinimaService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
+import net.caprazzi.minima.servlet.MinimaAppServlet;
 import net.caprazzi.minima.servlet.MinimaCometServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
 import net.caprazzi.minima.servlet.MinimaLoginServlet;
@@ -30,14 +31,16 @@ public class MinimaServer {
 	private final MinimaLoginServlet loginServlet;
 	private final PrivacyFilter privacyFilter;
 	private Server server;
+	private final MinimaAppServlet appServlet;
 
-	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet, MinimaIndexServlet indexServlet, MinimaLoginServlet loginServlet, PrivacyFilter privacyFilter) {
+	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet, MinimaIndexServlet indexServlet, MinimaLoginServlet loginServlet, PrivacyFilter privacyFilter, MinimaAppServlet appServlet) {
 		this.minimaService = minimaService;
 		this.websocketServlet = websocketServlet;
 		this.cometServlet = cometServlet;
 		this.indexServlet = indexServlet;
 		this.loginServlet = loginServlet;
 		this.privacyFilter = privacyFilter;
+		this.appServlet = appServlet;
 	}
 
 	public void start(String webroot, int port) throws Exception {
@@ -73,8 +76,11 @@ public class MinimaServer {
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/test.html");
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/js/*");
         context.addServlet(new ServletHolder(new ClasspathFilesServlet("/htdocs")), "/favicon.ico");
+        
         context.addServlet(new ServletHolder(indexServlet), "/index");
         context.addServlet(new ServletHolder(indexServlet), "/");
+        
+        context.addServlet(new ServletHolder(appServlet), "/app/*");
         
         server.start();
         System.out.println("Minima ready at http://localhost:" + port + webroot + "/index");

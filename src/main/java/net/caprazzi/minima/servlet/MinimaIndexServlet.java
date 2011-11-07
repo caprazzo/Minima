@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.RequestInfo;
+import net.caprazzi.minima.framework.SkimpyTemplate;
+import net.caprazzi.minima.service.MinimaAppService;
 
 import org.eclipse.jetty.util.IO;
 
@@ -18,9 +20,11 @@ public class MinimaIndexServlet extends HttpServlet {
 
 	private String boardTitle;
 	private final String websocketLocation;
+	private final MinimaAppService appService;
 
-	public MinimaIndexServlet(String websocketLocation) {
+	public MinimaIndexServlet(String websocketLocation, MinimaAppService appService) {
 		this.websocketLocation = websocketLocation;
+		this.appService = appService;
 	}
 
 	@Override
@@ -41,12 +45,31 @@ public class MinimaIndexServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
 		PrintWriter writer = resp.getWriter();
-		writer.write(IO.toString(in)
-			.replaceAll("\\{\\{ BOARD_TITLE \\}\\}", boardTitle)
-			.replaceAll("\\{\\{ READ_ONLY \\}\\}", req.getAttribute("minima.readonly").toString())
-			.replaceAll("\\{\\{ WEBSOCKET_LOCATION \\}\\}", websocketLocation)
-			.replaceAll("\\{\\{ LOGIN_URL \\}\\}", req.getContextPath() + "/login"));			
+		
+		
+		SkimpyTemplate template = new SkimpyTemplate(in)
+			.add("BOARD_TITLE", boardTitle)
+			.add("READ_ONLY", req.getAttribute("minima.readonly").toString())
+			.add("WEBSOCKET_LOCATION", websocketLocation.equals("auto") 
+					? "ws://" + req.getRemoteHost() + ":" + req.getRemotePort() + "/" + req.getContextPath() + "/comet" : websocketLocation)
+			.add("DATA_LOCATION", req.getContextPath() + "/data")
+			.add("COMET_LOCATION", req.getContextPath() + "/comet")
+			.add("LOGIN_URL", req.getContextPath() + "/login");
+		
+		if (req.getParameter("devel") != null) {
+			template
+				.add("CSS_IMPORTS", appService.getDevelCssHtmlLink(req.getContextPath()))
+				.add("LIB_IMPORTS", appService.getDevelLibsHtmlLink(req.getContextPath()))
+				.add("MAIN_IMPORTS", appService.getDevelMainHtmlLink(req.getContextPath()));			
+		}			
+		else {
+			template
+				.add("CSS_IMPORTS", appService.getProductionCssHtmlLink(req.getContextPath()))
+				.add("LIB_IMPORTS", appService.getProductionLibsHtmlLink(req.getContextPath()))
+				.add("MAIN_IMPORTS", appService.getProductionMainHtmlLink(req.getContextPath()));
+		}
 
+		template.write(writer);
 		writer.close();
 		in.close();
 	}

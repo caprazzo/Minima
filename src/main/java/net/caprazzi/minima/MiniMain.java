@@ -1,9 +1,12 @@
 package net.caprazzi.minima;
 
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.minima.framework.ImportsDescriptor;
+import net.caprazzi.minima.service.MinimaAppService;
 import net.caprazzi.minima.service.MinimaDb;
 import net.caprazzi.minima.service.MinimaPushService;
 import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.servlet.MinimaAppServlet;
 import net.caprazzi.minima.servlet.MinimaCometServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
 import net.caprazzi.minima.servlet.MinimaLoginServlet;
@@ -29,7 +32,10 @@ public class MiniMain {
 		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
 		db.setAutoPurge(true);
 		
-		MinimaIndexServlet indexServlet = new MinimaIndexServlet(websocketLocation);
+		ImportsDescriptor descriptor = ImportsDescriptor.fromFile("imports.js");		
+		MinimaAppService appService = new MinimaAppService(descriptor);
+		
+		MinimaIndexServlet indexServlet = new MinimaIndexServlet(websocketLocation, appService);
 		indexServlet.setTitle(boardTitle);
 		MinimaWebsocketServlet websocketServlet = new MinimaWebsocketServlet();
 		MinimaCometServlet cometServlet = new MinimaCometServlet();
@@ -43,6 +49,10 @@ public class MiniMain {
 			loginServlet = new MinimaLoginServlet(password);
 		}
 		
+		
+		
+		MinimaAppServlet appServlet = new MinimaAppServlet(appService);
+		
 		MinimaDb minimaDbHelper = new MinimaDb(db);
 		minimaDbHelper.init();
 		MinimaService minimaService = new MinimaService(db, pushService);
@@ -52,7 +62,8 @@ public class MiniMain {
 				cometServlet, 
 				indexServlet,
 				loginServlet,
-				privacyFilter);
+				privacyFilter,
+				appServlet);
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
