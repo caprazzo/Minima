@@ -4,28 +4,61 @@ if (!window.console)
 $(function() {
 	Templates.load();
 	
-	var mode = (window.WebSocket) ? 'websocket' : 'comet';
+	// read variables from document
 	
+	var app = new AppModel();
+	app.readPageConfig();
+	
+	/*
 	var readonly = ($('#minima-read-only').val() == "true");
-	if (readonly) 
-		$('#readonly-notice').show();
 	
+	var mode = (window.WebSocket) ? 'websocket' : 'comet';	
 	var ws_location = $('#minima-websocket-location').val();
 	var comet_location = $('#minima-comet-location').val();	
 	var data_location = $('#minima-data-location').val();
+	*/
 	
-	var client = new MinimaClient({
-		mode: mode,
-		data_location: data_location,
-		web_socket_location: ws_location,
-		comet_location: comet_location
+	var notes = new NoteCollection();
+	notes.url = app.get('data_location') + '/stories/';
+	notes.bind('change', function(note) {
+		// WARN: according to documentation this should not necessary
+		notes.sort();			
+	}, this);			
+	
+	var lists = new ListCollection();
+	lists.url = app.get('data_location') + '/lists/';
+	
+	var client = new MinimaClient({ appModel: app });
+		
+	client.bind('board', function(board) {
+		lists.add(board.lists);
+		notes.add(board.stories);		
 	});
 	
+	client.bind('note', function(note) {
+		
+	});
+	
+	client.bind('list', function(list) {
+		
+	});
+	
+	
+	/*
 	var controller = new MinimaController({
 		client: client,
 		data_location: data_location,
 		readonly: readonly
 	});
+	*/
 	
-	controller.start();
+	var view = new AppView({
+		lists: lists,
+		notes: notes,
+		appModel: app
+	});
+	view.render();	
+	
+	client.connect();
+	client.loadBoard();
 });

@@ -13,29 +13,16 @@
 </head>
 <body>
 	
+	<!-- setup variables from server -->
+	<input type="hidden" id="minima-board-title" value="{{ BOARD_TITLE }}"/>
 	<input type="hidden" id="minima-data-location" value="{{ DATA_LOCATION }}"/>
 	<input type="hidden" id="minima-read-only" value="{{ READ_ONLY }}"/>
 	<input type="hidden" id="minima-websocket-location" value="{{ WEBSOCKET_LOCATION }}"/>
 	<input type="hidden" id="minima-comet-location" value="{{ COMET_LOCATION }}"/>
 	
-	<div class="wrapper">
-		<div id="header">
-				
-			<div class="minima-logo">&nbsp;</div>
-			<h1>{{ BOARD_TITLE }}</h1>
-			<div id="controls">
-				<div id="notifications_ctrl"></div>	
-				<div id="list-create-ctrl"></div>
-			</div>
-		</div>
-		<div id="content"><div id="board"></div></div>
-		<div class="push"></div>
-	</div>
+	<!-- root of templates -->
+	<div id="minima"></div>	
 	
-	<div class="footer">
-		<div id="readonly-notice">This board is read-only. Please <a href="{{ LOGIN_URL }}">login</a> to enable editing.</div>
-	</div>
-		
 {{ TEMPLATES }}
 	
 </body>

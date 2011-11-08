@@ -14,27 +14,7 @@ function MinimaController(options) {
 	lists.url = options.data_location + '/lists/';
 	
 	this.client.onBoard(function(board) {
-		lists.add(board.lists);
-		notes.add(board.stories);
 		
-		notes.bind('change', function(note, b, c) {
-			// according to documentation this is not necessary
-			notes.sort();			
-		}, this);
-			
-		var listsView = new ListCollectionView({
-			lists: lists,
-			notes: notes,
-			readonly: this.readonly
-		});
-		
-		$(window).resize(function() {
-	    	listsView.resize($(this).width());
-		});
-		
-		$('#board').append(listsView.render().el);
-		
-		listsView.resize($(window).width());
 				
 	}, this);
 	
@@ -74,10 +54,10 @@ function MinimaController(options) {
 		}
 	}, this);
 	
-	var nModel = new NotificationsCtrlModel();
-	var nView = new NotificationsCtrlView({model: nModel});	
-	$('#notifications_ctrl').append(nView.el);
-	nView.render();	
+	//var nModel = new NotificationsCtrlModel();
+	//var nView = new NotificationsCtrlView({model: nModel});	
+	//$('#notifications_ctrl').append(nView.el);
+	//nView.render();	
 	
 	var listCreateView = new ListCreateView({lists: lists});
 	$('#list-create-ctrl').append(listCreateView.el);
@@ -85,6 +65,5 @@ function MinimaController(options) {
 }
 
 MinimaController.prototype.start = function() {
-	this.client.connect();
-	this.client.loadBoard();
+
 }

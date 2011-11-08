@@ -108,7 +108,6 @@ NoteView = Backbone.View.extend({
 					return true;
 				}				
 			});
-			console.log('replaced', part, 'with', rt);
 			return found ? rt : part;
 		}).join(' ');
 	},

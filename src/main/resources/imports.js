@@ -8,6 +8,7 @@
 	],
 				
 	"main": [
+	    "js/model/AppModel.js",
 		"js/model/FilteredCollection.js",
 		"js/model/ListModel.js",
 		"js/view/ListView.js",
@@ -27,6 +28,7 @@
 		"js/MinimaController.js",
 		"js/MinimaClient.js",
 		"js/view/Templates.js",
+		"js/view/AppView.js",
 		"js/index.js"	
 	],
 	
@@ -43,6 +45,7 @@
 	    "templates/list-template.html",
 	    "templates/note-create-template.html",
 	    "templates/note-template.html",
-	    "templates/notify-template.html"
+	    "templates/notify-template.html",
+	    "templates/app-template.html"
 	]
 }
