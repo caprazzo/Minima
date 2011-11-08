@@ -14,7 +14,7 @@ NoteCreateView = Backbone.View.extend({
 	
 	initialize: function(args) {
 		this.notes = args.notes;
-		this.template = _.template($('#note-create-template').html());
+		this.template = Templates['note-create-template'];
 	},
 	
 	render: function() {

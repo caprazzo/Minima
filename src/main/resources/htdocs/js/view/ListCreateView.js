@@ -9,7 +9,7 @@ ListCreateView = Backbone.View.extend({
 	
 	initialize: function(args) {
 		this.lists = args.lists;
-		this.template = _.template($('#list-create-template').html());
+		this.template = Templates['list-create-template'];
 	},
 	
 	render: function() {

@@ -26,6 +26,7 @@
 		"js/Minima.js",	 
 		"js/MinimaController.js",
 		"js/MinimaClient.js",
+		"js/view/Templates.js",
 		"js/index.js"	
 	],
 	

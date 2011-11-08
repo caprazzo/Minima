@@ -5,7 +5,7 @@ NotificationsCtrlView = Backbone.View.extend({
 	id: "notify-container",
 	
 	initialize: function() {
-		this.template = _.template($('#notify-template').html())
+		this.template = Templates['notify-template'];
 		this.model.bind('change', this.render, this);
 	},
 	  	  

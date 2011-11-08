@@ -2,6 +2,8 @@ if (!window.console)
 	window.console = { log: function() {} };
 	
 $(function() {
+	Templates.load();
+	
 	var mode = (window.WebSocket) ? 'websocket' : 'comet';
 	
 	var readonly = ($('#minima-read-only').val() == "true");
