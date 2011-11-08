@@ -1,0 +1,28 @@
+  <span class="notify-ctrl-label">notifications:</span>
+	<% if  (permission == 'allowed' || permission == 'not_allowed') { %>			
+		<span class="notify-on <% if (active) { %> notify-on-selected <% } %>">ON</span><span class="notify-off <% if (!active) { %> notify-off-selected <% } %>">OFF</span>
+	<% }  else if (permission == 'denied') { %>
+		<span class="notify-ctrl-label">disabled</span>
+	<% } else if (permission == 'not_supported') { %>
+		<span class="notify-ctrl-label">not supported</span>
+	<% } %>		
+	<span class="notify-help">?</span>
+	<div class="notify-help-topic">
+		A notification is a popup displayed when there is an update for this board.
+		<% if  (permission == 'allowed' || permission == 'not_allowed') { %>
+				<% if (active) {  %>
+					<br/><br/><strong>Notifications are turned on.</strong>
+				<% } else { %>
+					<br/><br/><strong>Notifications are turned off.</strong>
+				<% } %>
+		<% }  else if (permission == 'denied') { %>
+				<p class="notify-help-topic-warn">
+				Your browser disabled notifications for this page,
+				but you can change this setting in your browser options.
+				</p>
+		<% } else if (permission == 'not_supported') { %>
+				<p class="notify-help-topic-warn">
+				Your browser does not support notifications.
+				</p>
+		<% } %>		
+	</div>	

@@ -1,6 +1,6 @@
 package net.caprazzi.minima.framework;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -12,6 +12,15 @@ public class ImportsDescriptor {
 	private String[] libs;
 	private String[] css;
 	private String[] main;
+	private String[] templates;
+	
+	public String[] getTemplatesPaths() {
+		return templates;
+	}
+	
+	public void setTemplates(String[] templates) {
+		this.templates = templates;
+	}
 	
 	public void setLibs(String[] libs) {
 		this.libs = libs;
@@ -49,8 +58,16 @@ public class ImportsDescriptor {
 
 	public byte[] getData(String path) throws IOException {
 		Resource resource = Resource.newClassPathResource("/htdocs/" + path);
-		System.out.println(resource.getURL());
-		System.out.println(resource.getFile().getAbsolutePath());
+		return IO.readBytes(resource.getInputStream());
+	}
+
+	public String getTemplateId(String path) {
+		String name = new File(path).getName();
+		return name.substring(0, name.lastIndexOf("."));
+	}
+
+	public byte[] getTemplateData(String path) throws IOException {
+		Resource resource = Resource.newClassPathResource(path);
 		return IO.readBytes(resource.getInputStream());
 	}
 	

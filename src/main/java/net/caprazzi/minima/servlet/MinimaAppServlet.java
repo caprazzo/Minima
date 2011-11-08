@@ -58,7 +58,7 @@ public class MinimaAppServlet extends HttpServlet {
 
 	private void handleCssRequest(RequestInfo info, HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
-		resp.setContentType("application/json");
+		resp.setContentType("text/css");
 		ServletOutputStream out = resp.getOutputStream();
 		service.writeProductionCssData(out);
 		out.close();

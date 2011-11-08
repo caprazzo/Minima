@@ -51,10 +51,11 @@ public class MinimaIndexServlet extends HttpServlet {
 			.add("BOARD_TITLE", boardTitle)
 			.add("READ_ONLY", req.getAttribute("minima.readonly").toString())
 			.add("WEBSOCKET_LOCATION", websocketLocation.equals("auto") 
-					? "ws://" + req.getRemoteHost() + ":" + req.getRemotePort() + "/" + req.getContextPath() + "/comet" : websocketLocation)
+					? "ws://" + req.getServerName() + ":" + req.getServerPort() + "/" + req.getContextPath() + "websocket" : websocketLocation)
 			.add("DATA_LOCATION", req.getContextPath() + "/data")
 			.add("COMET_LOCATION", req.getContextPath() + "/comet")
-			.add("LOGIN_URL", req.getContextPath() + "/login");
+			.add("LOGIN_URL", req.getContextPath() + "/login")
+			.add("TEMPLATES", appService.getTemplatesHtml());
 		
 		if (req.getParameter("devel") != null) {
 			template

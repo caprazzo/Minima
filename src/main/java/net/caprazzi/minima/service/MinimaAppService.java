@@ -78,5 +78,16 @@ public class MinimaAppService {
 		}
 		return build.toString();
 	}
+
+	public String getTemplatesHtml() throws IOException {
+		StringBuilder build = new StringBuilder();
+		for (String path : descriptor.getTemplatesPaths()) {
+			String id = descriptor.getTemplateId(path);
+			build.append("<script type=\"text-template\" id=\"" + id + "\">\n");
+			build.append(new String(descriptor.getTemplateData(path)));
+			build.append("\n</script>\n\n");
+		}
+		return build.toString();
+	}
 	
 }

@@ -13,7 +13,7 @@
 		"js/view/ListView.js",
 		"js/view/ListNameView.js",
 		"js/view/ListCreateView.js",
-		
+		"js/view/NoteCreateView.js",
 		"js/model/ListCollection.js",
 		"js/view/ListCollectionView.js",
 		"js/model/NoteModel.js",
@@ -34,5 +34,14 @@
 		"css/list.css",
 		"css/note.css",
 		"css/notify.css"
-	]		
+	],
+	
+	"templates": [
+	    "templates/list-create-template.html",
+	    "templates/list-name-template.html",
+	    "templates/list-template.html",
+	    "templates/note-create-template.html",
+	    "templates/note-template.html",
+	    "templates/notify-template.html"
+	]
 }
