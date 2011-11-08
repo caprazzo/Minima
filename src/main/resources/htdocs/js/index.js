@@ -36,11 +36,38 @@ $(function() {
 	});
 	
 	client.bind('note', function(note) {
+		var found = notes.get(note.id);		
+		var model = new Note(note);
+				
+		if (found && found.get('list') != model.get('list')) {
+			var from = lists.get(found.get('list'));
+			var to = lists.get(model.get('list'));
+			Minima.notify('Note moved from "' + from.get('name') + '" to "' + to.get('name') + '"', model.get('desc'));
+		}
 		
+		else if (!found && !model.get('archived')) {
+			Minima.notify('New note', model.get('desc'));
+		}
+		
+		else if (found && !found.get('archived') && model.get('archived')) {
+			Minima.notify('Note archived', model.get('desc'));
+		}		
+		
+		if (found) {
+			found.set(note);
+		}
+		else {
+			notes.add(note);
+		}
 	});
 	
 	client.bind('list', function(list) {
-		
+		var found = lists.get(list.id);
+		if (found) {
+			found.set(list);
+		} else {
+			lists.add(list);
+		}
 	});
 	
 	

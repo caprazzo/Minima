@@ -25,7 +25,6 @@
 		"js/view/NotificationsCtrlView.js",
 		"js/view/ListCreateView.js",
 		"js/Minima.js",	 
-		"js/MinimaController.js",
 		"js/MinimaClient.js",
 		"js/view/Templates.js",
 		"js/view/AppView.js",
