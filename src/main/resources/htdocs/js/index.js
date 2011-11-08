@@ -70,15 +70,6 @@ $(function() {
 		}
 	});
 	
-	
-	/*
-	var controller = new MinimaController({
-		client: client,
-		data_location: data_location,
-		readonly: readonly
-	});
-	*/
-	
 	var view = new AppView({
 		lists: lists,
 		notes: notes,
