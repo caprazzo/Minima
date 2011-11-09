@@ -42,5 +42,9 @@ FilteredCollection = Backbone.Collection.extend({
 				this.add(model);
 			}
 		}		
+	},
+	
+	create: function(arg, opts) {
+		this.parent.create(arg, opts);
 	}
 });

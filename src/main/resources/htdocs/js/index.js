@@ -81,7 +81,7 @@ $(function() {
 	});
 	
 	var view = new AppView({
-		lists: lists,
+		lists: filteredLists,
 		notes: notes,
 		appModel: app
 	});

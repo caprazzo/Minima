@@ -11,6 +11,7 @@ ListCollectionView = Backbone.View.extend({
 		this.lists.each(this.addList);		
 		this.lists.bind('change:pos', this.onChangePos, this);
 		this.lists.bind('add', this.addList, this);
+		this.lists.bind('remove', this.removeList, this);
 		this.tag = '[ListCollectionView]';
 	},
 	
@@ -41,6 +42,14 @@ ListCollectionView = Backbone.View.extend({
 		this.listWidth = calcSize;
 		
 		_(this._listViews).chain().values().each(function(l) { l.resize(calcSize); });
+	},
+	
+	removeList: function(list) {
+		var view = this._listViews[list.id];
+		if (view) {
+			delete this._listViews[list.id];
+			view.remove();
+		}	
 	},
 	
 	onChangePos: function(list) {
