@@ -3,6 +3,8 @@ package net.caprazzi.minima.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
+
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Delete;
 import net.caprazzi.keez.Keez.Entry;
@@ -26,6 +28,7 @@ public class MinimaDb {
 	
 	private final Db db;
 
+	@Inject
 	public MinimaDb(Db db) {
 		this.db = db;
 	}

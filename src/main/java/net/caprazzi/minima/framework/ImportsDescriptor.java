@@ -2,6 +2,7 @@ package net.caprazzi.minima.framework;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
@@ -68,7 +69,10 @@ public class ImportsDescriptor {
 
 	public byte[] getTemplateData(String path) throws IOException {
 		Resource resource = Resource.newClassPathResource(path);
-		return IO.readBytes(resource.getInputStream());
+		InputStream inputStream = resource.getInputStream();
+		byte[] data = IO.readBytes(inputStream);
+		inputStream.close();
+		return data;
 	}
 	
 }

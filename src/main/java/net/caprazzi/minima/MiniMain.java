@@ -1,5 +1,11 @@
 package net.caprazzi.minima;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+
+import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.framework.ImportsDescriptor;
 import net.caprazzi.minima.service.MinimaAppService;
@@ -49,8 +55,6 @@ public class MiniMain {
 			loginServlet = new MinimaLoginServlet(password);
 		}
 		
-		
-		
 		MinimaAppServlet appServlet = new MinimaAppServlet(appService);
 		
 		MinimaDb minimaDbHelper = new MinimaDb(db);
@@ -80,4 +84,5 @@ public class MiniMain {
 		
 		minimaServer.start(webroot, port);
 	}
+
 }

@@ -14,10 +14,13 @@ import net.caprazzi.minima.framework.RequestInfo;
 
 import org.eclipse.jetty.util.IO;
 
+import com.google.inject.Inject;
+
 public class MinimaLoginServlet extends HttpServlet {
 
 	private final String password;
 
+	@Inject
 	public MinimaLoginServlet(String password) {
 		this.password = password;
 	}
@@ -52,10 +55,21 @@ public class MinimaLoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		RequestInfo info = RequestInfo.fromRequest(req);
+		if (info.isPath(req.getContextPath() + "/logout")) {
+			if (req.getSession(false) != null) {
+				req.getSession().invalidate();
+				
+			}			
+			resp.sendRedirect(req.getContextPath() + "/index");
+			return;
+		}
+		
 		if (req.getSession(false) != null) {
 			resp.sendRedirect(req.getContextPath() + "/index");
 			return;
 		}
+		
 		resp.setContentType("text/html");
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("login.html");
 		PrintWriter writer = resp.getWriter();

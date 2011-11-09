@@ -110,7 +110,8 @@ ListCollectionView = Backbone.View.extend({
 				});
 				
 				thisView.reposition(prevView, nextView);
-			}
+			},			
+			disabled: this.readonly
 		});
 		this.ui = {
 			el: el,

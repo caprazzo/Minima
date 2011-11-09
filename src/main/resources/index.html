@@ -18,10 +18,14 @@
 	<input type="hidden" id="minima-data-location" value="{{ DATA_LOCATION }}"/>
 	<input type="hidden" id="minima-read-only" value="{{ READ_ONLY }}"/>
 	<input type="hidden" id="minima-websocket-location" value="{{ WEBSOCKET_LOCATION }}"/>
-	<input type="hidden" id="minima-comet-location" value="{{ COMET_LOCATION }}"/>
+	<input type="hidden" id="minima-comet-location" value="{{ COMET_LOCATION }}"/>	
 	
-	<!-- root of templates -->
-	<div id="minima"></div>	
+	<!-- root of templates -->	
+	<div class="wrapper" id="minima"></div>
+
+	<div class="footer">
+		<div id="readonly-notice">This board is read-only. Please <a href="{{ LOGIN_URL }}">login</a> to enable editing.</div>
+	</div>
 	
 {{ TEMPLATES }}
 	

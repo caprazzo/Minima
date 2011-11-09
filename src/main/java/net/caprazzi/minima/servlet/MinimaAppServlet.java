@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.Inject;
+
 import net.caprazzi.minima.framework.HttpUtils;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.service.MinimaAppService;
@@ -17,6 +19,7 @@ public class MinimaAppServlet extends HttpServlet {
 	
 	private final MinimaAppService service;
 
+	@Inject
 	public MinimaAppServlet(MinimaAppService service) {
 		this.service = service;
 	}

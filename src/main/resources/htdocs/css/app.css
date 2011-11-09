@@ -36,15 +36,15 @@ html {
 	background-color: white;
 }
 #board {
-	margin: 20px 22px;
+	margin: 20px 18px;
 	float: left;
 	height: 100%;
 }
 #header {
 	padding: 28px;
+	padding-bottom: 14px;
 	padding-left: 8px;
-	border-bottom: 1px solid #222;
-	margin-bottom: 15px;
+	_border-bottom: 1px solid #222;
 	background-color: white;
 }
 .minima-logo {
@@ -83,4 +83,10 @@ html {
 }
 .ui-tag {
 	color: #3C3EBA;
+}
+
+#ribbon {
+	border-bottom: 1px solid black;
+	padding: 8px;
+	padding-left: 30px;
 }

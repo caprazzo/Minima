@@ -24,6 +24,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 public class MinimaService {
 
 	private static final Logger logger = LoggerFactory.getLogger("MinimaService");
@@ -32,6 +34,7 @@ public class MinimaService {
 
 	private final MinimaPushService pushServlet;
 
+	@Inject
 	public MinimaService(final Keez.Db db, MinimaPushService pushService) {
 		this.db = db;
 		this.pushServlet = pushService;

@@ -15,6 +15,8 @@ import net.caprazzi.minima.service.MinimaAppService;
 
 import org.eclipse.jetty.util.IO;
 
+import com.google.inject.Inject;
+
 @SuppressWarnings("serial")
 public class MinimaIndexServlet extends HttpServlet {
 
@@ -22,6 +24,7 @@ public class MinimaIndexServlet extends HttpServlet {
 	private final String websocketLocation;
 	private final MinimaAppService appService;
 
+	@Inject
 	public MinimaIndexServlet(String websocketLocation, MinimaAppService appService) {
 		this.websocketLocation = websocketLocation;
 		this.appService = appService;

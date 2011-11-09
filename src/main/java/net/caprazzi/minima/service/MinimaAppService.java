@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.google.inject.Inject;
+
 import net.caprazzi.minima.framework.ImportsDescriptor;
 
 /**
@@ -16,6 +18,7 @@ public class MinimaAppService {
 	
 	private final ImportsDescriptor descriptor;
 
+	@Inject
 	public MinimaAppService(ImportsDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}

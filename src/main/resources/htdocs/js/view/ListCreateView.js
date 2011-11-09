@@ -4,6 +4,8 @@ ListCreateView = Backbone.View.extend({
 	className: 'list-create-container',
 	
 	events: {
+		'mouseenter .list-create-btn': 'toggleBtnHighlight',
+		'mouseleave .list-create-btn': 'toggleBtnHighlight',
 		'click .list-create-btn': 'createNewList'
 	},
 	
@@ -31,5 +33,9 @@ ListCreateView = Backbone.View.extend({
 			revision: 0,
 			name: 'New List'
 		});
+	},
+	
+	toggleBtnHighlight: function() {
+		this.ui.btn.toggleClass('list-create-btn-hover');
 	}
 });

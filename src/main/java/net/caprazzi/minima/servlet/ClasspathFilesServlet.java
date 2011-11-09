@@ -3,6 +3,8 @@ package net.caprazzi.minima.servlet;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.resource.Resource;
 
+import com.google.inject.Inject;
+
 /**
  * Serves static files from a directory in the classPath
  * @author mcaprari
@@ -12,6 +14,7 @@ public class ClasspathFilesServlet extends DefaultServlet {
 
 	private final String basePath;
 
+	@Inject
 	public ClasspathFilesServlet(String basePath) {
 		this.basePath = basePath;
 	}

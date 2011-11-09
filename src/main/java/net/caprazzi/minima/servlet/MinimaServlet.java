@@ -23,6 +23,8 @@ import org.eclipse.jetty.util.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 @SuppressWarnings("serial")
 public class MinimaServlet extends HttpServlet {
 
@@ -32,6 +34,7 @@ public class MinimaServlet extends HttpServlet {
 
 	private final String webroot;
 
+	@Inject
 	public MinimaServlet(String webroot, MinimaService minimaService) {
 		this.webroot = webroot;
 		this.minimaService = minimaService;
