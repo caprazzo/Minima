@@ -12,6 +12,8 @@ ListView = Backbone.View.extend({
 	},
 	
 	events: {
+		'mouseenter .list-header': 'showArchive',
+		'mouseleave .list-header': 'hideArchive',
 		'click .list-archive-btn': 'archiveList'
 	},
 	
@@ -69,8 +71,30 @@ ListView = Backbone.View.extend({
 			el.find('.list-footer').append(createView.render().el);
 		}
 		
+		this.ui = {
+			archive: el.find('.list-archive-btn')
+		}
+		
 		this._rendered = true;
 		return this;
+	},
+	
+	startDrag: function() {
+		this._isDragging = true;
+		this.ui.archive.hide();
+	},
+	
+	stopDrag: function() {
+		this._isDragging = false;
+	},
+	
+	showArchive: function() {
+		if (this._isDragging || this.readonly) return;
+		this.ui.archive.show();
+	},
+	
+	hideArchive: function() {
+		this.ui.archive.hide();
 	},
 	
 	archiveList: function() {

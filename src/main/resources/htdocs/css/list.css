@@ -89,12 +89,15 @@
 	float: right;
 }
 .list-archive-btn {
+	display: none;
 	_float: right;
-	display: block;
+	display: none;	
 	border: 1px solid white;
 	border-radius: 3px;
 	position: absolute;			
 	margin: 4px;
+	margin-left: -16px;
+	margin-top: -1px;
 	background-color: #eee;
 	cursor: pointer;
 }

@@ -3,6 +3,7 @@ package net.caprazzi.minima.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 import com.google.inject.Inject;
 
@@ -13,8 +14,8 @@ import net.caprazzi.minima.framework.ImportsDescriptor;
  */
 public class MinimaAppService {
 
-	private static final String SCRIPT_FMT = "<script src=\"%s%s\" type=\"text/javascript\"></script>";
-	private static final String CSS_FMT = "<link href=\"%s%s\" rel=\"stylesheet\" type=\"text/css\"/>";
+	private static final String SCRIPT_FMT = "<script src=\"%s%s%s\" type=\"text/javascript\"></script>";
+	private static final String CSS_FMT = "<link href=\"%s%s%s\" rel=\"stylesheet\" type=\"text/css\"/>";
 	
 	private final ImportsDescriptor descriptor;
 
@@ -35,16 +36,20 @@ public class MinimaAppService {
 		return allLinks(SCRIPT_FMT, basepath, descriptor.getMainPaths());
 	}
 
+	private String getNoCacheTag() {
+		return Long.toString((new Date().getTime()));
+	}
+
 	public String getProductionCssHtmlLink(String basepath) {
-		return  String.format(CSS_FMT, basepath, "app/css");
+		return  String.format(CSS_FMT, basepath, "app/css", "");
 	}
 	
 	public String getProductionLibsHtmlLink(String basepath) {
-		return  String.format(SCRIPT_FMT, basepath, "app/libs");
+		return  String.format(SCRIPT_FMT, basepath, "app/libs", "");
 	}
 	
 	public String getProductionMainHtmlLink(String basepath) {
-		return  String.format(SCRIPT_FMT, basepath, "app/main");
+		return  String.format(SCRIPT_FMT, basepath, "app/main", "");
 	}
 	
 	public void writeProductionCssData(OutputStream out) throws IOException {
@@ -77,7 +82,7 @@ public class MinimaAppService {
 	private String allLinks(String format, String basepath, String[] paths) {
 		StringBuilder build = new StringBuilder();
 		for (String path : paths) {
-			build.append(String.format(format, basepath, path)).append("\n");
+			build.append(String.format(format, basepath, path, "?" + getNoCacheTag())).append("\n");
 		}
 		return build.toString();
 	}

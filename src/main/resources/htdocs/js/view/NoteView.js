@@ -38,33 +38,14 @@ NoteView = Backbone.View.extend({
 		return this;
 	},
 	
-	startDrag: function() {
-		this._isDragging = true;
-		this.ui.archive.hide();
-	},
-	
 	remove: function() {
 		$(this.el).remove();
-	},
-	
-	stopDrag: function() {
-		this._isDragging = false;
 	},
 	
 	archiveNote: function() {
 		this.model.set({archived: true});
 		this.remove();
 		this.model.save();
-	},
-	
-	showArchive: function() {
-		if (this._isDragging || this.readonly) return;		
-		var pos = this.ui.el.offset();
-		var width = this.ui.el.width();
-		this.ui.archive.css({
-			left: (pos.left - 25 + width) + 'px',
-			top: pos.top + 'px'
-		}).show();
 	},
 	
 	activateEdit: function() {
@@ -81,6 +62,16 @@ NoteView = Backbone.View.extend({
 	
 	onEditEsc: function(e) {
 		if (e.keyCode == 27) this.render();
+	},
+	
+	showArchive: function() {
+		if (this._isDragging || this.readonly) return;		
+		var pos = this.ui.el.offset();
+		var width = this.ui.el.width();
+		this.ui.archive.css({
+			left: (pos.left - 25 + width) + 'px',
+			top: pos.top + 'px'
+		}).show();
 	},
 	
 	hideArchive: function() {

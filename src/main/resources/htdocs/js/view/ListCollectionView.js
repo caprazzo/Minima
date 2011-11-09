@@ -99,13 +99,21 @@ ListCollectionView = Backbone.View.extend({
 		var ul = $('<ul class="lists-ul-container"></ul>').appendTo(el).sortable({
 			tolerance: 'pointer',
 			start: function(e, ui) {
+				var thisView = _.find(that._listViews, function(view) {
+					return view.el == ui.item.get(0);
+				});
+				thisView.startDrag();
+				
 				ui.placeholder.css({backgroundColor: '#8C8C8C', visibility: 'visible'});
 				ui.placeholder.height(ui.item.height());
 				ui.placeholder.width(ui.item.width());
 				$(window).scrollTop(scroll);
 			},
 			stop: function(el, ui) {
-				
+				var thisView = _.find(that._listViews, function(view) {
+					return view.el == ui.item.get(0);
+				});
+				thisView.stopDrag();
 			},
 			update: function(e, ui) {
 				var thisView = _.find(that._listViews, function(view) {
