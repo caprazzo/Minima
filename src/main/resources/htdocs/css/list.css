@@ -82,3 +82,19 @@
 	background-color: #ddd;
 	color: #888;
 }
+.list-name {
+	float:left;
+}
+.list-archive {
+	float: right;
+}
+.list-archive-btn {
+	_float: right;
+	display: block;
+	border: 1px solid white;
+	border-radius: 3px;
+	position: absolute;			
+	margin: 4px;
+	background-color: #eee;
+	cursor: pointer;
+}

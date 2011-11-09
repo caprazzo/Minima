@@ -11,6 +11,10 @@ ListView = Backbone.View.extend({
 		this.tag = '[ListView  ' + this.model.name +']';
 	},
 	
+	events: {
+		'click .list-archive-btn': 'archiveList'
+	},
+	
 	resize: function(width) {
 		if (this._rendered) {
 			var el = $(this.el);
@@ -52,7 +56,7 @@ ListView = Backbone.View.extend({
 			model: this.model,
 			readonly: this.readonly
 		});
-		el.find('.list-header').append(nameView.render().el);
+		el.find('.list-name').append(nameView.render().el);
 		
 		
 		if (!this.readonly) {
@@ -66,5 +70,11 @@ ListView = Backbone.View.extend({
 		
 		this._rendered = true;
 		return this;
+	},
+	
+	archiveList: function() {
+		$(this.el).remove();
+		this.model.set({archived: true});
+		this.model.save();
 	}
 });

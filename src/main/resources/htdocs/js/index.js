@@ -28,6 +28,16 @@ $(function() {
 	var lists = new ListCollection();
 	lists.url = app.get('data_location') + '/lists/';
 	
+	var filteredLists = new FilteredCollection([], {
+		parent: lists, 
+		filter: function(list) {
+			return !list.get('archived'); 
+		},
+		comparator: function(list) {
+			return list.get('pos');
+		}
+	});
+	
 	var client = new MinimaClient({ appModel: app });
 		
 	client.bind('board', function(board) {

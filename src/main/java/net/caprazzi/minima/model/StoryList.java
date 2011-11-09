@@ -10,6 +10,7 @@ public class StoryList {
 	private String id;
 	private String name;
 	private int revision;
+	private boolean archived;
 
 	public StoryList(String id, String name, BigDecimal pos) {
 		this.id = id;
@@ -68,6 +69,14 @@ public class StoryList {
 	
 	public int getRevision() {
 		return revision;
+	}
+	
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+	
+	public boolean getArchived() {
+		return this.archived;
 	}
 
 }
