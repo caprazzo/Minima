@@ -59,7 +59,10 @@ public class ImportsDescriptor {
 
 	public byte[] getData(String path) throws IOException {
 		Resource resource = Resource.newClassPathResource("/htdocs/" + path);
-		return IO.readBytes(resource.getInputStream());
+		InputStream inputStream = resource.getInputStream();
+		byte[] data = IO.readBytes(inputStream);
+		inputStream.close();
+		return data;
 	}
 
 	public String getTemplateId(String path) {

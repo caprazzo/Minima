@@ -26,10 +26,11 @@ ListView = Backbone.View.extend({
 	reposition: function(prevView, nextView) {
 		var pos = null;
 		if (!prevView) {
-			pos = nextView.model.get('pos') + 65536;
+			pos = nextView.model.get('pos') / 2;
+			
 		}
 		else if (!nextView) {
-			pos = prevView.model.get('pos') / 2;
+			pos = prevView.model.get('pos') + 65536;
 		}
 		else {
 			pos = prevView.model.get('pos') + ((nextView.model.get('pos') - prevView.model.get('pos')) / 2);

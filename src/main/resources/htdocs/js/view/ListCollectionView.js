@@ -9,7 +9,7 @@ ListCollectionView = Backbone.View.extend({
 	    this.notes = args.notes;
 		this._listViews = {};
 		this.lists.each(this.addList);		
-		this.lists.bind('change:pos', this.onChangePos, this);
+		this.lists.bind('sort', this.onChangePos, this);
 		this.lists.bind('add', this.addList, this);
 		this.lists.bind('remove', this.removeList, this);
 		this.tag = '[ListCollectionView]';
@@ -57,12 +57,14 @@ ListCollectionView = Backbone.View.extend({
 		if (!listView)
 			return;
 		
+		console.log(_.map(this._listViews, function(list) { return list.model.get('name'); }));
+		
 		this._sortViewCache();
 		
 		var target = _.indexOf(_.keys(this._listViews), list.id);
 		var current = $(listView.el).index();
 		
-		console.log(_.keys(this._listViews), list.id, target, current);
+		console.log(_.map(this._listViews, function(list) { return list.model.get('name'); }), 'moving', list.get('name'), 'from', current, 'to', target);
 		
 		if (target != current) {
 			$(listView.el).remove();
