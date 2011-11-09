@@ -55,7 +55,7 @@ All configurations are optional
 
 ### V 0.9
 
-* lists can be rearranged
+* lists can be added, archived and rearranged
 
 ### V 0.8 - 04 November 2011
 

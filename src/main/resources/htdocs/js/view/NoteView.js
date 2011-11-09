@@ -38,6 +38,15 @@ NoteView = Backbone.View.extend({
 		return this;
 	},
 	
+	startDrag: function() {
+		this._isDragging = true;
+		this.ui.archive.hide();
+	},
+	
+	stopDrag: function() {
+		this._isDragging = false;
+	},
+	
 	remove: function() {
 		$(this.el).remove();
 	},
