@@ -8,19 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.inject.Inject;
-
-import net.caprazzi.minima.framework.HttpUtils;
+import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
-import net.caprazzi.minima.service.MinimaAppService;
 
 public class MinimaAppServlet extends HttpServlet {
 
-	
-	private final MinimaAppService service;
+	private final BuildServices service;
 
-	@Inject
-	public MinimaAppServlet(MinimaAppService service) {
+	public MinimaAppServlet(BuildServices service) {
 		this.service = service;
 	}
 
@@ -29,10 +24,7 @@ public class MinimaAppServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
-		
-		System.out.println(req.getContextPath() + "app/lib");
-		System.out.println(req.getRequestURI());
-		
+				
 		if (info.isPath(req.getContextPath() + "/app/libs")) {
 			handleLibsRequest(info, req, resp);
 			return;
@@ -48,9 +40,20 @@ public class MinimaAppServlet extends HttpServlet {
 			return;
 		}
 		
-		HttpUtils.sendNotFoundJson(resp);
+		handleDevelResourceRequest(req.getRequestURI(), resp);
 	}
 	
+	// This will serve original files
+	private void handleDevelResourceRequest(String requestURI,
+			// TODO: disable caches
+			// TODO: set content type? Mhh this could be js or css, can I guess from
+			// the request? Does it matter?
+			HttpServletResponse resp) throws IOException {
+		ServletOutputStream out = resp.getOutputStream();
+		service.writeFile(requestURI, out);
+		out.close();
+	}
+
 	private void handleLibsRequest(RequestInfo info, HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");

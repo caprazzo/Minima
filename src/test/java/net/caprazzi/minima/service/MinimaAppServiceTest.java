@@ -4,24 +4,25 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import net.caprazzi.minima.framework.ImportsDescriptor;
+import net.caprazzi.minima.framework.BuildDescriptor;
+import net.caprazzi.minima.framework.BuildServices;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 public class MinimaAppServiceTest {
 
-	private MinimaAppService service;
-	private ImportsDescriptor descriptor;
+	private BuildServices service;
+	private BuildDescriptor descriptor;
 
 
 	@Before
 	public void setup() {
-		descriptor = mock(ImportsDescriptor.class);
-		service = new MinimaAppService(descriptor);
+		descriptor = mock(BuildDescriptor.class);
+		service = new BuildServices(descriptor);
 		
 		when(descriptor.getCssPaths()).thenReturn(new String[] {
 			"css/a.css", "css/b.css", "css/c.css"
@@ -38,7 +39,7 @@ public class MinimaAppServiceTest {
 	
 	@Test
 	public void test_should_return_devel_css_html_links() {
-		String link = service.getDevelCssHtmlLink("xxxx/");
+		String link = service.getDevelCssTags("xxxx/");
 		assertEquals(link, 
 			"<link href=\"xxxx/css/a.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
 			"<link href=\"xxxx/css/b.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
@@ -47,7 +48,7 @@ public class MinimaAppServiceTest {
 
 	@Test
 	public void test_should_return_devel_lib_html_links() {
-		String link = service.getDevelLibsHtmlLink("xxxx/");
+		String link = service.getDevelLibsTags("xxxx/");
 		assertEquals(link, 
 			"<script src=\"xxxx/js/lib/a.js\" type=\"text/javascript\"></script>\n" +
 			"<script src=\"xxxx/js/lib/b.js\" type=\"text/javascript\"></script>\n" +
@@ -56,7 +57,7 @@ public class MinimaAppServiceTest {
 	
 	@Test
 	public void test_should_return_devel_main_html_links() {
-		String link = service.getDevelMainHtmlLink("xxxx/");
+		String link = service.getDevelMainTags("xxxx/");
 		assertEquals(link, 
 			"<script src=\"xxxx/js/main/a.js\" type=\"text/javascript\"></script>\n" +
 			"<script src=\"xxxx/js/main/b.js\" type=\"text/javascript\"></script>\n" +
@@ -65,20 +66,20 @@ public class MinimaAppServiceTest {
 	
 	@Test
 	public void test_should_return_compact_css_html_link() {
-		String link = service.getProductionCssHtmlLink("xxxx/");
+		String link = service.getProductionCssTag("xxxx/");
 		assertEquals(link, 
 			"<link href=\"xxxx/app/css\" rel=\"stylesheet\" type=\"text/css\"/>");
 	}
 	
 	@Test
 	public void test_should_return_compact_libs_html_link() {
-		String link = service.getProductionLibsHtmlLink("xxxx/");
+		String link = service.getProductionLibsTag("xxxx/");
 		assertEquals(link, "<script src=\"xxxx/app/libs\" type=\"text/javascript\"></script>");
 	}
 	
 	@Test
 	public void test_should_Return_compact_main_html_link() {
-		String link = service.getProductionMainHtmlLink("xxxx/");
+		String link = service.getProductionMainTag("xxxx/");
 		assertEquals(link, "<script src=\"xxxx/app/main\" type=\"text/javascript\"></script>");
 	}
 	
@@ -88,7 +89,7 @@ public class MinimaAppServiceTest {
 		when(descriptor.getData("css/b.css")).thenReturn("b.css".getBytes());
 		when(descriptor.getData("css/c.css")).thenReturn("c.css".getBytes());
 		
-		ByteOutputStream baos = new ByteOutputStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		service.writeProductionCssData(baos);
 		
 		assertEquals(new String(baos.toByteArray()), "a.css\nb.css\nc.css\n");		
@@ -100,7 +101,7 @@ public class MinimaAppServiceTest {
 		when(descriptor.getData("js/lib/b.js")).thenReturn("b.js".getBytes());
 		when(descriptor.getData("js/lib/c.js")).thenReturn("c.js".getBytes());
 		
-		ByteOutputStream baos = new ByteOutputStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		service.writeProductionLibsData(baos);
 		
 		assertEquals(new String(baos.toByteArray()), "a.js\nb.js\nc.js\n");
@@ -112,7 +113,7 @@ public class MinimaAppServiceTest {
 		when(descriptor.getData("js/main/b.js")).thenReturn("b.js".getBytes());
 		when(descriptor.getData("js/main/c.js")).thenReturn("c.js".getBytes());
 		
-		ByteOutputStream baos = new ByteOutputStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		service.writeProductionMainData(baos);
 		
 		assertEquals(new String(baos.toByteArray()), "a.js\nb.js\nc.js\n");

@@ -14,13 +14,10 @@ import net.caprazzi.minima.framework.RequestInfo;
 
 import org.eclipse.jetty.util.IO;
 
-import com.google.inject.Inject;
-
 public class MinimaLoginServlet extends HttpServlet {
 
 	private final String password;
 
-	@Inject
 	public MinimaLoginServlet(String password) {
 		this.password = password;
 	}

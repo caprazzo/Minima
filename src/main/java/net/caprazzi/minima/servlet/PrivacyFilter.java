@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.inject.Inject;
-
 import net.caprazzi.minima.framework.RequestInfo;
 
 public class PrivacyFilter implements Filter {
@@ -22,7 +20,6 @@ public class PrivacyFilter implements Filter {
 	private final boolean publicView;
 	private final boolean privateAccess;
 
-	@Inject
 	public PrivacyFilter(boolean privateAccess, boolean publicView) {
 		this.privateAccess = privateAccess;
 		this.publicView = publicView;

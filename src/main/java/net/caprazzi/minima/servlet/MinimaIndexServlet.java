@@ -9,25 +9,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.framework.SkimpyTemplate;
-import net.caprazzi.minima.service.MinimaAppService;
 
 import org.eclipse.jetty.util.IO;
-
-import com.google.inject.Inject;
 
 @SuppressWarnings("serial")
 public class MinimaIndexServlet extends HttpServlet {
 
 	private String boardTitle;
 	private final String websocketLocation;
-	private final MinimaAppService appService;
+	private final BuildServices build;
 
-	@Inject
-	public MinimaIndexServlet(String websocketLocation, MinimaAppService appService) {
+	public MinimaIndexServlet(String websocketLocation, BuildServices buildService) {
 		this.websocketLocation = websocketLocation;
-		this.appService = appService;
+		this.build = buildService;
 	}
 
 	@Override
@@ -45,12 +42,14 @@ public class MinimaIndexServlet extends HttpServlet {
 			return;
 		}
 		
+		
 		resp.setContentType("text/html");
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
-		PrintWriter writer = resp.getWriter();
 		
+		SkimpyTemplate index = build.getPage("index");
 		
-		SkimpyTemplate template = new SkimpyTemplate(in)
+//		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
+			
+		index
 			.add("BOARD_TITLE", boardTitle)
 			.add("READ_ONLY", req.getAttribute("minima.readonly").toString())
 			.add("WEBSOCKET_LOCATION", websocketLocation.equals("auto") 
@@ -58,24 +57,24 @@ public class MinimaIndexServlet extends HttpServlet {
 			.add("DATA_LOCATION", req.getContextPath() + "/data")
 			.add("COMET_LOCATION", req.getContextPath() + "/comet")
 			.add("LOGIN_URL", req.getContextPath() + "/login")
-			.add("TEMPLATES", appService.getTemplatesHtml());
+			.add("TEMPLATES", build.getTemplatesHtml());
 		
 		if (req.getParameter("devel") != null) {
-			template
-				.add("CSS_IMPORTS", appService.getDevelCssHtmlLink(req.getContextPath()))
-				.add("LIB_IMPORTS", appService.getDevelLibsHtmlLink(req.getContextPath()))
-				.add("MAIN_IMPORTS", appService.getDevelMainHtmlLink(req.getContextPath()));			
+			index
+				.add("CSS_IMPORTS", build.getDevelCssTags(req.getContextPath()))
+				.add("LIB_IMPORTS", build.getDevelLibsTags(req.getContextPath()))
+				.add("MAIN_IMPORTS", build.getDevelMainTags(req.getContextPath()));			
 		}			
 		else {
-			template
-				.add("CSS_IMPORTS", appService.getProductionCssHtmlLink(req.getContextPath()))
-				.add("LIB_IMPORTS", appService.getProductionLibsHtmlLink(req.getContextPath()))
-				.add("MAIN_IMPORTS", appService.getProductionMainHtmlLink(req.getContextPath()));
+			index
+				.add("CSS_IMPORTS", build.getProductionCssTag(req.getContextPath()))
+				.add("LIB_IMPORTS", build.getProductionLibsTag(req.getContextPath()))
+				.add("MAIN_IMPORTS", build.getProductionMainTag(req.getContextPath()));
 		}
 
-		template.write(writer);
-		writer.close();
-		in.close();
+		PrintWriter writer = resp.getWriter();
+		index.write(writer);
+		writer.close();		
 	}
 
 	public void setTitle(String boardTitle) {

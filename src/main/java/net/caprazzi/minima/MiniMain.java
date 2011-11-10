@@ -1,14 +1,9 @@
 package net.caprazzi.minima;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
-
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
-import net.caprazzi.minima.framework.ImportsDescriptor;
-import net.caprazzi.minima.service.MinimaAppService;
+import net.caprazzi.minima.framework.BuildDescriptor;
+import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.service.MinimaDb;
 import net.caprazzi.minima.service.MinimaPushService;
 import net.caprazzi.minima.service.MinimaService;
@@ -38,8 +33,8 @@ public class MiniMain {
 		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
 		db.setAutoPurge(true);
 		
-		ImportsDescriptor descriptor = ImportsDescriptor.fromFile("imports.js");		
-		MinimaAppService appService = new MinimaAppService(descriptor);
+		BuildDescriptor descriptor = BuildDescriptor.fromFile("build.js");		
+		BuildServices appService = new BuildServices(descriptor);
 		
 		MinimaIndexServlet indexServlet = new MinimaIndexServlet(websocketLocation, appService);
 		indexServlet.setTitle(boardTitle);

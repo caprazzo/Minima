@@ -22,8 +22,6 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import com.google.inject.Inject;
-
 public class MinimaServer {
 
 	private final MinimaService minimaService;
@@ -35,7 +33,6 @@ public class MinimaServer {
 	private Server server;
 	private final MinimaAppServlet appServlet;
 
-	@Inject
 	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet, MinimaIndexServlet indexServlet, MinimaLoginServlet loginServlet, PrivacyFilter privacyFilter, MinimaAppServlet appServlet) {
 		this.minimaService = minimaService;
 		this.websocketServlet = websocketServlet;
