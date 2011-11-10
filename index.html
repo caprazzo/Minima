@@ -1,87 +1,174 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+<head>
+<meta charset="utf-8">
+<title>Minima</title>
+<meta name="description" content="">
+<meta name="author" content="">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+<!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <!-- Le styles -->
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-      }
-    </style>
+<!-- Le styles -->
+<link rel="stylesheet"
+	href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+<style type="text/css">
+body {
+	padding-top: 60px;
+}
+</style>
 
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  </head>
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72"
+	href="images/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114"
+	href="images/apple-touch-icon-114x114.png">
+</head>
 
-  <body>
+<body>
 
-    <div class="topbar">
-      <div class="fill">
-        <div class="container">
-          <a class="brand" href="#">Minima</a>
-          <ul class="nav">
-          	<!-- 
-	            <li class="active"><a href="#">Home</a></li>
-	            <li><a href="#about">About</a></li>
-	            <li><a href="#contact">Contact</a></li>
-             -->
-          </ul>
-        </div>
-      </div>
-    </div>
+	<div class="topbar">
+		<div class="fill">
+			<div class="container">
+				<a class="brand" href="#">Minima</a>
+				<ul class="nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#download">Download</a></li>
+					<li><a href="#install">Install</a></li>
+					<li><a href="#source">Source Code</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-    <div class="container">
+	<div class="container">
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
+		<!-- Main hero unit for a primary marketing message or call to action -->
+		<div class="hero-unit">
+			<h1>Minima</h1>
+			<p>Use minima to organize and share notes</p>
+			<p>
+				<ul>
+					<li>Simple</li>
+					<li>Install on your host</li>
+					<li>Open source</li>
+				</ul>
+			</p>
+			<p>
+				<a href="http://minima.caprazzi.net/demo/index"
+					class="btn primary large">Demo &raquo;</a>
+			</p>
+		</div>
+
+		<!-- 
+      <img src="https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.8.png"/>
+       -->
+
+		<!-- 
       <div class="hero-unit">
-        <h1>Minima</h1>
-        <p>Use minima to organize and share project notes</p>
-        <br/>
-        <p><a href="http://minima.caprazzi.net/demo/index" class="btn primary large">Enough said, show me the Demo!</a></p>
+      	<ul class="media-grid">
+      		<li>
+      			<img class="thumbnail" src="http://placehold.it/210x150" alt="">
+      			blah blah blah
+      		</li>
+      		<li>
+      			<img class="thumbnail" src="http://placehold.it/210x150" alt="">
+      		</li>
+      	</ul>
       </div>
-      
-      <div class="hero-unit">
-      	<img src="https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.8.png"/>
-      </div>
+ 	-->
+		<section id="about">
+			<div class="page-header">
+				<h1>About Minima</h1>
+			</div>
+			<div class="row">
+				<div class="span5">
+					<h2>Simple</h2>
+					<ul>
+						<li>Add with one click</li>
+						<li>Drag to organize</li>
+						<li>Archive when done</li>
+						<li>Show archived stuff if you want</li>
+					</ul>
+					<!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+				</div>
+				<div class="span5">
+					<h2>Flexible</h2>
+					<ul>
+						<li>Create as many lists or notes you like</li>
+						<li>The layout adapts to the browser size</li>
+					</ul>
+				</div>
+				<div class="span5">
+					<h2>Always fresh</h2>
+					<ul>
+						<li>When another user makes a change, it is
+						immediately displayed on your board</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+		
+		<section id="install">
+			<div class="page-header">
+				<h1>Install</h1>
+			</div>
+			<div>
+				<p>
+					Minima comes as a standlone server with an embedded database. Get up and running in seconds.
+				</p>
+				<ul>
+					<li>Download the latest build</li>
+					<li>java -jar Minima-0.9-standalone.jar (or doubleclick on the jar)</li>
+					<li>Browse to http://localhost:8989/index</li>
+					<li>Bravo!</li>
+				</ul>
+				<h3>Options</h3>
+				<p>
+					Options are passed as Jvm arguments.
+				</p>
+				<p>
+					For example, to start the server on port 8080, use
+					<code>java -jar -Dminima.port=8080 Minima-standalone.jar</code>
+				</p>
+				<dl>
+					<dt>minima.port</dt>
+					<dd>http port, defaults to 8989</dd>
+					<dt>minima.db.dir</dt>
+					<dd>database directory, defaults to ./minima-db and is created if it does not exist</dd>
+					<dt>minima.password</dt>
+					<dd>By default Minima allows anyone to see the board and make changes. If a password is set, it will be requested to see and modify the board.</dd>
+					<dt>minima.readonly</dt>
+					<dd>if this is set to true and a password is configured, non-authenticated users can see but not modify the board</dd>
+				</dl>
+			</div>
+		</section>
+		
+		<section id="source">
+			<div class="page-header">
+				<h1>Source Code</h1>
+			</div>
+			<div>
+				<p>
+					Minima is open source code released under Apache License 2.0
+				</p>
+				<p>
+					You can download and fork Minima on <a href="https://github.com/mcaprari/Minima">Github</a>.
+				</p>
+			</div>
+		</section>
+		<footer>
+			<p>&copy; Company 2011</p>
+		</footer>
 
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="span6">
-          <h2>Heading</h2>
-          <p>Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-        <div class="span5">
-          <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-       </div>
-        <div class="span5">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-      </div>
 
-      <footer>
-        <p>&copy; Company 2011</p>
-      </footer>
+	</div>
+	<!-- /container -->
 
-    </div> <!-- /container -->
-
-  </body>
+</body>
 </html>
