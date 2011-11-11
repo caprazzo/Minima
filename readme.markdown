@@ -22,8 +22,8 @@ Screenshot:
 ## For users
  
 ### Install and run
-1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.8-standalone.jar)
-2. java -jar Minima-0.8-standalone.jar (or doubleclick)
+1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.9-standalone.jar)
+2. java -jar Minima-0.9-standalone.jar (or doubleclick)
 3. browse to http://localhost:8989/index
 
 ### Configuration
@@ -49,13 +49,15 @@ All configurations are optional
 ### Build and run (maven)
 
 1. mvn assembly:assembly
-2. java -jar target/minima-0.8-jar-with-dependencies.jar
+2. java -jar target/Minima-0.9-standalone.jar
 
 ## Changelog
 
-### V 0.9
+### V 0.9 - 11 November 2011
 
 * lists can be added, archived and rearranged
+* using backbone.js
+* css and javascript files are served rolled up
 
 ### V 0.8 - 04 November 2011
 
