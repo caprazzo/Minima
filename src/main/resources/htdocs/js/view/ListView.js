@@ -11,9 +11,7 @@ ListView = Backbone.View.extend({
 		this.tag = '[ListView  ' + this.model.name +']';
 	},
 	
-	events: {
-		'mouseenter .list-header': 'showArchive',
-		'mouseleave .list-header': 'hideArchive',
+	events: {		
 		'click .list-archive-btn': 'archiveList'
 	},
 	
@@ -72,8 +70,15 @@ ListView = Backbone.View.extend({
 		}
 		
 		this.ui = {
-			archive: el.find('.list-archive-btn')
+			archive: el.find('.list-archive-btn'),
+			header: el.find('.list-header') 
 		}
+		
+		var view = this;
+		this.ui.header.hover(
+			function() { view.showArchive() },
+			function() { view.hideArchive() }
+		);
 		
 		this._rendered = true;
 		return this;

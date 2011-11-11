@@ -11,8 +11,6 @@ NoteView = Backbone.View.extend({
 	},
 	
 	events: {
-		'mouseenter': 'showArchive',
-		'mouseleave': 'hideArchive',
 		'dblclick': 'activateEdit',
 		'keypress .note-textarea': 'onEditEnter',
 		'keyup .note-textarea': 'onEditEsc',
@@ -35,6 +33,13 @@ NoteView = Backbone.View.extend({
 		if (this.readonly)
 			this.ui.el.addClass('note-container-readonly');
 		this._rendered = true;
+		
+		var view = this;
+		this.ui.el.hover(
+			function() { view.showArchive() },
+			function() { view.hideArchive() }
+		);
+		
 		return this;
 	},
 	
