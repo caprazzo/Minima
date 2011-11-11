@@ -40,7 +40,8 @@ public class MinimaAppServlet extends HttpServlet {
 			return;
 		}
 		
-		handleDevelResourceRequest(req.getRequestURI(), resp);
+		String path = req.getRequestURI().substring(req.getContextPath().length());
+		handleDevelResourceRequest(path, resp);
 	}
 	
 	// This will serve original files

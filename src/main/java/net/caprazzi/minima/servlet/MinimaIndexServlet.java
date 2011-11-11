@@ -61,15 +61,15 @@ public class MinimaIndexServlet extends HttpServlet {
 		
 		if (req.getParameter("devel") != null) {
 			index
-				.add("CSS_IMPORTS", build.getDevelCssTags(req.getContextPath() + "/"))
-				.add("LIB_IMPORTS", build.getDevelLibsTags(req.getContextPath() + "/"))
-				.add("MAIN_IMPORTS", build.getDevelMainTags(req.getContextPath() + "/"));			
+				.add("CSS_IMPORTS", build.getDevelCssTags(req.getContextPath()))
+				.add("LIB_IMPORTS", build.getDevelLibsTags(req.getContextPath()))
+				.add("MAIN_IMPORTS", build.getDevelMainTags(req.getContextPath()));			
 		}			
 		else {
 			index
-				.add("CSS_IMPORTS", build.getProductionCssTag(req.getContextPath() + "/"))
-				.add("LIB_IMPORTS", build.getProductionLibsTag(req.getContextPath() + "/"))
-				.add("MAIN_IMPORTS", build.getProductionMainTag(req.getContextPath() + "/"));
+				.add("CSS_IMPORTS", build.getProductionCssTag(req.getContextPath()))
+				.add("LIB_IMPORTS", build.getProductionLibsTag(req.getContextPath()))
+				.add("MAIN_IMPORTS", build.getProductionMainTag(req.getContextPath()));
 		}
 
 		PrintWriter writer = resp.getWriter();

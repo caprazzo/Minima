@@ -31,7 +31,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getDevelCssTags(String basepath) {
-		return allTags(CSS_FMT, basepath, descriptor.getExternalCssPaths());
+		return allTags(CSS_FMT, fixPath(basepath), descriptor.getExternalCssPaths());
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getDevelLibsTags(String basepath) {
-		return allTags(SCRIPT_FMT, basepath, descriptor.getExternalLibsPaths());
+		return allTags(SCRIPT_FMT, fixPath(basepath), descriptor.getExternalLibsPaths());
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getDevelMainTags(String basepath) {
-		return allTags(SCRIPT_FMT, basepath, descriptor.getExternalMainPaths());
+		return allTags(SCRIPT_FMT, fixPath(basepath), descriptor.getExternalMainPaths());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getProductionCssTag(String basepath) {
-		return  String.format(CSS_FMT, basepath, "app/css", "");
+		return  String.format(CSS_FMT, fixPath(basepath), "app/css", "");
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getProductionLibsTag(String basepath) {
-		return  String.format(SCRIPT_FMT, basepath, "app/libs", "");
+		return  String.format(SCRIPT_FMT, fixPath(basepath), "app/libs", "");
 	}
 	
 	/**
@@ -76,9 +76,13 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getProductionMainTag(String basepath) {
-		return  String.format(SCRIPT_FMT, basepath, "app/main", "");
+		return  String.format(SCRIPT_FMT, fixPath(basepath), "app/main", "");
 	}
 	
+	private String fixPath(String basepath) {
+		return basepath.endsWith("/") ? basepath : basepath + "/"; 
+	}
+
 	/**
 	 * Reads all css files and writes them out
 	 * @param out
