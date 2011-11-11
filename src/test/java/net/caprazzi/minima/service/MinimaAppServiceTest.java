@@ -1,7 +1,7 @@
 package net.caprazzi.minima.service;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -21,47 +21,47 @@ public class MinimaAppServiceTest {
 
 	@Before
 	public void setup() {
-		descriptor = mock(BuildDescriptor.class);
+		descriptor = spy(new BuildDescriptor());
 		service = new BuildServices(descriptor);
-		
-		when(descriptor.getCssPaths()).thenReturn(new String[] {
-			"css/a.css", "css/b.css", "css/c.css"
+
+		descriptor.setCss(new String[] {
+			"/css/a.css", "/css/b.css", "/css/c.css"
 		});
 		
-		when(descriptor.getLibsPaths()).thenReturn(new String[] {
-			"js/lib/a.js", "js/lib/b.js", "js/lib/c.js"	
+		descriptor.setLibs(new String[] {
+			"/js/lib/a.js", "/js/lib/b.js", "/js/lib/c.js"	
 		});
 		
-		when(descriptor.getMainPaths()).thenReturn(new String[] {
-			"js/main/a.js", "js/main/b.js", "js/main/c.js"	
+		descriptor.setMain(new String[] {
+			"/js/main/a.js", "/js/main/b.js", "/js/main/c.js"	
 		});
 	}
 	
 	@Test
 	public void test_should_return_devel_css_html_links() {
 		String link = service.getDevelCssTags("xxxx/");
-		assertEquals(link, 
-			"<link href=\"xxxx/css/a.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
-			"<link href=\"xxxx/css/b.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
-			"<link href=\"xxxx/css/c.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
+		assertEquals(link.replaceAll("\\?[0-9]*", ""), // removing cache-defeating query param
+			"<link href=\"xxxx/app/css/a.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
+			"<link href=\"xxxx/app/css/b.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
+			"<link href=\"xxxx/app/css/c.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
 	}
 
 	@Test
 	public void test_should_return_devel_lib_html_links() {
 		String link = service.getDevelLibsTags("xxxx/");
-		assertEquals(link, 
-			"<script src=\"xxxx/js/lib/a.js\" type=\"text/javascript\"></script>\n" +
-			"<script src=\"xxxx/js/lib/b.js\" type=\"text/javascript\"></script>\n" +
-			"<script src=\"xxxx/js/lib/c.js\" type=\"text/javascript\"></script>\n");
+		assertEquals(link.replaceAll("\\?[0-9]*", ""), // removing cache-defeating query param
+			"<script src=\"xxxx/app/js/lib/a.js\" type=\"text/javascript\"></script>\n" +
+			"<script src=\"xxxx/app/js/lib/b.js\" type=\"text/javascript\"></script>\n" +
+			"<script src=\"xxxx/app/js/lib/c.js\" type=\"text/javascript\"></script>\n");
 	}
 	
 	@Test
 	public void test_should_return_devel_main_html_links() {
 		String link = service.getDevelMainTags("xxxx/");
-		assertEquals(link, 
-			"<script src=\"xxxx/js/main/a.js\" type=\"text/javascript\"></script>\n" +
-			"<script src=\"xxxx/js/main/b.js\" type=\"text/javascript\"></script>\n" +
-			"<script src=\"xxxx/js/main/c.js\" type=\"text/javascript\"></script>\n");
+		assertEquals(link.replaceAll("\\?[0-9]*", ""), // removing cache-defeating query param
+			"<script src=\"xxxx/app/js/main/a.js\" type=\"text/javascript\"></script>\n" +
+			"<script src=\"xxxx/app/js/main/b.js\" type=\"text/javascript\"></script>\n" +
+			"<script src=\"xxxx/app/js/main/c.js\" type=\"text/javascript\"></script>\n");
 	}
 	
 	@Test
@@ -85,9 +85,9 @@ public class MinimaAppServiceTest {
 	
 	@Test
 	public void test_should_return_all_css_in_one_go() throws IOException {
-		when(descriptor.getData("css/a.css")).thenReturn("a.css".getBytes());
-		when(descriptor.getData("css/b.css")).thenReturn("b.css".getBytes());
-		when(descriptor.getData("css/c.css")).thenReturn("c.css".getBytes());
+		doReturn("a.css".getBytes()).when(descriptor).getData("/css/a.css");
+		doReturn("b.css".getBytes()).when(descriptor).getData("/css/b.css");
+		doReturn("c.css".getBytes()).when(descriptor).getData("/css/c.css");
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		service.writeProductionCssData(baos);
@@ -97,9 +97,9 @@ public class MinimaAppServiceTest {
 	
 	@Test
 	public void test_should_return_all_libs_in_one_go() throws IOException {
-		when(descriptor.getData("js/lib/a.js")).thenReturn("a.js".getBytes());
-		when(descriptor.getData("js/lib/b.js")).thenReturn("b.js".getBytes());
-		when(descriptor.getData("js/lib/c.js")).thenReturn("c.js".getBytes());
+		doReturn("a.js".getBytes()).when(descriptor).getData("/js/lib/a.js");
+		doReturn("b.js".getBytes()).when(descriptor).getData("/js/lib/b.js");
+		doReturn("c.js".getBytes()).when(descriptor).getData("/js/lib/c.js");
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		service.writeProductionLibsData(baos);
@@ -109,9 +109,9 @@ public class MinimaAppServiceTest {
 	
 	@Test
 	public void test_should_return_all_main_in_one_go() throws IOException {
-		when(descriptor.getData("js/main/a.js")).thenReturn("a.js".getBytes());
-		when(descriptor.getData("js/main/b.js")).thenReturn("b.js".getBytes());
-		when(descriptor.getData("js/main/c.js")).thenReturn("c.js".getBytes());
+		doReturn("a.js".getBytes()).when(descriptor).getData("/js/main/a.js");
+		doReturn("b.js".getBytes()).when(descriptor).getData("/js/main/b.js");
+		doReturn("c.js".getBytes()).when(descriptor).getData("/js/main/c.js");
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		service.writeProductionMainData(baos);

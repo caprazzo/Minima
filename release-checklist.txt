@@ -1,3 +1,5 @@
+- update changelog
+- bump pom
 - create and upload artifact
 - update readme with upload link
 - deploy new version to server
