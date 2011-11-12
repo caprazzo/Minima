@@ -7,7 +7,7 @@ Peek at [this project board](http://minima.caprazzi.net/minima/ "Minima project 
 
 Screenshot:
 
-![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.8.png "Minima Screenshot")
+![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.9.png "Minima Screenshot")
 
 ### Features:
 
