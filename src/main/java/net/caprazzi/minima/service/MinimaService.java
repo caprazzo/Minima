@@ -94,7 +94,7 @@ public class MinimaService {
 	
 	public void createStory(String key, byte[] jsonStory, final CreateStory cb) {
 		
-		Story story = fromJson(jsonStory);
+		Story story = Story.fromJson(jsonStory);
 		story.setId(key);
 		story.setRevision(1);
 		
@@ -192,61 +192,6 @@ public class MinimaService {
 			return;
 		}
 		
-	}
-	
-	public Story fromPostStoryJson(byte[] story) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			Stories postStory = mapper.readValue(story, Stories.class);
-			return postStory.getStories().get(0);			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	public Story fromJson(byte[] story) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			return mapper.readValue(story, Story.class);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private boolean validateStoryData(final byte[] story, final Callback cb) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			Story read = mapper.readValue(story, Story.class);
-			if (isEmpty(read.getDesc(), read.getList())) {
-				cb.error("Data is missing some fields", new IllegalArgumentException("Data is missing some fields"));
-			}
-			return true;
-		} catch (JsonParseException e) {
-			cb.error("Error while parsing data", e);
-		} catch (JsonMappingException e) {
-			cb.error("Error mapping object", e);
-		} catch (IOException e) {
-			cb.error("IO error", e);
-		}
-		return false;
-	}
-
-	
-	private boolean isEmpty(String... args) {
-		for (String arg : args) {
-			if (arg == null || arg.trim().length() == 0)
-				return true;
-		}
-		return false;
-	}
-
-	public byte[] asJson(Story story) {
-		 ObjectMapper mapper = new ObjectMapper();
-		 try {
-			return mapper.writeValueAsBytes(story);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 	
 	public interface Callback {

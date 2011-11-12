@@ -53,7 +53,7 @@ public class MinimaServiceTest {
 		Story story = new Story("key", "dsec", "tofo");
 		
 		story.setPos(new BigDecimal(99));
-		byte[] data = service.asJson(story);
+		byte[] data = story.toJson();
 		service.createStory("id", data, TestUtils.createStoryNoop);
 		
 		story.setRevision(1);
@@ -78,7 +78,7 @@ public class MinimaServiceTest {
 	@Test
 	public void test_should_create_good_json() throws JsonParseException, IOException {
 		Story story = new Story("key", "description", "todo");
-		byte[] asJson = service.asJson(story);
+		byte[] asJson = story.toJson();
 		Story readBack = new ObjectMapper().readValue(asJson, Story.class);
 		assertEquals(story, readBack);
 	}

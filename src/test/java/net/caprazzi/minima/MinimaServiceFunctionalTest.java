@@ -55,7 +55,7 @@ public class MinimaServiceFunctionalTest {
 	public void create_story_should_return_story_with_id_and_rev() {
 		Story story = new Story(null,"desc","list");
 		story.setPos(new BigDecimal(99));
-		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+		service.createStory("id", story.toJson(), new TestUtils.TestCreateStory() {
 			
 			@Override
 			public void success(Story stored) {
@@ -74,7 +74,7 @@ public class MinimaServiceFunctionalTest {
 	public void create_story_should_push_created() {
 		Story story = new Story(null,"desc","list");
 		story.setPos(new BigDecimal(99));
-		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+		service.createStory("id", story.toJson(), new TestUtils.TestCreateStory() {
 			
 			@Override
 			public void success(Story stored) {
@@ -141,7 +141,7 @@ public class MinimaServiceFunctionalTest {
 	public void created_stories_should_be_in_board() throws JsonParseException, IOException {
 		Story story = new Story(null,"desc","list");
 		story.setPos(new BigDecimal(99));
-		service.createStory("id", service.asJson(story), TestUtils.createStoryNoop);
+		service.createStory("id", story.toJson(), TestUtils.createStoryNoop);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStreamWriter out = new OutputStreamWriter(baos);
 		service.writeBoard(out);
@@ -164,7 +164,7 @@ public class MinimaServiceFunctionalTest {
 	public void updated_stories_should_be_in_board() throws JsonParseException, IOException {
 		Story story = new Story(null,"desc","list");
 		story.setPos(new BigDecimal(99));
-		service.createStory("id", service.asJson(story), new TestUtils.TestCreateStory() {
+		service.createStory("id", story.toJson(), new TestUtils.TestCreateStory() {
 			@Override
 			public void success(Story updated) {
 				updated.setDesc("newDesc");

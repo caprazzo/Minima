@@ -153,6 +153,12 @@ public class MinimaDb {
 			@Override
 			public void notFound(String key) {
 			}
+
+			@Override
+			public void error(String key, Exception e) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 	}
 
@@ -185,6 +191,10 @@ public class MinimaDb {
 			
 			@Override
 			public void deleted(String key, byte[] data) {}
+
+			@Override
+			public void error(String key, Exception e) {
+			}
 		});
 	}
 
@@ -224,6 +234,12 @@ public class MinimaDb {
 							
 							@Override
 							public void deleted(String key, byte[] data) {}
+
+							@Override
+							public void error(String key, Exception e) {
+								// TODO Auto-generated method stub
+								
+							}
 						});
 					}
 					
