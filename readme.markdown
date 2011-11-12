@@ -11,8 +11,8 @@ Screenshot:
 
 ### Features:
 
-* create, edit and rearrange notes between lists
-* edit list names
+* add, edit and drag notes between lists
+* add, edit and rearrange lists
 * live updates: all connected browsers are updated
 * desktop notifications (supported browsers only)
 * password protection - same password for all users (see configuration below to enable)
