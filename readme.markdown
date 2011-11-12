@@ -53,11 +53,11 @@ All configurations are optional
 
 ## Changelog
 
-### V 0.9 - 11 November 2011
+### V 0.9 - 12 November 2011
 
 * lists can be added, archived and rearranged
 * using backbone.js
-* css and javascript files are served rolled up
+* css and javascript files are served rolled up by default
 
 ### V 0.8 - 04 November 2011
 
