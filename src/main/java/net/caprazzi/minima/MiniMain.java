@@ -6,7 +6,7 @@ import net.caprazzi.minima.framework.BuildDescriptor;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.service.MinimaDb;
 import net.caprazzi.minima.service.MinimaPushService;
-import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.servlet.MinimaAppServlet;
 import net.caprazzi.minima.servlet.MinimaCometServlet;
 import net.caprazzi.minima.servlet.MinimaIndexServlet;
@@ -54,7 +54,7 @@ public class MiniMain {
 		
 		MinimaDb minimaDbHelper = new MinimaDb(db);
 		minimaDbHelper.init();
-		MinimaService minimaService = new MinimaService(db, pushService);
+		DataService minimaService = new DataService(db, pushService);
 		final MinimaServer minimaServer = new MinimaServer(
 				minimaService,
 				websocketServlet, 

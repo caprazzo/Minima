@@ -8,7 +8,9 @@ Note = Backbone.Model.extend({
 		return {
 			
 		};
-	},
+	}
+	
+	/*,
 	
 	toJSON: function() {
 		return {
@@ -23,4 +25,5 @@ Note = Backbone.Model.extend({
 			}
 		}
 	}
+	*/
 });

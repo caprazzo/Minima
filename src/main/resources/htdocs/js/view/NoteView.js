@@ -21,7 +21,7 @@ NoteView = Backbone.View.extend({
 		var el = $(this.el);	
 		el.attr('id', 'note-'+ this.model.id);
 		var json = this.model.toJSON();
-		json.obj.desc = this._filter(json.obj.desc);
+		json.desc = this._filter(json.desc);
 		el.html(this.template(json));
 		this.ui = {
 			el: el,

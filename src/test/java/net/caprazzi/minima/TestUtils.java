@@ -7,9 +7,7 @@ import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.minima.model.Story;
-import net.caprazzi.minima.service.MinimaService.CreateStory;
-import net.caprazzi.minima.service.MinimaService.Update;
+import net.caprazzi.minima.service.DataService.Update;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,17 +31,6 @@ public class TestUtils {
 		
 	};
 	
-	public final static CreateStory createStoryNoop = new CreateStory() {
-		@Override
-		public void error(String string, Exception e) {
-			System.out.println("CreateStory error: " + string + " ex:" + e);
-			throw new RuntimeException(string, e);
-		}
-		
-		@Override
-		public void success(Story story) {}
-	};
-	
 	public final static Update updateStoryNoop = new Update() {
 		@Override
 		public void error(String string, Exception e) {
@@ -51,24 +38,15 @@ public class TestUtils {
 		}
 		
 		@Override
-		public void success(String key, int rev, byte[] data) {}
-
-		@Override
 		public void collision(String key, int yourRev, int foundRev) {}
+
+		@Override
+		public void success(String key, int revision, Object updated) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	};
-	
-	public static class TestCreateStory extends CreateStory {
-
-		@Override
-		public void error(String string, Exception e) {			
-			throw new RuntimeException("unexpected error: " + string, e);
-		}
-
-		@Override
-		public void success(Story story) {
-			throw new RuntimeException("unexpected success");
-		}
-	}
 	
 	public static class TestUpdateStory extends Update {
 		@Override
@@ -77,13 +55,14 @@ public class TestUtils {
 		}
 
 		@Override
-		public void success(String key, int rev, byte[] data) {
-			throw new RuntimeException("unexpected success");
+		public void collision(String key, int yourRev, int foundRev) {
+			throw new RuntimeException("unexpected collision");
 		}
 
 		@Override
-		public void collision(String key, int yourRev, int foundRev) {
-			throw new RuntimeException("unexpected collision");
+		public void success(String key, int revision, Object updated) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	
