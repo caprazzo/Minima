@@ -14,7 +14,7 @@ import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
 
-public class MinimaDb {
+public class DbHelper {
 
 	public static final String MASTER_KEY = "minimaster";
 
@@ -26,7 +26,7 @@ public class MinimaDb {
 	
 	private final Db db;
 
-	public MinimaDb(Db db) {
+	public DbHelper(Db db) {
 		this.db = db;
 	}
 	

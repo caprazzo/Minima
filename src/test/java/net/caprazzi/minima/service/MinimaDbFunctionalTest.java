@@ -22,13 +22,13 @@ public class MinimaDbFunctionalTest {
 
 	private File testDir;
 	private KeezFileDb db;
-	private MinimaDb minimaDb;
+	private DbHelper minimaDb;
 
 	@Before
 	public void setUp() {
 		testDir = Files.createTempDir();
 		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx", false);
-		minimaDb = new MinimaDb(db);
+		minimaDb = new DbHelper(db);
 	}
 	
 	@Test

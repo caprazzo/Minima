@@ -23,9 +23,9 @@ public class DataService {
 
 	private final Keez.Db db;
 
-	private final MinimaPushService pushServlet;
+	private final PushService pushServlet;
 
-	public DataService(final Keez.Db db, MinimaPushService pushService) {
+	public DataService(final Keez.Db db, PushService pushService) {
 		this.db = db;
 		this.pushServlet = pushService;
 	}

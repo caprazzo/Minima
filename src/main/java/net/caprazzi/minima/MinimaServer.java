@@ -7,12 +7,12 @@ import javax.servlet.DispatcherType;
 
 import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
-import net.caprazzi.minima.servlet.MinimaAppServlet;
-import net.caprazzi.minima.servlet.MinimaCometServlet;
-import net.caprazzi.minima.servlet.MinimaIndexServlet;
-import net.caprazzi.minima.servlet.MinimaLoginServlet;
+import net.caprazzi.minima.servlet.AppServlet;
+import net.caprazzi.minima.servlet.CometServlet;
+import net.caprazzi.minima.servlet.IndexServlet;
+import net.caprazzi.minima.servlet.LoginServlet;
 import net.caprazzi.minima.servlet.DataServlet;
-import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
+import net.caprazzi.minima.servlet.WebsocketServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
 
 import org.eclipse.jetty.server.Server;
@@ -25,15 +25,15 @@ import org.eclipse.jetty.servlet.ServletHolder;
 public class MinimaServer {
 
 	private final DataService minimaService;
-	private final MinimaWebsocketServlet websocketServlet;
-	private final MinimaIndexServlet indexServlet;
-	private final MinimaCometServlet cometServlet;
-	private final MinimaLoginServlet loginServlet;
+	private final WebsocketServlet websocketServlet;
+	private final IndexServlet indexServlet;
+	private final CometServlet cometServlet;
+	private final LoginServlet loginServlet;
 	private final PrivacyFilter privacyFilter;
 	private Server server;
-	private final MinimaAppServlet appServlet;
+	private final AppServlet appServlet;
 
-	public MinimaServer(DataService minimaService, MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet, MinimaIndexServlet indexServlet, MinimaLoginServlet loginServlet, PrivacyFilter privacyFilter, MinimaAppServlet appServlet) {
+	public MinimaServer(DataService minimaService, WebsocketServlet websocketServlet, CometServlet cometServlet, IndexServlet indexServlet, LoginServlet loginServlet, PrivacyFilter privacyFilter, AppServlet appServlet) {
 		this.minimaService = minimaService;
 		this.websocketServlet = websocketServlet;
 		this.cometServlet = cometServlet;

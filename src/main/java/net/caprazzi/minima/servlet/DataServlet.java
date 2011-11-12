@@ -1,7 +1,6 @@
 package net.caprazzi.minima.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 
 import javax.servlet.ServletException;
@@ -11,14 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.RequestInfo;
-import net.caprazzi.minima.model.ToJson;
-import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
+import net.caprazzi.minima.model.ToJson;
 import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.service.DataService.Update;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
 
-public class MinimaAppServlet extends HttpServlet {
+public class AppServlet extends HttpServlet {
 
 	private final BuildServices service;
 
-	public MinimaAppServlet(BuildServices service) {
+	public AppServlet(BuildServices service) {
 		this.service = service;
 	}
 

@@ -16,13 +16,13 @@ import net.caprazzi.minima.framework.SkimpyTemplate;
 import org.eclipse.jetty.util.IO;
 
 @SuppressWarnings("serial")
-public class MinimaIndexServlet extends HttpServlet {
+public class IndexServlet extends HttpServlet {
 
 	private String boardTitle;
 	private final String websocketLocation;
 	private final BuildServices build;
 
-	public MinimaIndexServlet(String websocketLocation, BuildServices buildService) {
+	public IndexServlet(String websocketLocation, BuildServices buildService) {
 		this.websocketLocation = websocketLocation;
 		this.build = buildService;
 	}

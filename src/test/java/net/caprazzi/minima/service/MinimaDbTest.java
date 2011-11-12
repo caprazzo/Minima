@@ -29,19 +29,19 @@ import org.junit.Test;
 public class MinimaDbTest {
 
 	private Db db;
-	private MinimaDb minimaDb;
-	private String masterKey = MinimaDb.MASTER_KEY;
+	private DbHelper minimaDb;
+	private String masterKey = DbHelper.MASTER_KEY;
 	private byte[] masterRecord = "record".getBytes();
 
 	@Before
 	public void setUp() {
 		db = mock(Keez.Db.class);
-		minimaDb = new MinimaDb(db);
+		minimaDb = new DbHelper(db);
 	}
 	
 	@Test
 	public void init_should_put_master_record_and_lists_if_not_there() {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		doAnswer(getNotFound).when(db).get(eq(masterKey), any(Get.class));
 		when(minimaDb.getMasterRecord()).thenReturn(masterRecord);
@@ -52,7 +52,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void init_should_update_if_no_master_key_and_then_install_master_record() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		doAnswer(getNotFound).when(db).get(eq(masterKey), any(Get.class));
 		when(minimaDb.getMasterRecord()).thenReturn(masterRecord);
@@ -65,7 +65,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void init_should_not_install_master_record_if_upgrade_fails() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		doAnswer(getNotFound).when(db).get(eq(masterKey), any(Get.class));
 		
@@ -78,7 +78,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void init_should_not_upgrade_if_master_record_presesnt() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		doAnswer(getFound(1, masterRecord))
 			.when(db).get(eq(masterKey), any(Get.class));
@@ -90,7 +90,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void upgradeFrom0to1_shold_do_nothing_if_database_empty() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		Entry[] entries = new Entry[] {};
 		
 		doAnswer(listFound(entries)).when(db).list(any(List.class));
@@ -103,36 +103,36 @@ public class MinimaDbTest {
 	
 	@Test
 	public void upgradeFrom0To1_should_create_list_entries() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		minimaDb.upgradeFrom0to1();
 		
-		verify(minimaDb).createList(MinimaDb.ID_LIST_TODO, "todo", 65536);
-		verify(minimaDb).createList(MinimaDb.ID_LIST_DOING, "doing" , 65536 * 2);
-		verify(minimaDb).createList(MinimaDb.ID_LIST_DONE, "done", 65536 * 3);
+		verify(minimaDb).createList(DbHelper.ID_LIST_TODO, "todo", 65536);
+		verify(minimaDb).createList(DbHelper.ID_LIST_DOING, "doing" , 65536 * 2);
+		verify(minimaDb).createList(DbHelper.ID_LIST_DONE, "done", 65536 * 3);
 		
 		verify(minimaDb).upgradeStories();
 	}
 	
 	@Test
 	public void upgradeFrom0To1_should_rollback_lists_if_one_fails() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
-		doThrow(new Exception()).when(minimaDb).createList(MinimaDb.ID_LIST_DOING, "doing", 65536 * 2);
+		doThrow(new Exception()).when(minimaDb).createList(DbHelper.ID_LIST_DOING, "doing", 65536 * 2);
 		
 		try {
 			minimaDb.upgradeFrom0to1();
 			fail();
 		} catch (Exception e) {}
 		
-		verify(minimaDb).rollbackInstallList(MinimaDb.ID_LIST_TODO);
-		verify(minimaDb).rollbackInstallList(MinimaDb.ID_LIST_DOING);
-		verify(minimaDb).rollbackInstallList(MinimaDb.ID_LIST_DONE);
+		verify(minimaDb).rollbackInstallList(DbHelper.ID_LIST_TODO);
+		verify(minimaDb).rollbackInstallList(DbHelper.ID_LIST_DOING);
+		verify(minimaDb).rollbackInstallList(DbHelper.ID_LIST_DONE);
 	}
 	
 	@Test
 	public void upgradeFrom0To1_should_rollback_lists_if_update_story_fails() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
 			new Entry("story0", 1, "somedata".getBytes()),
@@ -148,14 +148,14 @@ public class MinimaDbTest {
 		} catch (Exception e) {}
 				
 		
-		verify(minimaDb).rollbackInstallList(MinimaDb.ID_LIST_TODO);
-		verify(minimaDb).rollbackInstallList(MinimaDb.ID_LIST_DOING);
-		verify(minimaDb).rollbackInstallList(MinimaDb.ID_LIST_DONE);
+		verify(minimaDb).rollbackInstallList(DbHelper.ID_LIST_TODO);
+		verify(minimaDb).rollbackInstallList(DbHelper.ID_LIST_DOING);
+		verify(minimaDb).rollbackInstallList(DbHelper.ID_LIST_DONE);
 	}
 	
 	@Test
 	public void upgradeFrom0to1_should_upgrade_each_story() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
 			new Entry("story1", 1, new Story("id1", "desc1", "todo").toJson()),
@@ -172,7 +172,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void upgradeFrom0to1_should_delete_old_stories_after_upgrade() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
 			new Entry("story1", 1, new Story("id1", "desc1", "todo").toJson()),
@@ -189,7 +189,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void upgradeFrom0To1_should_rollback_if_any_upgrade_fails_then_throw() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
 			new Entry("story1", 1, new Story("id1", "desc1", "todo").toJson()),
@@ -219,7 +219,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void upgradeFrom0To1_rollback_keeps_going_if_rollback_fails_then_throw() throws Exception {
-		minimaDb = spy(new MinimaDb(db));
+		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
 			new Entry("story0", 0, new Story("id0", "desc0", "todo").toJson()),
@@ -248,7 +248,7 @@ public class MinimaDbTest {
 		byte[] storyData = story.toJson();		
 		Entry entry = spy(new Entry("keyA", 130, storyData));
 		
-		Story upgraded = new Story("keyArx","title", MinimaDb.ID_LIST_TODO);
+		Story upgraded = new Story("keyArx","title", DbHelper.ID_LIST_TODO);
 		upgraded.setRevision(1);
 		
 		Meta<Story> wrap = Meta.wrap("story", upgraded);

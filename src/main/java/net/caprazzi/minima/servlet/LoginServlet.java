@@ -14,11 +14,11 @@ import net.caprazzi.minima.framework.RequestInfo;
 
 import org.eclipse.jetty.util.IO;
 
-public class MinimaLoginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
 	private final String password;
 
-	public MinimaLoginServlet(String password) {
+	public LoginServlet(String password) {
 		this.password = password;
 	}
 	
