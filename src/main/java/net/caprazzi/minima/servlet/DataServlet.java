@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-import net.caprazzi.minima.model.ToJson;
+import net.caprazzi.minima.model.Entity;
 import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.service.DataService.Update;
 
@@ -78,52 +78,47 @@ public class DataServlet extends HttpServlet {
 	private void saveList(HttpServletRequest req, final HttpServletResponse resp,
 			RequestInfo info) throws IOException {
 		
-		String key = info.get(-2);
+		String id = info.get(-2);
 		int revision = Integer.parseInt(info.get(-1));
 		byte[] data = IO.readBytes(req.getInputStream());
-		
 		StoryList list = StoryList.fromJson(data);
 		
-		minimaService.update(key, revision, list, new GenericUpdate(resp, list.getClass()));
+		update(resp, id, revision, list);
 	}
 
 	private void saveStory(HttpServletRequest req,
 			final HttpServletResponse resp, RequestInfo info)
 			throws IOException {
-		String key = info.get(-2);
 		
+		String id = info.get(-2);
 		int revision = Integer.parseInt(info.get(-1));
 		byte[] storyJson = IO.readBytes(req.getInputStream());
 		Story story = Story.fromJson(storyJson);
 		
-		minimaService.update(key, revision, story, new GenericUpdate(resp, story.getClass()));
+		update(resp, id, revision, story);
 	}
 	
-	private static class GenericUpdate<T> extends Update<ToJson> {
+	private void update(final HttpServletResponse resp, String id, int revision, Entity e) {
+		minimaService.update(id, revision, e, new Update() {
 
-		private final HttpServletResponse resp;
-		
-		public GenericUpdate(HttpServletResponse resp, Class<T> clz) {
-			this.resp = resp;
-		}
-
-		@Override
-		public void error(String message, Exception e) {
-			logger.error("Error while updating story " + message, e);
-			sendError(resp, 500, "Internal Server Error");
-		}
-
-		@Override
-		public void collision(String key, int yourRev, int foundRev) {
-			logger.warn("Collision while updating item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
-			sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
-		}
-
-		@Override
-		public void success(String key, int revision, ToJson updated) {
-			sendJson(resp, 201, updated.toJson());
-		}
-
+			@Override
+			public void error(String message, Exception e) {
+				logger.error("Error while updating story " + message, e);
+				sendError(resp, 500, "Internal Server Error");
+			}
+	
+			@Override
+			public void collision(String key, int yourRev, int foundRev) {
+				logger.warn("Collision while updating item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+				sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
+			}
+	
+			@Override
+			public void success(String key, int revision, Entity updated) {
+				sendJson(resp, 201, updated.toJson());
+			}
+	
+		});
 	}
 	
 	private static void sendJson(HttpServletResponse resp, int status, byte[] data) {

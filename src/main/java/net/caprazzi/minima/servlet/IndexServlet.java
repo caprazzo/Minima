@@ -1,7 +1,6 @@
 package net.caprazzi.minima.servlet;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.framework.SkimpyTemplate;
-
-import org.eclipse.jetty.util.IO;
 
 @SuppressWarnings("serial")
 public class IndexServlet extends HttpServlet {

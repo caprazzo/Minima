@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class StoryList implements ToJson {
+public class StoryList implements Entity {
 
 	private BigDecimal pos;
 	private String id;

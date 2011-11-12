@@ -1,7 +1,6 @@
 package net.caprazzi.minima.model;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -15,11 +14,29 @@ public class Meta<T> {
 	private T obj;
 	private String name; 
 	
-	private static HashMap<String, Class> knownTypes = new HashMap<String, Class>();
-	static {
-		knownTypes.put("story", Story.class);
-		knownTypes.put("list", StoryList.class);
-		knownTypes.put("master_record", MasterRecord.class);
+	private enum Types {
+		
+		story(Story.class),
+		list(StoryList.class), 
+		master_record(MasterRecord.class);
+		
+		private final Class<?> clazz;
+
+		Types(Class<?> clazz) {
+			this.clazz = clazz;
+		}
+		
+		public static Class<?> getType(String name) {
+			return Types.valueOf(name).clazz;
+		}
+		
+		public static Types fromClass(Class<?> clazz) {
+			if (story.clazz == clazz)
+				return story;
+			if (list.clazz == clazz)
+				return list;
+			throw new IllegalArgumentException();
+		}
 	}
 
 	private Meta(String name, T obj) {
@@ -31,7 +48,12 @@ public class Meta<T> {
 		return new Meta<T>(name, obj);
 	}
 	
-	public static Meta fromJson(byte[] json) {
+	public static Meta<Entity> wrap(Entity obj) {
+		String name = Types.fromClass(obj.getClass()).name();
+		return wrap(name, obj);
+	}
+	
+	public static Meta<?> fromJson(byte[] json) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			JsonFactory jf = mapper.getJsonFactory();
@@ -39,7 +61,7 @@ public class Meta<T> {
 			JsonNode tree = mapper.readTree(parser);
 			JsonNode node = tree.get("name");
 			String name = node.getValueAsText();
-			Object obj = mapper.readValue(tree.get("obj").toString(), knownTypes.get(name));
+			Object obj = mapper.readValue(tree.get("obj").toString(), Types.getType(name));
 			return wrap(node.getValueAsText(), obj);
 		}
 		catch (Exception e) {
@@ -91,9 +113,9 @@ public class Meta<T> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public <K> K getObj(Class<K> clazz) {
 		return (K) this.obj;
 	}
-
 	
 }

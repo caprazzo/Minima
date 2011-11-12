@@ -6,7 +6,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
@@ -26,7 +25,7 @@ public class WebsocketServlet extends WebSocketServlet {
 			try {
 				member.sendMessage(data);
 			} catch (IOException e) {
-				Log.info("error while sending message");
+				e.printStackTrace();
 			}
 		}
 	}

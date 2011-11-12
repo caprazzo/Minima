@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
 
+@SuppressWarnings("serial")
 public class AppServlet extends HttpServlet {
 
 	private final BuildServices service;

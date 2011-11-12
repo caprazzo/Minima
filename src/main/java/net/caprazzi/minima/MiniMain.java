@@ -1,18 +1,17 @@
 package net.caprazzi.minima;
 
-import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.simpleFileDb.KeezFileDb;
 import net.caprazzi.minima.framework.BuildDescriptor;
 import net.caprazzi.minima.framework.BuildServices;
+import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.service.DbHelper;
 import net.caprazzi.minima.service.PushService;
-import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.servlet.AppServlet;
 import net.caprazzi.minima.servlet.CometServlet;
 import net.caprazzi.minima.servlet.IndexServlet;
 import net.caprazzi.minima.servlet.LoginServlet;
-import net.caprazzi.minima.servlet.WebsocketServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
+import net.caprazzi.minima.servlet.WebsocketServlet;
 
 public class MiniMain {
 

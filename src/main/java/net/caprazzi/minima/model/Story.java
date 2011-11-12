@@ -13,7 +13,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * - whan a story is placed between two other stories, its pos becomes high_story.pos + ((high_story.pos - low_story.pos)/2)
  *
  */
-public class Story implements ToJson {
+public class Story implements Entity {
 
 	private String id;
 	private String desc;

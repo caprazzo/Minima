@@ -7,6 +7,7 @@ import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
+import net.caprazzi.minima.model.Entity;
 import net.caprazzi.minima.service.DataService.Update;
 
 import org.mockito.invocation.InvocationOnMock;
@@ -41,7 +42,7 @@ public class TestUtils {
 		public void collision(String key, int yourRev, int foundRev) {}
 
 		@Override
-		public void success(String key, int revision, Object updated) {
+		public void success(String key, int revision, Entity updated) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -60,7 +61,7 @@ public class TestUtils {
 		}
 
 		@Override
-		public void success(String key, int revision, Object updated) {
+		public void success(String key, int revision, Entity updated) {
 			// TODO Auto-generated method stub
 			
 		}

@@ -10,7 +10,7 @@ import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-import net.caprazzi.minima.model.ToJson;
+import net.caprazzi.minima.model.Entity;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -30,27 +30,17 @@ public class DataService {
 		this.pushServlet = pushService;
 	}
 	
-	public static abstract class Update<T> {
-		public abstract void success(String key, int revision, T updated);
+	public static abstract class  Update {
+		public abstract void success(String key, int revision, Entity updated);
 		public abstract void collision(String key, int yourRev, int foundRev);
 		public abstract void error(String string, Exception e);
 	}
 	
-	public void update(String id, final int revision, final Story story, final Update<Story> cb) {
-		final Meta<Story> meta = Meta.wrap("story", story);
-		story.setId(id);
-		story.setRevision(revision + 1);
-		doUpdate(id, revision, meta, cb);
-	}
-	
-	public void update(String id, final int revision, final StoryList list, final Update<StoryList> cb) {
-		final Meta<StoryList> meta = Meta.wrap("list", list);
-		list.setId(id);
-		list.setRevision(revision + 1);
-		doUpdate(id, revision, meta, cb);
-	}
-	
-	private <T extends ToJson> void doUpdate(String id, final int revision, final Meta<T> meta, final Update<T> cb) {
+	public void update(String id, final int revision, final Entity e, final Update cb) {
+		e.setId(id);
+		e.setRevision(revision + 1);
+		
+		final Meta<Entity> meta = Meta.wrap(e);
 		final byte[] writeData = meta.toJson();
 		
 		db.put(id, revision, writeData, new Put() {
@@ -88,7 +78,7 @@ public class DataService {
 					ArrayList<StoryList> lists = new ArrayList<StoryList>();
 					
 					for(Entry e : entries) {
-						Meta meta = Meta.fromJson(e.getData());
+						Meta<?> meta = Meta.fromJson(e.getData());
 						if (meta.getName().equals("list")) {
 							StoryList list = (StoryList) meta.getObj();
 							list.setRevision(e.getRevision());
