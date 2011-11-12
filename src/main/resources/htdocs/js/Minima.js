@@ -1,5 +1,10 @@
 function Minima() {}
 
+KeyCodes = {
+	Enter: 13,
+	Esc: 27
+};
+
 // global event handlers
 (function() {
 	var _onCreateStoryHandler = null;
