@@ -1,6 +1,8 @@
 ListCollectionView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'lists-container',
+	_rendered: false,
+	
 	initialize: function(args) {
 		// bind the functions 'add' and 'remove' to the view.
 	    _(this).bindAll('addList');
@@ -81,8 +83,12 @@ ListCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');	
+			//return this;
+		}
 		this._rendered = true;
+		
 		var that = this;
 		
 		// when draggin an item that is below the fold

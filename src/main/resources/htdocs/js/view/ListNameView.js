@@ -2,6 +2,7 @@ ListNameView = Backbone.View.extend({
 	tagName: 'div',
 	model: List,
 	className: 'list-name-container',
+	_rendered: false,
 	
 	initialize: function(args) {
 		this.template = Templates['list-name-template'];
@@ -17,7 +18,12 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');	
+			return this;
+		}
+		this._rendered = true;
+		
 		var $el = $(this.el);
 		var json = this.model.toJSON();
 		$el.html(this.template(json));
@@ -25,7 +31,7 @@ ListNameView = Backbone.View.extend({
 			edit: $el.find('.list-name-edit'),
 			view: $el.find('.list-name-display')
 		}
-		this._rendered = true;
+		
 		return this;
 	},
 	

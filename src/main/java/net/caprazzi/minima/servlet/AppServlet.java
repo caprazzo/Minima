@@ -1,6 +1,8 @@
 package net.caprazzi.minima.servlet;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -45,12 +47,25 @@ public class AppServlet extends HttpServlet {
 		handleDevelResourceRequest(path, resp);
 	}
 	
+	
 	// This will serve original files
 	private void handleDevelResourceRequest(String requestURI,
-			// TODO: disable caches
-			// TODO: set content type? Mhh this could be js or css, can I guess from
-			// the request? Does it matter?
 			HttpServletResponse resp) throws IOException {
+		
+		if (requestURI.endsWith(".js")) {
+			resp.setContentType("text/javascript");
+		}
+		else if (requestURI.endsWith(".css")) {
+			resp.setContentType("text/css");
+		}
+		
+		long now = new Date().getTime();
+		long year = 1000 * 60 * 60 * 24 * 365;
+		resp.addDateHeader("Last-Modified", now + year);
+		resp.addDateHeader("Expires", now - year);
+		resp.addHeader("Cache-control", "no-cache, must-revalidate");
+		resp.addHeader("Pragma", "no-cache");
+		
 		ServletOutputStream out = resp.getOutputStream();
 		service.writeFile(requestURI, out);
 		out.close();

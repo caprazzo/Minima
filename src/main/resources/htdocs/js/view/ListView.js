@@ -9,7 +9,7 @@ ListView = Backbone.View.extend({
 		this.filteredNotes = args.filteredNotes;
 		this.readonly = args.readonly;
 		this.template = Templates['list-template'];
-		this.tag = '[ListView  ' + this.model.name +']';
+		this.tag = '[ListView  ' + this.model.id +']';
 	},
 	
 	events: {		

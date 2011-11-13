@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import javax.servlet.ServletOutputStream;
-
 
 /**
  * BuildService provides access to client resources (js, css and templates) in plain
@@ -58,7 +56,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getProductionCssTag(String basepath) {
-		return  String.format(CSS_FMT, fixPath(basepath), "app/css", "");
+		return  String.format(CSS_FMT, fixPath(basepath), "app/css");
 	}
 	
 	/**
@@ -67,7 +65,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getProductionLibsTag(String basepath) {
-		return  String.format(SCRIPT_FMT, fixPath(basepath), "app/libs", "");
+		return  String.format(SCRIPT_FMT, fixPath(basepath), "app/libs");
 	}
 	
 	/**
@@ -76,7 +74,7 @@ public class BuildServices {
 	 * @return
 	 */
 	public String getProductionMainTag(String basepath) {
-		return  String.format(SCRIPT_FMT, fixPath(basepath), "app/main", "");
+		return  String.format(SCRIPT_FMT, fixPath(basepath), "app/main");
 	}
 	
 	private String fixPath(String basepath) {
@@ -160,20 +158,16 @@ public class BuildServices {
 	private String allTags(String format, String basepath, String[] paths) {
 		StringBuilder build = new StringBuilder();
 		for (String path : paths) {
-			build.append(String.format(format, basepath, path, "?" + getTimestamp())).append("\n");
+			build.append(String.format(format, basepath, path)).append("\n");
 		}
 		return build.toString();
 	}
 	
 	private static final String SCRIPT_FMT
-		= "<script src=\"%s%s%s\" type=\"text/javascript\"></script>";
+		= "<script src=\"%s%s\" type=\"text/javascript\"></script>";
 	private static final String CSS_FMT 
-		= "<link href=\"%s%s%s\" rel=\"stylesheet\" type=\"text/css\"/>";
+		= "<link href=\"%s%s\" rel=\"stylesheet\" type=\"text/css\"/>";
 	
-	private String getTimestamp() {
-		return Long.toString((new Date().getTime()));
-	}
-
 	public SkimpyTemplate getPage(String name) throws IOException {
 		return new SkimpyTemplate(descriptor.getPage(name));
 	}

@@ -1,6 +1,8 @@
 NoteCollectionView = Backbone.View.extend({
 	tagName: 'ul',
 	className: 'notes-container',
+	_rendered: false,
+	
 	initialize: function(args) {
 		_(this).bindAll('addNote');
 		this.notes = args.notes;
@@ -47,17 +49,16 @@ NoteCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
-		var that = this;
-		if (this._rendered)
-			return;
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');
+			return this;
+		}
 		this._rendered = true;
 		
-		$(this.el).attr('id', 'lists-' + this.listId);
+		var that = this;
 		this._noteViews = {};
 		this._setupContainer();		
 		
-		var that = this;
 		this._noteViews = {};
 		this.filteredNotes.each(this.addNote);
 		return this;
