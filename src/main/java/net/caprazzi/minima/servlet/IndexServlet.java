@@ -39,6 +39,9 @@ public class IndexServlet extends HttpServlet {
 			return;
 		}
 		
+		Boolean readonly = req.getParameter("readonly") != null 
+				|| (Boolean)req.getAttribute("minima.readonly");
+		
 		
 		resp.setContentType("text/html");
 		
@@ -48,7 +51,7 @@ public class IndexServlet extends HttpServlet {
 			
 		index
 			.add("BOARD_TITLE", boardTitle)
-			.add("READ_ONLY", req.getAttribute("minima.readonly").toString())
+			.add("READ_ONLY", readonly.toString())
 			.add("WEBSOCKET_LOCATION", websocketLocation.equals("auto") 
 					? "ws://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath() + "/websocket" : websocketLocation)
 			.add("DATA_LOCATION", req.getContextPath() + "/data")

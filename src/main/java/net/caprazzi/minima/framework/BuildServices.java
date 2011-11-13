@@ -6,8 +6,7 @@ import java.io.OutputStream;
 
 /**
  * BuildService provides access to client resources (js, css and templates) in plain
- * or compiled form. This is used at runtime and, at the moment, there is no caching,
- * so the filesystem is hit.
+ * or compiled form. This is used at runtime and, at the moment, there is no caching
  */
 public class BuildServices {
 

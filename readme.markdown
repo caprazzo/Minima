@@ -51,6 +51,13 @@ All configurations are optional
 1. mvn assembly:assembly
 2. java -jar target/Minima-0.9-standalone.jar
 
+### Notes
+
+Options to /index
+
+* ?devel: js and css files will be oaded separately and with all cacheing disabled
+* ?readonly: the ui be rendered as if in readonly mode
+
 ## Changelog
 
 ### V 0.9 - 12 November 2011
