@@ -26,8 +26,8 @@ public class MiniMain {
 		String websocketLocation = System.getProperty("minima.websocket.location", "auto");
 		String webroot = System.getProperty("minima.webroot", "");
 		
-		boolean isPrivate = (password != null && password.length() > 0);
-		boolean hasPublicView = publicView.equalsIgnoreCase("true");
+		boolean requireSessionToEdit = (password != null && password.length() > 0);
+		boolean requireSessionToView = requireSessionToEdit && !publicView.equalsIgnoreCase("true");
 		
 		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
 		db.setAutoPurge(true);
@@ -42,10 +42,10 @@ public class MiniMain {
 		
 		PushService pushService = new PushService(websocketServlet, cometServlet);
 		
-		PrivacyFilter privacyFilter = new PrivacyFilter(isPrivate, hasPublicView);
+		PrivacyFilter privacyFilter = new PrivacyFilter(requireSessionToView, requireSessionToEdit);
 		LoginServlet loginServlet = null;
 		
-		if (isPrivate) {
+		if (requireSessionToEdit) {
 			loginServlet = new LoginServlet(password);
 		}
 		

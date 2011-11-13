@@ -6,14 +6,14 @@ import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 
 import net.caprazzi.minima.service.DataService;
-import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.AppServlet;
+import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.CometServlet;
+import net.caprazzi.minima.servlet.DataServlet;
 import net.caprazzi.minima.servlet.IndexServlet;
 import net.caprazzi.minima.servlet.LoginServlet;
-import net.caprazzi.minima.servlet.DataServlet;
-import net.caprazzi.minima.servlet.WebsocketServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
+import net.caprazzi.minima.servlet.WebsocketServlet;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.HashSessionManager;

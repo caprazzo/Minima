@@ -78,6 +78,7 @@ public class DataService {
 					ArrayList<StoryList> lists = new ArrayList<StoryList>();
 					
 					for(Entry e : entries) {
+						// Here it would be wiser to use Meta.Types
 						Meta<?> meta = Meta.fromJson(e.getData());
 						if (meta.getName().equals("list")) {
 							StoryList list = (StoryList) meta.getObj();

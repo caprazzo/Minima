@@ -2,6 +2,7 @@ ListView = Backbone.View.extend({
 	tagName: 'li',
 	model: List,
 	className: 'list-container',
+	_rendered: false,
 	
 	initialize: function(args) {
 		this.notes = args.notes;
@@ -41,9 +42,11 @@ ListView = Backbone.View.extend({
 	},
 	
 	render: function() {
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');
+			return this;
+		}
 		this._rendered = true;
-		
-		console.log(this.tag, 'render', this._rendered);
 		var el = $(this.el);		
 		el.html(this.template());
 		
@@ -71,34 +74,16 @@ ListView = Backbone.View.extend({
 		this.ui.notes.append(this.notesView.render().el);
 		this.ui.name.append(this.nameView.render().el);
 		
-		if (this.readonly)
-			return this;
+		if (!this.readonly)
+			this._setupEditUi();
 		
-		var view = this;
-		this.ui.createBtn.show();
-		
-		this.ui.header.hover(
-			function() { view.showArchive() },
-			function() { view.hideArchive() }
-		);
-			
-		var newNote = new Note({});
-		newNote.bind('change', function(note) {
-			var clone = note.clone();
-			note.clear({silent: true});
-			this.createNote(clone);
-		}, this);
-		
-		this.noteEditView = new NoteEditView({model: newNote});
-		this.noteEditView.bind('reset', function() {
-			this.ui.createBtn.show();
-		}, this);
-		this.ui.footer.append(this.noteEditView.render().el);
 		
 		return this;
 	},
 	
 	showCreateView: function() {
+		if (this.readonly)
+			return;
 		this.noteEditView.edit();
 		this.ui.createBtn.hide();
 	},
@@ -144,5 +129,33 @@ ListView = Backbone.View.extend({
 		$(this.el).remove();
 		this.model.set({archived: true});
 		this.model.save();
+	},
+	
+	_setupEditUi: function() {
+		var view = this;
+		
+		this.ui.header.hover(
+			function() { view.showArchive() },
+			function() { view.hideArchive() }
+		);
+
+		this.ui.createBtn.show().hover(
+			function() { view.ui.createBtn.addClass('note-create-btn-hover'); },
+			function() { view.ui.createBtn.removeClass('note-create-btn-hover'); }
+		);
+		
+		var newNote = new Note({});
+		newNote.bind('change', function(note) {
+			var clone = note.clone();
+			note.clear({silent: true});
+			this.createNote(clone);
+		}, this);
+		
+		this.noteEditView = new NoteEditView({model: newNote});
+		this.noteEditView.bind('reset', function() {
+			this.ui.createBtn.show();
+		}, this);
+		
+		this.ui.footer.append(this.noteEditView.render().el);
 	}
 });

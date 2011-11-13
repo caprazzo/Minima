@@ -10,26 +10,24 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import net.caprazzi.minima.framework.RequestInfo;
 
 public class PrivacyFilter implements Filter {
 
+	private final boolean requireSessionToView;
+	private final boolean requireSessionToEdit;
 	
-	private final boolean publicView;
-	private final boolean privateAccess;
-
-	public PrivacyFilter(boolean privateAccess, boolean publicView) {
-		this.privateAccess = privateAccess;
-		this.publicView = publicView;
+	public PrivacyFilter(boolean requireSessionToView, boolean requireSessionToEdit) {
+		this.requireSessionToView = requireSessionToView;
+		this.requireSessionToEdit = requireSessionToEdit;
 	}
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		
 	}
-
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -39,40 +37,48 @@ public class PrivacyFilter implements Filter {
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
 		
-		HttpSession session = req.getSession(false);		
+		boolean hasSession = (req.getSession(false) != null);
 		
+		boolean allowEdit = !requireSessionToEdit || hasSession;
+		boolean allowView = allowEdit || (!requireSessionToView || hasSession);
+		
+		request.setAttribute("minima.readonly", !allowEdit);
+		
+		// redirect /index to /login if login required
+		if (info.isGet("{ctx}/index") && !allowView) {
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
 
-		// if this board 
-		// - is private 
-		// AND has public view enabled
-		// THEN configure request for readonly access, if user is not logged in
-		if (privateAccess && publicView) {
-			request.setAttribute("minima.readonly", (session == null));
+		// redirect /login to /index if login not required
+		if (info.isGet("{ctx}/login") && allowEdit && allowView) {
+			resp.sendRedirect(req.getContextPath() + "/index");
+			return;
+		}
+		
+		// let pass requests to /login if login is required
+		if (info.isPath("{ctx}/login") && (!allowView || !allowEdit)) {
 			chain.doFilter(request, response);
 			return;
 		}
 		
-		// if this board 
-		// is private 
-		// AND does NOT have public view
-		// AND there is no session
-		// THEN send to login or deny access		
-		if (privateAccess && !publicView && session == null) {
-			if (info.isPath(req.getContextPath() + "/login")) {
-				chain.doFilter(request, response);
-				return;
-			}						
-			if (info.isPath(req.getContextPath() + "/index")) {
-				resp.sendRedirect(req.getContextPath() + "/login");
-			}
-			else {
-				resp.sendError(403);
-			}
+		// only show logout if there is a session
+		if (info.isGet("{ctx}/logout") && !hasSession) {
+			resp.sendRedirect(req.getContextPath() + "/index");
 			return;
 		}
 		
-		// in all other cases set readonly to false and proceed
-		request.setAttribute("minima.readonly", false);
+		// stop all other reads if view is not allowed
+		if (info.isRead() && !allowView) {
+			resp.sendError(403);
+			return;
+		}
+		
+		// stop all other writes if view is not required
+		if (info.isWrite() && !allowEdit) {
+			resp.sendError(403);
+			return;
+		}
 		
 		chain.doFilter(request, response);
 	}

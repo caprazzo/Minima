@@ -63,7 +63,23 @@
 	border-radius: 3px;
 	width: 98%;
 }
-
+.note-create-btn {
+	border: 1px solid #ccc;
+	background-color: #efefef;
+	color: #efefef;
+	border-radius: 4px;
+	margin-bottom: 1px;
+	cursor: pointer;	
+	padding-top: 6px;
+	padding-bottom: 6px;	
+	min-height: 1em;
+	text-align: center;
+	display: none;
+}
+.note-create-btn-hover {
+	background-color: #ddd;
+	color: #888;
+}
 .list-create-btn {
 	border: 1px solid #ccc;
 	background-color: #efefef;

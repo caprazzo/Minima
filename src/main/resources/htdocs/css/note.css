@@ -52,20 +52,3 @@
 .notes-container {
 	min-height: 2.5em;
 }
-.note-create-btn {
-	border: 1px solid #ccc;
-	background-color: #efefef;
-	color: #efefef;
-	border-radius: 4px;
-	margin-bottom: 1px;
-	cursor: pointer;	
-	padding-top: 6px;
-	padding-bottom: 6px;	
-	min-height: 1em;
-	display:block;
-	text-align: center;
-}
-.note-create-btn-hover {
-	background-color: #ddd;
-	color: #888;
-}
