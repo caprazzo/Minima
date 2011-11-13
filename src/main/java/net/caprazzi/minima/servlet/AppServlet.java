@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.BuildServices;
+import net.caprazzi.minima.framework.HttpUtils;
 import net.caprazzi.minima.framework.RequestInfo;
 
 @SuppressWarnings("serial")
@@ -59,18 +60,13 @@ public class AppServlet extends HttpServlet {
 			resp.setContentType("text/css");
 		}
 		
-		long now = new Date().getTime();
-		long year = 1000 * 60 * 60 * 24 * 365;
-		resp.addDateHeader("Last-Modified", now + year);
-		resp.addDateHeader("Expires", now - year);
-		resp.addHeader("Cache-control", "no-cache, must-revalidate");
-		resp.addHeader("Pragma", "no-cache");
+		HttpUtils.sendNoCacheHeaders(resp);
 		
 		ServletOutputStream out = resp.getOutputStream();
 		service.writeFile(requestURI, out);
 		out.close();
 	}
-
+	
 	private void handleLibsRequest(RequestInfo info, HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");

@@ -3,8 +3,6 @@ package net.caprazzi.minima.framework;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
-
 
 /**
  * BuildService provides access to client resources (js, css and templates) in plain
