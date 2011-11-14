@@ -1,15 +1,11 @@
 package net.caprazzi.slabs;
 
-import java.io.IOException;
-
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -39,27 +35,32 @@ public class Slabs {
 		return typeMap[name.hashCode() % typeMap.length];
 	}
 	
+	private Function<Keez.Entry, SlabsDoc> fun = new Function<Keez.Entry, SlabsDoc>() {
+		@Override
+		public SlabsDoc apply(Entry e) {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				ObjectNode root = mapper.readValue(e.getData(), ObjectNode.class);
+				String typeName = root.get("name").getTextValue();
+				Class<?> clz = getType(typeName);						
+				return (SlabsDoc) mapper.readValue(root.get("obj"), clz);
+			} catch (Exception ex) {				
+				throw new RuntimeException();
+			}
+		}
+	};
 	
 	public void list(final SlabsList list) {
 		db.list(new List() {
 			@Override
 			public void entries(Iterable<Entry> entries) {
-				Iterable<SlabsDoc> docs = Iterables.transform(entries, new Function<Keez.Entry, SlabsDoc>() {
-					@Override
-					public SlabsDoc apply(Entry e) {
-						ObjectMapper mapper = new ObjectMapper();
-						try {
-							ObjectNode root = mapper.readValue(e.getData(), ObjectNode.class);
-							String typeName = root.get("name").getTextValue();
-							Class<?> clz = getType(typeName);						
-							return (SlabsDoc) mapper.readValue(root.get("obj"), clz);
-						} catch (Exception ex) {
-							list.error("Exception while listing database", ex);
-							throw new RuntimeException();
-						}
-					}
-				});
-				list.entries(docs);
+				try {
+					list.entries(Iterables.transform(entries, fun));
+				}
+				catch (Exception ex) {
+					list.error("Error while listing database", ex);
+				}
+				
 			}
 		});			
 	}
