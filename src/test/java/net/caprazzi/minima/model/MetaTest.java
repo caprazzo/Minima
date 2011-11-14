@@ -38,7 +38,7 @@ public class MetaTest {
 		System.out.println(new String(asJson));
 	}
 	
-	public static class MockModel {
+	public static class MockModel extends Entity {
 		
 		private String value;
 		public String getValue() {
@@ -46,6 +46,27 @@ public class MetaTest {
 		}
 		public void setValue(String value) {
 			this.value = value;
+		}
+		
+		@Override
+		public void setId(String id) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void setRevision(int revision) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public String getId() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		@Override
+		public int getRevision() {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 		
 	}

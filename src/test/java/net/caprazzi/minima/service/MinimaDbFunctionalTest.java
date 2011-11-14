@@ -90,9 +90,11 @@ public class MinimaDbFunctionalTest {
 	public void should_upgrade_existing_legacy_database() {
 		
 		// simulate existing db version 0
+		/*
 		db.put("story1", 0, new Story("story1", "desc1", "todo").toJson(), TestUtils.putNoop);
 		db.put("story2", 0, new Story("story2", "desc2", "todo").toJson(), TestUtils.putNoop);
 		db.put("story3", 0, new Story("story3", "desc3", "doing").toJson(), TestUtils.putNoop);
+		*/
 		
 		minimaDb.init();
 		
@@ -150,9 +152,11 @@ public class MinimaDbFunctionalTest {
 	public void should_leave_alone_existing_recent_db() {
 
 		// simulate existing db version 0
+		/*
 		db.put("story1", 0, new Story("story1", "desc1", "todo").toJson(), TestUtils.putNoop);
 		db.put("story2", 0, new Story("story2", "desc2", "todo").toJson(), TestUtils.putNoop);
 		db.put("story3", 0, new Story("story3", "desc3", "doing").toJson(), TestUtils.putNoop);
+		*/
 		
 		// upgrade to v1
 		minimaDb.init();

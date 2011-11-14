@@ -37,22 +37,21 @@ public class MiniMain {
 		
 		IndexServlet indexServlet = new IndexServlet(websocketLocation, appService);
 		indexServlet.setTitle(boardTitle);
+		
 		WebsocketServlet websocketServlet = new WebsocketServlet();
-		CometServlet cometServlet = new CometServlet();
-		
-		PushService pushService = new PushService(websocketServlet, cometServlet);
-		
+		CometServlet cometServlet = new CometServlet();		
+		PushService pushService = new PushService(websocketServlet, cometServlet);		
 		PrivacyFilter privacyFilter = new PrivacyFilter(requireSessionToView, requireSessionToEdit);
-		LoginServlet loginServlet = null;
 		
-		if (requireSessionToEdit) {
-			loginServlet = new LoginServlet(password);
-		}
-		
+		LoginServlet loginServlet = (requireSessionToEdit)
+				? new LoginServlet(password)
+				: null;
+				
 		AppServlet appServlet = new AppServlet(appService);
 		
 		DbHelper minimaDbHelper = new DbHelper(db);
 		minimaDbHelper.init();
+		
 		DataService minimaService = new DataService(db, pushService);
 		final MinimaServer minimaServer = new MinimaServer(
 				minimaService,
@@ -70,7 +69,6 @@ public class MiniMain {
 				try {
 					minimaServer.shutdown();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

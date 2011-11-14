@@ -9,7 +9,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class Meta<T> {
+public class Meta<T extends Entity> {
 
 	private T obj;
 	private String name; 
@@ -44,7 +44,7 @@ public class Meta<T> {
 		this.obj = obj;
 	}
 	
-	public static <T> Meta<T> wrap(String name, T obj) {
+	public static <T extends Entity> Meta<T> wrap(String name, T obj) {
 		return new Meta<T>(name, obj);
 	}
 	
@@ -53,7 +53,7 @@ public class Meta<T> {
 		return wrap(name, obj);
 	}
 	
-	public static Meta<?> fromJson(byte[] json) {
+	public static Meta<? extends Entity> fromJson(byte[] json) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			JsonFactory jf = mapper.getJsonFactory();
@@ -61,7 +61,7 @@ public class Meta<T> {
 			JsonNode tree = mapper.readTree(parser);
 			JsonNode node = tree.get("name");
 			String name = node.getValueAsText();
-			Object obj = mapper.readValue(tree.get("obj").toString(), Types.getType(name));
+			Entity obj = (Entity) mapper.readValue(tree.get("obj").toString(), Types.getType(name));
 			return wrap(node.getValueAsText(), obj);
 		}
 		catch (Exception e) {
@@ -69,7 +69,7 @@ public class Meta<T> {
 		}
 	}
 	
-	public static <T> Meta<T> fromJson(Class<T> clazz, byte[] json) {
+	public static <T extends Entity> Meta<T> fromJson(Class<T> clazz, byte[] json) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			JsonFactory jf = mapper.getJsonFactory();

@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.RequestInfo;
+import net.caprazzi.minima.model.Entity;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-import net.caprazzi.minima.model.Entity;
 import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.service.DataService.Update;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class DataServlet extends HttpServlet {
 	private final DataService minimaService;
 
 	private final String webroot;
+	private ObjectMapper mapper = new ObjectMapper();
 
 	public DataServlet(String webroot, DataService minimaService) {
 		this.webroot = webroot;
@@ -46,7 +48,7 @@ public class DataServlet extends HttpServlet {
 		
 		resp.setContentType("application/json");
 		Writer out = resp.getWriter();
-		minimaService.writeBoard(out);
+		minimaService.writeJsonBoard(out);
 		out.close();
 		return;
 	}
@@ -115,9 +117,12 @@ public class DataServlet extends HttpServlet {
 	
 			@Override
 			public void success(String key, int revision, Entity updated) {
-				sendJson(resp, 201, updated.toJson());
+				try {
+					sendJson(resp, 201, mapper.writeValueAsBytes(updated.toJson(true)));
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
 			}
-	
 		});
 	}
 	

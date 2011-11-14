@@ -93,7 +93,7 @@ public class MinimaServiceTest {
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStreamWriter writer = new OutputStreamWriter(baos);		
-		service.writeBoard(writer);
+		service.writeJsonBoard(writer);
 		
 		byte[] written = baos.toByteArray();
 		
@@ -120,7 +120,7 @@ public class MinimaServiceTest {
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStreamWriter writer = new OutputStreamWriter(baos);		
-		service.writeBoard(writer);
+		service.writeJsonBoard(writer);
 		
 		byte[] written = baos.toByteArray();
 		
@@ -155,7 +155,7 @@ public class MinimaServiceTest {
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStreamWriter writer = new OutputStreamWriter(baos);		
-		service.writeBoard(writer);
+		service.writeJsonBoard(writer);
 		
 		byte[] written = baos.toByteArray();
 		
