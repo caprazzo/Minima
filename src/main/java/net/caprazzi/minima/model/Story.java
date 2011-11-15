@@ -13,7 +13,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * - whan a story is placed between two other stories, its pos becomes high_story.pos + ((high_story.pos - low_story.pos)/2)
  *
  */
-public class Story implements Entity {
+public class Story extends Entity {
 
 	private String id;
 	private String desc;
@@ -33,10 +33,12 @@ public class Story implements Entity {
 		this.list = list;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 	
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -53,10 +55,12 @@ public class Story implements Entity {
 		this.desc = desc;
 	}
 	
+	@Override
 	public int getRevision() {
 		return revision;
 	}
 	
+	@Override
 	public void setRevision(int revision) {
 		this.revision = revision;
 	}
@@ -106,13 +110,5 @@ public class Story implements Entity {
 		}
 	}
 
-	public byte[] toJson() {
-		ObjectMapper mapper = new ObjectMapper();
-		 try {
-			return mapper.writeValueAsBytes(this);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 	
 }

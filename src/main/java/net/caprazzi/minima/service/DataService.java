@@ -1,19 +1,17 @@
 package net.caprazzi.minima.service;
 
 import java.io.Writer;
-import java.util.ArrayList;
 
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.minima.model.Meta;
-import net.caprazzi.minima.model.Story;
-import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.model.Entity;
+import net.caprazzi.minima.model.Meta;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +46,8 @@ public class DataService {
 			@Override
 			public void ok(String key, int rev) {
 				logger.info("Saved object [" + key + "]@" + rev);
-				cb.success(key, revision, meta.getObj());
-				pushServlet.send(writeData);
+				cb.success(key, revision, e);
+				pushServlet.send(meta);
 			}
 
 			@Override
@@ -64,61 +62,43 @@ public class DataService {
 			}
 		});
 	}
-
-	public void writeBoard(final Writer out) {
+	
+	public void writeJsonBoard(final Writer out) {
 		db.list(new List() {
 
 			@Override
 			public void entries(Iterable<Entry> entries) {
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode root = mapper.createObjectNode();
 				
-				JsonFactory factory = new JsonFactory();
-				try {
-					
-					ArrayList<Story> stories = new ArrayList<Story>();
-					ArrayList<StoryList> lists = new ArrayList<StoryList>();
-					
-					for(Entry e : entries) {
-						// Here it would be wiser to use Meta.Types
-						Meta<?> meta = Meta.fromJson(e.getData());
-						if (meta.getName().equals("list")) {
-							StoryList list = (StoryList) meta.getObj();
-							list.setRevision(e.getRevision());
-							lists.add(list);
-						}
-						else if (meta.getName().equals("story")) {
-							stories.add((Story) meta.getObj());
-						}
+				ArrayNode stories = mapper.createArrayNode();
+				root.put("stories", stories);
+				
+				ArrayNode lists = mapper.createArrayNode();
+				root.put("lists", lists);
+				
+				for(Entry entry : entries) {
+					Meta<?> meta = Meta.fromJson(entry.getData());
+					ObjectNode json = meta.getObj().toJson(true);
+					if (meta.getName().equals("list")) {						
+						lists.add(json);
+					}
+					else  if (meta.getName().equals("story")) {
+						stories.add(json);
 					}
 					
-					JsonGenerator json = factory.createJsonGenerator(out);
-					json.writeStartObject();
-					
-					json.writeFieldName("stories");
-					json.writeStartArray();
-					
-					for (Story s : stories) {
-						json.writeRawValue(new String(s.toJson()));
-					}
-					
-					json.writeEndArray();
-					
-					json.writeFieldName("lists");
-					json.writeStartArray();
-					
-					for(StoryList l : lists) {
-						json.writeRawValue(new String(l.toJson()));
-					}
-					json.writeEndArray();
-					
-					
-					json.writeEndObject();
-					json.flush();
+					json.put("id", entry.getKey());
+					json.put("revision", entry.getRevision());
+				}				
+				
+				try {					
+					mapper.writeValue(out, root);
 				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException("Error while wrinting board to output", e);
+					throw new RuntimeException(e);
 				}
 			}
+			
 		});
 	}
-	
+
 }
