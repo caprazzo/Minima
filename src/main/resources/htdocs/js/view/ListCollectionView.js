@@ -51,6 +51,7 @@ ListCollectionView = Backbone.View.extend({
 		if (view) {
 			delete this._listViews[list.id];
 			view.remove();
+			this.resize($(window).width());
 		}	
 	},
 	
