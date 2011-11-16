@@ -19,7 +19,7 @@ public class DataService {
 
 	private static final Logger logger = LoggerFactory.getLogger("MinimaService");
 
-	private final Keez.Db db;
+	public final Keez.Db db;
 
 	private final PushService pushServlet;
 

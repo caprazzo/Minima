@@ -54,7 +54,7 @@ NoteCollectionView = Backbone.View.extend({
 			return this;
 		}
 		this._rendered = true;
-		
+		this.el.id = 'list-' + this.listId;
 		var that = this;
 		this._noteViews = {};
 		this._setupContainer();		
@@ -146,9 +146,10 @@ NoteCollectionView = Backbone.View.extend({
 				if (!view) return;
 				view.stopDrag();
 			},
-			update: function(e, ui) {
+			update: function(e, ui) {								
 				if (ui.item.parent().attr('id') != that.el.id)
 					return;
+				
 				var view = that._findView(ui.item.attr('id'));
 				if (!view) return;
 				

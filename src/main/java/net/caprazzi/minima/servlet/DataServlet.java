@@ -1,6 +1,7 @@
 package net.caprazzi.minima.servlet;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 
 import javax.servlet.ServletException;
@@ -11,10 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.model.Entity;
+import net.caprazzi.minima.model.List;
+import net.caprazzi.minima.model.Note;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.service.DataService.Update;
+import net.caprazzi.slabs.Slabs;
+import net.caprazzi.slabs.SlabsDoc;
+import net.caprazzi.slabs.SlabsException;
+import net.caprazzi.slabs.SlabsOnKeez;
+import net.caprazzi.slabs.SlabsOnKeez.SlabsPut;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
@@ -65,39 +73,67 @@ public class DataServlet extends HttpServlet {
 		RequestInfo info = RequestInfo.fromRequest(req);
 		
 		if (info.isPath(webroot + "/data/stories/_/_")) {
-			saveStory(req, resp, info);
+			String id = info.get(-2);
+			int revision = Integer.parseInt(info.get(-1));		
+			SlabsDoc note = Note.fromJson(req.getInputStream());
+			save(id, revision, note, resp);
 			return;
 		}
 		
 		if (info.isPath(webroot + "/data/lists/_/_")) {
-			saveList(req, resp, info);
+			String id = info.get(-2);
+			int revision = Integer.parseInt(info.get(-1));
+			List list = List.fromJson(req.getInputStream());
+			save(id, revision, list, resp);
 			return;
 		}
 		
 		sendError(resp, 404, "not found");
 	}
 	
-	private void saveList(HttpServletRequest req, final HttpServletResponse resp,
-			RequestInfo info) throws IOException {
-		
-		String id = info.get(-2);
-		int revision = Integer.parseInt(info.get(-1));
-		byte[] data = IO.readBytes(req.getInputStream());
-		StoryList list = StoryList.fromJson(data);
-		
-		update(resp, id, revision, list);
+	private void save(String id, int revision, SlabsDoc doc, final HttpServletResponse resp) {
+		doc.setId(id);
+		doc.setRevision(revision);
+		Slabs slabs = new SlabsOnKeez(minimaService.db, new Class[] { Note.class, List.class });
+		slabs.put(doc, new SlabsPut() {
+
+			@Override
+			public void ok(SlabsDoc doc) {
+				sendDoc(resp, 201, doc);
+			}
+
+			@Override
+			public void collision(String id, int yourRev, int foundRev) {
+				logger.warn("Collision while updating item ["+id+"@"+yourRev+"]: " +
+						"was expecting revision " + foundRev);
+				sendError(resp, 409, "Could not update item ["+id+"@"+yourRev+"]: " +
+						"was expecting revision " + foundRev);
+			}
+
+			@Override
+			public void error(String id, SlabsException e) {
+				logger.error("Error while updating story " + id, e);
+				sendError(resp, 500, "Internal Server Error");
+			}
+			
+			@Override
+			public void applicationError(SlabsException ex) {
+				sendError(resp, 500, "Internal Server Error");
+			}
+			
+		});
 	}
 
-	private void saveStory(HttpServletRequest req,
-			final HttpServletResponse resp, RequestInfo info)
-			throws IOException {
-		
-		String id = info.get(-2);
-		int revision = Integer.parseInt(info.get(-1));
-		byte[] storyJson = IO.readBytes(req.getInputStream());
-		Story story = Story.fromJson(storyJson);
-		
-		update(resp, id, revision, story);
+	private void sendDoc(HttpServletResponse resp, int status, SlabsDoc doc) {
+		resp.setStatus(201);
+		OutputStream out;
+		try {
+			out = resp.getOutputStream();
+			doc.toJson(out);
+			out.close();
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	private void update(final HttpServletResponse resp, String id, int revision, Entity e) {

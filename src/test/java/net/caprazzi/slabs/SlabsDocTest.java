@@ -39,7 +39,7 @@ public class SlabsDocTest {
 	
 	@Test
 	public void should_serialize_to_plain_format_with_idrev() {
-		ObjectNode node = doc.toJson(false);
+		ObjectNode node = doc.toInternalJson();
 		assertEquals(null, node.get("id"));
 		assertEquals(null, node.get("revision"));
 		assertEquals(doc.getValue(), node.get("value").getValueAsText());
@@ -47,7 +47,7 @@ public class SlabsDocTest {
 	
 	@Test
 	public void should_serialize_to_plain_format_without_idrev() {
-		ObjectNode node = doc.toJson(true);
+		ObjectNode node = doc.toInternalJson();
 		assertEquals("the id", node.get("id").getValueAsText());
 		assertEquals(99, node.get("revision").getValueAsInt());
 		assertEquals(doc.getValue(), node.get("value").getValueAsText());

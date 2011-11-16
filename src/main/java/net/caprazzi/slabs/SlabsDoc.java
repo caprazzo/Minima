@@ -1,10 +1,27 @@
 package net.caprazzi.slabs;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import net.caprazzi.minima.model.Note;
+
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 
 public abstract class SlabsDoc {
 
+	/****
+	 * 
+	 *  TODO: make SlabsDoc immutable
+	 * 
+	 */
 	private String id;
 	private int revision;
 	private String typeName = null;		
@@ -25,18 +42,20 @@ public abstract class SlabsDoc {
 		return revision;
 	}
 	
-	/**
-	 * Returns a json tree with this bean data, with or without 'id' and 'revision' fields
-	 * @param includeIdAndRev
-	 * @return
-	 */
-	public ObjectNode toJson(boolean includeIdAndRev) {
+	public void toJson(OutputStream out) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			mapper.writeValue(out, this);
+		} catch (Exception e) {
+			new SlabsException("Exception while writing json to outputStream", e);
+		}
+	}
+	
+	protected ObjectNode toInternalJson() {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode root = mapper.valueToTree(this);		
-		if (!includeIdAndRev) {
-			root.remove("id");
-			root.remove("revision");
-		}
+		root.remove("id");
+		root.remove("revision");
 		return root;
 	}
 	
@@ -52,7 +71,7 @@ public abstract class SlabsDoc {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode root = mapper.createObjectNode();
 		root.put("name", getTypeName());
-		root.put("obj", toJson(false));
+		root.put("obj", toInternalJson());
 		return root;
 	}
 			
@@ -61,5 +80,26 @@ public abstract class SlabsDoc {
 			typeName = this.getClass().getAnnotation(SlabsType.class).value();
 		return typeName;
 	}
+
+	public static <T> T fromJson(byte[] in, Class<T> clazz) {
+		 MappingJsonFactory jsonFactory = new MappingJsonFactory(); // or, for data binding, org.codehaus.jackson.mapper.MappingJsonFactory 
+		 try {
+			JsonParser jp = jsonFactory.createJsonParser(in);
+			return jp.readValueAs(clazz);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
+	public static <T> T fromJson(InputStream in, Class<T> clazz) {
+		 MappingJsonFactory jsonFactory = new MappingJsonFactory(); // or, for data binding, org.codehaus.jackson.mapper.MappingJsonFactory 
+		 try {
+			JsonParser jp = jsonFactory.createJsonParser(in);
+			return jp.readValueAs(clazz);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
 }
