@@ -10,10 +10,12 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.junit.Ignore;
 
 public abstract class SlabsDoc {
 
@@ -40,6 +42,13 @@ public abstract class SlabsDoc {
 	
 	public final int getRevision() {
 		return revision;
+	}
+	
+	@JsonIgnore
+	public final String getTypeName() {		
+		if (typeName == null)
+			typeName = this.getClass().getAnnotation(SlabsType.class).value();
+		return typeName;
 	}
 	
 	public void toJson(OutputStream out) {
@@ -74,13 +83,12 @@ public abstract class SlabsDoc {
 		root.put("obj", toInternalJson());
 		return root;
 	}
-			
-	final String getTypeName() {		
-		if (typeName == null)
-			typeName = this.getClass().getAnnotation(SlabsType.class).value();
-		return typeName;
+	
+	public ObjectNode toJsonNode() {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.valueToTree(this);
 	}
-
+			
 	public static <T> T fromJson(byte[] in, Class<T> clazz) {
 		 MappingJsonFactory jsonFactory = new MappingJsonFactory(); // or, for data binding, org.codehaus.jackson.mapper.MappingJsonFactory 
 		 try {

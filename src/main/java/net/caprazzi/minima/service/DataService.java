@@ -34,7 +34,7 @@ public class DataService {
 		public abstract void error(String string, Exception e);
 	}
 	
-	public void update(String id, final int revision, final Entity e, final Update cb) {
+	private void update(String id, final int revision, final Entity e, final Update cb) {
 		e.setId(id);
 		e.setRevision(revision + 1);
 		

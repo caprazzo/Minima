@@ -11,21 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.caprazzi.minima.framework.RequestInfo;
-import net.caprazzi.minima.model.Entity;
 import net.caprazzi.minima.model.List;
 import net.caprazzi.minima.model.Note;
-import net.caprazzi.minima.model.Story;
-import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.service.DataService;
-import net.caprazzi.minima.service.DataService.Update;
 import net.caprazzi.slabs.Slabs;
 import net.caprazzi.slabs.SlabsDoc;
 import net.caprazzi.slabs.SlabsException;
 import net.caprazzi.slabs.SlabsOnKeez;
+import net.caprazzi.slabs.SlabsOnKeez.SlabsList;
 import net.caprazzi.slabs.SlabsOnKeez.SlabsPut;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.eclipse.jetty.util.IO;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +35,6 @@ public class DataServlet extends HttpServlet {
 	private final DataService minimaService;
 
 	private final String webroot;
-	private ObjectMapper mapper = new ObjectMapper();
 
 	public DataServlet(String webroot, DataService minimaService) {
 		this.webroot = webroot;
@@ -54,6 +51,7 @@ public class DataServlet extends HttpServlet {
 			return;
 		}
 		
+		sendBoard(resp);
 		resp.setContentType("application/json");
 		Writer out = resp.getWriter();
 		minimaService.writeJsonBoard(out);
@@ -61,6 +59,55 @@ public class DataServlet extends HttpServlet {
 		return;
 	}
 	
+	private void sendBoard(final HttpServletResponse resp) {
+		Slabs slabs = new SlabsOnKeez(minimaService.db, new Class[] { Note.class, List.class });
+		slabs.list(new SlabsList() {
+
+			@Override
+			public void entries(Iterable<SlabsDoc> docs) {
+				
+				ObjectMapper mapper = new ObjectMapper();
+				ObjectNode root = mapper.createObjectNode();
+				
+				ArrayNode stories = mapper.createArrayNode();
+				root.put("stories", stories);
+				
+				ArrayNode lists = mapper.createArrayNode();
+				root.put("lists", lists);
+				
+				for(SlabsDoc doc : docs) {
+					ObjectNode node = doc.toJsonNode();
+					if (doc.getTypeName().equals("list")) {
+						lists.add(node);
+					}
+					else if (doc.getTypeName().equals("story")) {						
+						stories.add(node);
+					}
+				}				
+				
+				try {					
+					resp.setContentType("application/json");
+					ServletOutputStream out = resp.getOutputStream();
+					mapper.writeValue(out, root);
+					out.close();
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+			@Override
+			public void error(SlabsException ex) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void notFound() {
+				// TODO Auto-generated method stub
+			}
+			
+		});
+	}
+
 	@Override
 	protected void doPut(HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -133,44 +180,6 @@ public class DataServlet extends HttpServlet {
 			out.close();
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
-		}
-	}
-	
-	private void update(final HttpServletResponse resp, String id, int revision, Entity e) {
-		minimaService.update(id, revision, e, new Update() {
-
-			@Override
-			public void error(String message, Exception e) {
-				logger.error("Error while updating story " + message, e);
-				sendError(resp, 500, "Internal Server Error");
-			}
-	
-			@Override
-			public void collision(String key, int yourRev, int foundRev) {
-				logger.warn("Collision while updating item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
-				sendError(resp, 409, "Could not update item ["+key+"@"+yourRev+"]: was expecting revision " + foundRev);
-			}
-	
-			@Override
-			public void success(String key, int revision, Entity updated) {
-				try {
-					sendJson(resp, 201, mapper.writeValueAsBytes(updated.toJson(true)));
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-		});
-	}
-	
-	private static void sendJson(HttpServletResponse resp, int status, byte[] data) {
-		try {
-			resp.setContentType("application/json");
-			resp.setStatus(201);
-			ServletOutputStream out = resp.getOutputStream();
-			out.write(data);
-			out.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 	
