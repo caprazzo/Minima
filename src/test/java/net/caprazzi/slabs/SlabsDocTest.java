@@ -1,14 +1,10 @@
 package net.caprazzi.slabs;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,27 +51,5 @@ public class SlabsDocTest {
 		assertEquals("the id", node.get("id").getValueAsText());
 		assertEquals(99, node.get("revision").getValueAsInt());
 		assertEquals(doc.getValue(), node.get("value").getValueAsText());
-	}
-	
-	private ObjectNode dataAsTree(byte[] data) throws IOException,
-			JsonParseException, JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonFactory jf = mapper.getJsonFactory();
-		JsonParser parser = jf.createJsonParser(data);
-		return (ObjectNode) mapper.readTree(parser);
-	}
-	
-	@SlabsType("test_doc")
-	private static class TestDoc extends SlabsDoc {
-		
-		private String value;
-		
-		public String getValue() {
-			return value;
-		}
-		
-		public void setValue(String value) {
-			this.value = value;
-		}
 	}
 }

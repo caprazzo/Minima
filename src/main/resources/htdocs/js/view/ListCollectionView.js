@@ -4,7 +4,6 @@ ListCollectionView = Backbone.View.extend({
 	_rendered: false,
 	
 	initialize: function(args) {
-		// bind the functions 'add' and 'remove' to the view.
 	    _(this).bindAll('addList');
 	    this.readonly = args.readonly;
 	    this.lists = args.lists;

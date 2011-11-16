@@ -78,35 +78,37 @@ public class Slabs {
 	}
 	
 	public void put(SlabsDoc doc, SlabsPut cb) {
-		byte[] data = null;
 		
-		/*
+
+		
 		try {
-			data = doc.getSlabData();
-		} catch (SlabsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		*/
+			ObjectNode databaseJson = doc.getDatabaseJson();
+			ObjectMapper mapper = new ObjectMapper();
+			byte[] data = mapper.writeValueAsBytes(databaseJson);
 		
-		db.put(doc.getId(), doc.getRevision(), data, new Put() {
-
-			@Override
-			public void collision(String arg0, int arg1, int arg2) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void error(String arg0, Exception arg1) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void ok(String arg0, int arg1) {
-				// TODO Auto-generated method stub
-			}
-			
-		});
+		
+			db.put(doc.getId(), doc.getRevision(), data, new Put() {
+	
+				@Override
+				public void collision(String arg0, int arg1, int arg2) {
+					// TODO Auto-generated method stub
+				}
+	
+				@Override
+				public void error(String arg0, Exception arg1) {
+					// TODO Auto-generated method stub
+				}
+	
+				@Override
+				public void ok(String arg0, int arg1) {
+					// TODO Auto-generated method stub
+				}
+				
+			});
+		
+		} catch (Exception e) {
+			//TODO: cb.error;
+		} 
 	}	
 	
 	public interface SlabsGet {
