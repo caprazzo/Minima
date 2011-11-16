@@ -9,7 +9,6 @@ import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.service.PushService;
 
 import org.junit.Before;
@@ -23,7 +22,6 @@ public class MinimaServiceFunctionalTest {
 	Logger logger = LoggerFactory.getLogger(MinimaServiceFunctionalTest.class);
 	
 	private Keez.Db db;
-	private DataService service;
 	private PushService pushServlet;
 	private File testDir;
 	private boolean flag;
@@ -34,7 +32,6 @@ public class MinimaServiceFunctionalTest {
 		testDir = Files.createTempDir();
 		db = new KeezOnFile(testDir.getAbsolutePath(), "pfx", false);
 		pushServlet = mock(PushService.class);
-		service = new DataService(db, pushServlet);
 	}
 	
 	/*

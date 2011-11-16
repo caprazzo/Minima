@@ -3,7 +3,9 @@ package net.caprazzi.minima;
 import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.framework.BuildDescriptor;
 import net.caprazzi.minima.framework.BuildServices;
-import net.caprazzi.minima.service.DataService;
+import net.caprazzi.minima.model.List;
+import net.caprazzi.minima.model.MasterRecord;
+import net.caprazzi.minima.model.Note;
 import net.caprazzi.minima.service.DbHelper;
 import net.caprazzi.minima.service.PushService;
 import net.caprazzi.minima.servlet.AppServlet;
@@ -12,6 +14,8 @@ import net.caprazzi.minima.servlet.IndexServlet;
 import net.caprazzi.minima.servlet.LoginServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
 import net.caprazzi.minima.servlet.WebsocketServlet;
+import net.caprazzi.slabs.Slabs;
+import net.caprazzi.slabs.SlabsOnKeez;
 
 public class MiniMain {
 
@@ -29,8 +33,8 @@ public class MiniMain {
 		boolean requireSessionToEdit = (password != null && password.length() > 0);
 		boolean requireSessionToView = requireSessionToEdit && !publicView.equalsIgnoreCase("true");
 		
-		KeezOnFile db = new KeezOnFile(dbDir, dbPrefix, true);
-		db.setAutoPurge(true);
+		KeezOnFile keez = new KeezOnFile(dbDir, dbPrefix, true);
+		keez.setAutoPurge(true);
 		
 		BuildDescriptor descriptor = BuildDescriptor.fromFile("build.js");		
 		BuildServices appService = new BuildServices(descriptor);
@@ -49,12 +53,12 @@ public class MiniMain {
 				
 		AppServlet appServlet = new AppServlet(appService);
 		
-		DbHelper minimaDbHelper = new DbHelper(db);
+		DbHelper minimaDbHelper = new DbHelper(keez);
 		minimaDbHelper.init();
 		
-		DataService minimaService = new DataService(db, pushService);
+		Slabs db = new SlabsOnKeez(keez, new Class[] { List.class, Note.class, MasterRecord.class } ); 
 		final MinimaServer minimaServer = new MinimaServer(
-				minimaService,
+				db,
 				websocketServlet, 
 				cometServlet, 
 				indexServlet,

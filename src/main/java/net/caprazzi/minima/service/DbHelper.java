@@ -99,7 +99,7 @@ public class DbHelper {
 	byte[] getMasterRecord() {
 		MasterRecord record = new MasterRecord();
 		record.setDbVersion(DB_VERSION);
-		return Meta.wrap("master_record", record).toJson();
+		return record.toJson();
 	}
 	
 	public void upgradeEntry(Entry entry) throws Exception {

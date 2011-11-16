@@ -13,11 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.model.List;
 import net.caprazzi.minima.model.Note;
-import net.caprazzi.minima.service.DataService;
 import net.caprazzi.slabs.Slabs;
 import net.caprazzi.slabs.SlabsDoc;
 import net.caprazzi.slabs.SlabsException;
-import net.caprazzi.slabs.SlabsOnKeez;
 import net.caprazzi.slabs.SlabsOnKeez.SlabsList;
 import net.caprazzi.slabs.SlabsOnKeez.SlabsPut;
 
@@ -32,13 +30,15 @@ public class DataServlet extends HttpServlet {
 
 	private static Logger logger = LoggerFactory.getLogger("MinimaServlet");
 	
-	private final DataService minimaService;
 
 	private final String webroot;
 
-	public DataServlet(String webroot, DataService minimaService) {
+
+	private final Slabs db;
+
+	public DataServlet(String webroot, Slabs db) {
 		this.webroot = webroot;
-		this.minimaService = minimaService;
+		this.db = db;
 	}
 	
 	@Override
@@ -52,16 +52,11 @@ public class DataServlet extends HttpServlet {
 		}
 		
 		sendBoard(resp);
-		resp.setContentType("application/json");
-		Writer out = resp.getWriter();
-		minimaService.writeJsonBoard(out);
-		out.close();
 		return;
 	}
 	
 	private void sendBoard(final HttpServletResponse resp) {
-		Slabs slabs = new SlabsOnKeez(minimaService.db, new Class[] { Note.class, List.class });
-		slabs.list(new SlabsList() {
+		db.list(new SlabsList() {
 
 			@Override
 			public void entries(Iterable<SlabsDoc> docs) {
@@ -105,6 +100,11 @@ public class DataServlet extends HttpServlet {
 				// TODO Auto-generated method stub
 			}
 			
+			@Override
+			public void applicationError(SlabsException ex) {
+				ex.getCause().printStackTrace();
+			}
+			
 		});
 	}
 
@@ -141,8 +141,7 @@ public class DataServlet extends HttpServlet {
 	private void save(String id, int revision, SlabsDoc doc, final HttpServletResponse resp) {
 		doc.setId(id);
 		doc.setRevision(revision);
-		Slabs slabs = new SlabsOnKeez(minimaService.db, new Class[] { Note.class, List.class });
-		slabs.put(doc, new SlabsPut() {
+		db.put(doc, new SlabsPut() {
 
 			@Override
 			public void ok(SlabsDoc doc) {

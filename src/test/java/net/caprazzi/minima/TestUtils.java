@@ -8,7 +8,6 @@ import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.model.Entity;
-import net.caprazzi.minima.service.DataService.Update;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

@@ -60,13 +60,14 @@ public class SlabsOnKeez implements Slabs {
 			try {
 				ObjectNode root = mapper.readValue(e.getData(), ObjectNode.class);
 				String typeName = root.get("name").getTextValue();
-				Class<?> clz = getType(typeName);						
+				Class<?> clz = getType(typeName);
+				System.out.println(typeName + " " + clz);
 				SlabsDoc doc = (SlabsDoc) mapper.readValue(root.get("obj"), clz);
 				doc.setId(e.getKey());
 				doc.setRevision(e.getRevision());
 				return doc;
 			} catch (Exception ex) {				
-				throw new RuntimeException();
+				throw new RuntimeException(ex);
 			}
 		}
 	};
@@ -104,11 +105,20 @@ public class SlabsOnKeez implements Slabs {
 		});
 	}
 	
+	/***
+	 * 
+	 *	TODO: this hashmap is not happy at all
+	 *
+	 */
 	private Class<?>[] setupTypes(Class<? extends SlabsDoc>[] types) {
-		Class<?>[] clz = new Class[types.length];		
+		Class<?>[] clz = new Class[100];		
 		for (Class<?> t : types) {			
 			String typeName = t.getAnnotation(SlabsType.class).value();
-			clz[typeName.hashCode() % clz.length] = t;
+			int pos = typeName.hashCode() % clz.length;
+			if (clz[pos] != null) {
+				throw new RuntimeException("collision while building type map list");
+			}
+			clz[pos] = t;
 		}
 		return clz;
 	}

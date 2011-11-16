@@ -5,7 +5,6 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
-import net.caprazzi.minima.service.DataService;
 import net.caprazzi.minima.servlet.AppServlet;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.CometServlet;
@@ -14,6 +13,7 @@ import net.caprazzi.minima.servlet.IndexServlet;
 import net.caprazzi.minima.servlet.LoginServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
 import net.caprazzi.minima.servlet.WebsocketServlet;
+import net.caprazzi.slabs.Slabs;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.HashSessionManager;
@@ -24,7 +24,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class MinimaServer {
 
-	private final DataService minimaService;
 	private final WebsocketServlet websocketServlet;
 	private final IndexServlet indexServlet;
 	private final CometServlet cometServlet;
@@ -32,9 +31,10 @@ public class MinimaServer {
 	private final PrivacyFilter privacyFilter;
 	private Server server;
 	private final AppServlet appServlet;
+	private final Slabs db;
 
-	public MinimaServer(DataService minimaService, WebsocketServlet websocketServlet, CometServlet cometServlet, IndexServlet indexServlet, LoginServlet loginServlet, PrivacyFilter privacyFilter, AppServlet appServlet) {
-		this.minimaService = minimaService;
+	public MinimaServer(Slabs db, WebsocketServlet websocketServlet, CometServlet cometServlet, IndexServlet indexServlet, LoginServlet loginServlet, PrivacyFilter privacyFilter, AppServlet appServlet) {
+		this.db = db;
 		this.websocketServlet = websocketServlet;
 		this.cometServlet = cometServlet;
 		this.indexServlet = indexServlet;
@@ -66,7 +66,7 @@ public class MinimaServer {
         	context.addServlet(new ServletHolder(loginServlet), "/logout");
         }
         
-        DataServlet minimaServlet = new DataServlet(webroot, minimaService);
+        DataServlet minimaServlet = new DataServlet(webroot, db);
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         ServletHolder websocketholder = new ServletHolder(websocketServlet);
         context.addServlet(websocketholder, "/websocket");

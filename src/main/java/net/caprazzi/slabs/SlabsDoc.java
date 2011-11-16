@@ -1,21 +1,13 @@
 package net.caprazzi.slabs;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import net.caprazzi.minima.model.Note;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
-import org.junit.Ignore;
 
 public abstract class SlabsDoc {
 
@@ -57,6 +49,15 @@ public abstract class SlabsDoc {
 			mapper.writeValue(out, this);
 		} catch (Exception e) {
 			new SlabsException("Exception while writing json to outputStream", e);
+		}
+	}
+	
+	public byte[] toJson() {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsBytes(this);
+		} catch (Exception e) {
+			throw new SlabsException("Exception while serializing to json", e);
 		}
 	}
 	
