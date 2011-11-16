@@ -37,9 +37,25 @@ NoteEditView = Backbone.View.extend({
 		if (this.editing)
 			return;
 		this.editing = true;
-		this.ui.val(this.model.get('desc'));
-		this.ui.show().focus();
+		this.ui.val(this.model.get('desc') + ' ');
 		this.trigger('edit');
+		this.ui.show().focus();
+		this._setCaretToEnd();
+	},
+	
+	_setCaretToEnd: function() {
+		var text = this.ui.val();
+		if (this.el.setSelectionRange) {			
+			this.el.setSelectionRange(text.length, text.length);
+			this.el.focus();
+		}
+		else if (this.el.createTextRange) {
+			var range = this.el.createTextRange();
+			range.collapse(true);
+			range.moveEnd('character', text.length);
+			range.moveStart('character', text.length);
+			range.select();
+		}
 	},
 	
 	save: function() {
