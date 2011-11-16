@@ -1,8 +1,8 @@
 package net.caprazzi.minima.service;
 
-import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.servlet.CometServlet;
 import net.caprazzi.minima.servlet.WebsocketServlet;
+import net.caprazzi.slabs.SlabsDoc;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
@@ -18,16 +18,16 @@ public class PushService {
 		this.cometServlet = cometServlet;
 	}
 	
-	public void send(Meta<?> data) {
-		byte[] json = getUpdateJson(data);
+	public void send(SlabsDoc doc) {
+		byte[] json = getUpdateJson(doc);
 		this.websocketServlet.send(json);
 		this.cometServlet.send(json);
 	}
 	
-	private byte[] getUpdateJson(Meta<?> data) {
+	private byte[] getUpdateJson(SlabsDoc doc) {
 		ObjectNode root = mapper.createObjectNode();		
-		ObjectNode entity = data.getObj().toJson(true);
-		root.put("name", data.getName());		
+		ObjectNode entity = doc.toJsonNode();
+		root.put("name", doc.getTypeName());		
 		try {
 			root.put("obj", entity);
 			return mapper.writeValueAsBytes(root);

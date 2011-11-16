@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.model.List;
 import net.caprazzi.minima.model.Note;
+import net.caprazzi.minima.service.PushService;
 import net.caprazzi.slabs.Slabs;
 import net.caprazzi.slabs.SlabsDoc;
 import net.caprazzi.slabs.SlabsException;
@@ -30,15 +31,15 @@ public class DataServlet extends HttpServlet {
 
 	private static Logger logger = LoggerFactory.getLogger("MinimaServlet");
 	
-
 	private final String webroot;
-
-
 	private final Slabs db;
 
-	public DataServlet(String webroot, Slabs db) {
+	private final PushService pushService;
+
+	public DataServlet(String webroot, Slabs db, PushService pushService) {
 		this.webroot = webroot;
 		this.db = db;
+		this.pushService = pushService;
 	}
 	
 	@Override
@@ -92,16 +93,18 @@ public class DataServlet extends HttpServlet {
 
 			@Override
 			public void error(SlabsException ex) {
-				// TODO Auto-generated method stub
+				sendError(resp, 500, "Internal Serverl Error");
+				ex.getCause().printStackTrace();
 			}
 
 			@Override
 			public void notFound() {
-				// TODO Auto-generated method stub
+				sendError(resp, 500, "Internal Serverl Error");
 			}
 			
 			@Override
 			public void applicationError(SlabsException ex) {
+				sendError(resp, 500, "Internal Serverl Error");
 				ex.getCause().printStackTrace();
 			}
 			
@@ -146,6 +149,7 @@ public class DataServlet extends HttpServlet {
 			@Override
 			public void ok(SlabsDoc doc) {
 				sendDoc(resp, 201, doc);
+				pushService.send(doc);
 			}
 
 			@Override

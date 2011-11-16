@@ -59,6 +59,7 @@ public class MiniMain {
 		Slabs db = new SlabsOnKeez(keez, new Class[] { List.class, Note.class, MasterRecord.class } ); 
 		final MinimaServer minimaServer = new MinimaServer(
 				db,
+				pushService,
 				websocketServlet, 
 				cometServlet, 
 				indexServlet,

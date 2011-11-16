@@ -5,6 +5,7 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
+import net.caprazzi.minima.service.PushService;
 import net.caprazzi.minima.servlet.AppServlet;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
 import net.caprazzi.minima.servlet.CometServlet;
@@ -32,9 +33,11 @@ public class MinimaServer {
 	private Server server;
 	private final AppServlet appServlet;
 	private final Slabs db;
+	private final PushService pushService;
 
-	public MinimaServer(Slabs db, WebsocketServlet websocketServlet, CometServlet cometServlet, IndexServlet indexServlet, LoginServlet loginServlet, PrivacyFilter privacyFilter, AppServlet appServlet) {
+	public MinimaServer(Slabs db, PushService pushService, WebsocketServlet websocketServlet, CometServlet cometServlet, IndexServlet indexServlet, LoginServlet loginServlet, PrivacyFilter privacyFilter, AppServlet appServlet) {
 		this.db = db;
+		this.pushService = pushService;
 		this.websocketServlet = websocketServlet;
 		this.cometServlet = cometServlet;
 		this.indexServlet = indexServlet;
@@ -66,7 +69,7 @@ public class MinimaServer {
         	context.addServlet(new ServletHolder(loginServlet), "/logout");
         }
         
-        DataServlet minimaServlet = new DataServlet(webroot, db);
+        DataServlet minimaServlet = new DataServlet(webroot, db, pushService);
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         ServletHolder websocketholder = new ServletHolder(websocketServlet);
         context.addServlet(websocketholder, "/websocket");

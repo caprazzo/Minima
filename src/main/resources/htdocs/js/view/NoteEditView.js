@@ -37,7 +37,8 @@ NoteEditView = Backbone.View.extend({
 		if (this.editing)
 			return;
 		this.editing = true;
-		this.ui.val(this.model.get('desc') + ' ');
+		var desc = this.model.get('desc')
+		this.ui.val(desc ? desc + ' ' : '');
 		this.trigger('edit');
 		this.ui.show().focus();
 		this._setCaretToEnd();

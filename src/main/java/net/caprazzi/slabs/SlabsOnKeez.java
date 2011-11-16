@@ -25,29 +25,23 @@ public class SlabsOnKeez implements Slabs {
 		typeMap = setupTypes(types);
 	}		
 	
-	/* (non-Javadoc)
-	 * @see net.caprazzi.slabs.Slabs#list(net.caprazzi.slabs.SlabsOnKeez.SlabsList)
-	 */
 	@Override
 	public void list(final SlabsList list) {
  		db.list(new List() {
-			@Override
-			public void entries(Iterable<Entry> entries) {
+ 			
+			@Override public void entries(Iterable<Entry> entries) {
 				list.callEntries(Iterables.transform(entries, entriesToDocs));
 			}
 
-			@Override
-			public void notFound() {
+			@Override public void notFound() {
 				list.callNotFound();
 			}
 
-			@Override
-			public void error(Exception ex) {
+			@Override public void error(Exception ex) {
 				list.callError(ex);
 			}
 			
-			@Override
-			public void applicationError(Exception ex) {
+			@Override public void applicationError(Exception ex) {
 				list.callApplicationError(ex);
 			}
 		});	
@@ -61,7 +55,6 @@ public class SlabsOnKeez implements Slabs {
 				ObjectNode root = mapper.readValue(e.getData(), ObjectNode.class);
 				String typeName = root.get("name").getTextValue();
 				Class<?> clz = getType(typeName);
-				System.out.println(typeName + " " + clz);
 				SlabsDoc doc = (SlabsDoc) mapper.readValue(root.get("obj"), clz);
 				doc.setId(e.getKey());
 				doc.setRevision(e.getRevision());
@@ -86,18 +79,15 @@ public class SlabsOnKeez implements Slabs {
 		
 		db.put(doc.getId(), doc.getRevision(), data, new Put() {
 
-			@Override
-			public void collision(String key, int yourRev, int foundRev) {
+			@Override public void collision(String key, int yourRev, int foundRev) {
 				callback.callCollision(key, yourRev, foundRev);
 			}
 
-			@Override
-			public void error(String key, Exception ex) {
+			@Override public void error(String key, Exception ex) {
 				callback.callError(key, ex);
 			}
 
-			@Override
-			public void ok(String key, int revision) {
+			@Override public void ok(String key, int revision) {
 				doc.setId(key);
 				doc.setRevision(revision);
 				callback.callOk(doc);
