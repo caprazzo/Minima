@@ -5,6 +5,8 @@ Try the [online demo](http://minima.caprazzi.net/demo/ "Minima live demo")
 
 Peek at [this project board](http://minima.caprazzi.net/minima/ "Minima project board") (read only) 
 
+Current development banch is [0.10](https://github.com/mcaprari/Minima/tree/v0.10) 
+
 Screenshot:
 
 ![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.9.png "Minima Screenshot")
