@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.TestUtils;
 import net.caprazzi.minima.TestUtils.*;
 import net.caprazzi.minima.model.MasterRecord;
@@ -21,13 +21,13 @@ import com.google.common.io.Files;
 public class MinimaDbFunctionalTest {
 
 	private File testDir;
-	private KeezFileDb db;
+	private KeezOnFile db;
 	private DbHelper minimaDb;
 
 	@Before
 	public void setUp() {
 		testDir = Files.createTempDir();
-		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx", false);
+		db = new KeezOnFile(testDir.getAbsolutePath(), "pfx", false);
 		minimaDb = new DbHelper(db);
 	}
 	

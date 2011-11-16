@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Collection;
 
 import net.caprazzi.keez.Keez;
-import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
 import net.caprazzi.minima.service.DataService;
@@ -32,7 +32,7 @@ public class MinimaServiceFunctionalTest {
 	public void setUp() {
 		flag = false;
 		testDir = Files.createTempDir();
-		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx", false);
+		db = new KeezOnFile(testDir.getAbsolutePath(), "pfx", false);
 		pushServlet = mock(PushService.class);
 		service = new DataService(db, pushServlet);
 	}

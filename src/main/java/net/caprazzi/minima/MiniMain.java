@@ -1,6 +1,6 @@
 package net.caprazzi.minima;
 
-import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.framework.BuildDescriptor;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.service.DataService;
@@ -29,7 +29,7 @@ public class MiniMain {
 		boolean requireSessionToEdit = (password != null && password.length() > 0);
 		boolean requireSessionToView = requireSessionToEdit && !publicView.equalsIgnoreCase("true");
 		
-		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
+		KeezOnFile db = new KeezOnFile(dbDir, dbPrefix, true);
 		db.setAutoPurge(true);
 		
 		BuildDescriptor descriptor = BuildDescriptor.fromFile("build.js");		
