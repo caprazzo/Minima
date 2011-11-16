@@ -185,6 +185,18 @@ public class TestUtils {
 		public void entries(Iterable<Entry> entries) {
 			throw new RuntimeException("unexpected entries call");
 		}
+
+		@Override
+		public void notFound() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void error(Exception ex) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 }

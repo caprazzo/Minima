@@ -154,8 +154,10 @@ ListCollectionView = Backbone.View.extend({
 	
 	addList: function(list) {
 		
-		if (listViews[listView.model.id])
+		if (this._listViews[list.id]) {
+			console.warn("ListCollectionView.addList called for a list that was already added", this, list);
 			return;
+		}
 		
 		var filteredNotes = new FilteredCollection([], {
 			parent: this.notes, 

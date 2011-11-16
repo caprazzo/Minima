@@ -36,7 +36,8 @@ NoteView = Backbone.View.extend({
 			archive: el.find('.note-archive-btn').hide(),
 			view: el.find('.note-view'),
 			edit: el.find('.note-edit'),
-			text: el.find('.note-text')
+			text: el.find('.note-text'),
+			alert: el.find('.note-save-alert')
 		}
 		
 		if (this.readonly)
@@ -101,11 +102,27 @@ NoteView = Backbone.View.extend({
 			this.ui.view.hide();
 		}, this);
 		
+		this.noteEditView.bind("save_error", function() {
+			this.showSaveFailed();
+		}, this);	
+		
+		this.noteEditView.bind("save_success", function() {
+			this.hideSaveFailed();
+		}, this);
+		
 		this.ui.edit.append(this.noteEditView.render().el);
 	},
 	
 	hideArchive: function() {
 		this.ui.archive.hide();
+	},
+	
+	showSaveFailed: function() {
+		this.ui.alert.fadeIn();
+	},
+	
+	hideSaveFailed: function() {
+		this.ui.alert.fadeOut();
 	},
 	
 	_filter: function(text) {

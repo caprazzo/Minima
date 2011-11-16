@@ -33,6 +33,24 @@
 	word-wrap: break-word;
 }
 
+.note-save-alert {
+	display: none;
+	color: #705400;
+	text-align: center;
+	font-style: italic;
+	font-family: monospace;
+	font-size: small;
+	border: 1px solid #705400;
+	border-radius: 4px;
+	
+	margin-right: 12px;
+	margin-left: 12px;
+	margin-top: 4px;
+	background-color: #ffd4aa;
+	padding: 1px;
+	line-height: 1em;
+}
+
 .note-editor {
 	display: none;	
 	background-color: #ffffcc;

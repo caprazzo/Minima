@@ -244,6 +244,18 @@ public class DbHelper {
 					}
 					
 				}
+
+				@Override
+				public void notFound() {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void error(Exception ex) {
+					// TODO Auto-generated method stub
+					
+				}
 			});
 		}
 		catch (RuntimeException e) {
