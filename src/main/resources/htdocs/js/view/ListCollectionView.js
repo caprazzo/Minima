@@ -154,6 +154,9 @@ ListCollectionView = Backbone.View.extend({
 	
 	addList: function(list) {
 		
+		if (listViews[listView.model.id])
+			return;
+		
 		var filteredNotes = new FilteredCollection([], {
 			parent: this.notes, 
 			filter: function(note) {
