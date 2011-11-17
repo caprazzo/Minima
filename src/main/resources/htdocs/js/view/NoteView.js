@@ -149,12 +149,16 @@ NoteView = Backbone.View.extend({
 		return null;
 	},
 	
-	_linkFilter: function(text) {
-		var p1 = /^\s*(http[s]?:\/\/(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
-		var text = text.replace(p1, '<a href="$1">$1</a>');
-		
-		var p2 = /^\s*((www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
-		return text.replace(p2, '<a href="http://$1">$1</a>');
+	_linkFilter: function(text) {		
+		var p1 = /([-a-zA-Z0-9@:%_\+.~#?&/\/\=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)/;
+		var reg = new RegExp(p1);
+		var match = reg.exec(text)
+		if (match != null) {	
+			var hasProtocol = match[0].indexOf('://') == -1;
+			var repl =  hasProtocol ? 'http://' + match[0] : match[0];
+			return '<a href="' + repl + '">' + text + '</a>';
+		}
+		return text;
 	},
 	
 	_atFilter: function(text) {

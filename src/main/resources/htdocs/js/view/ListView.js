@@ -90,7 +90,8 @@ ListView = Backbone.View.extend({
 	
 	createNote: function(note) {
 		// find position
-		var that = this;
+		var that = this;		
+		
 		var lastNote = _(this.notes.filter(function(note) {
 			return !note.get('archived') && note.get('list') == that.model.id;
 		})).last();		

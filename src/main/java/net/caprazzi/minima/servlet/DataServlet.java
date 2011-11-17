@@ -47,13 +47,11 @@ public class DataServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
-		if (!info.isPath(webroot + "/data/stories")) {
-			sendError(resp, 404, "not found");
+		if (info.isPath(webroot + "/data/stories")) {
+			sendBoard(resp);
 			return;
 		}
-		
-		sendBoard(resp);
-		return;
+		sendError(resp, 404, "not found");
 	}
 	
 	private void sendBoard(final HttpServletResponse resp) {

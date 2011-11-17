@@ -36,13 +36,15 @@
 }
 .list-footer {
 	margin-top: 0px;
+	margin-bottom: 9px;
 }
 .list-name-container {
 	margin-bottom: 6px;
 }
 .list-name-display {
-	border: 1px solid white;
+	_border: 1px solid white;
 	border-left: 1px;
+	padding-left: 6px;
 }
 .list-name-display, .list-name-edit {
 	font-size: 18px;
