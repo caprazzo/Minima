@@ -4,7 +4,8 @@
 		"/htdocs/js/lib/jquery-ui-1.8.16.min.js",
 		"/htdocs/js/lib/underscore-1.2.1.min.js",
 		"/htdocs/js/lib/backbone-0.5.3.min.js",
-		"/htdocs/js/lib/json2.js"
+		"/htdocs/js/lib/json2.js",
+		"/htdocs/js/lib/expanding.js"
 	],
 				
 	"main": [

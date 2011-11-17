@@ -156,7 +156,7 @@ NoteView = Backbone.View.extend({
 		if (match != null) {	
 			var hasProtocol = match[0].indexOf('://') == -1;
 			var repl =  hasProtocol ? 'http://' + match[0] : match[0];
-			return '<a href="' + repl + '">' + text + '</a>';
+			return '<a target="_blank" href="' + repl + '">' + text + '</a>';
 		}
 		return text;
 	},

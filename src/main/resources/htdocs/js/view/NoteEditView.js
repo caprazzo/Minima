@@ -1,87 +1,126 @@
 NoteEditView = Backbone.View.extend({
-	tagName: 'textarea',
-	model: Note,
-	className: 'note-editor',
-	editing: false,
-	
-	initialize: function(args) {
+	tagName : 'textarea',
+	model : Note,
+	className : 'note-editor',
+	editing : false,
+
+	initialize : function(args) {
 		this.model = args.model;
 	},
-	
-	events: {
-		'dblclick': 'edit',
-		'keyup': 'keyup',
-		'keydown': 'keydown'
+
+	events : {
+		'dblclick' : 'edit',
+		'keyup' : 'keyup',
+		'keydown' : 'keydown'
 	},
-	
-	keydown: function(e) {
-		if ((e.ctrlKey || e.altKey) && e.keyCode == KeyCodes.Enter) { 
-			this.ui.val(this.ui.val() + "\n");
-			return;
-		}
-		else if (e.keyCode == KeyCodes.Enter) 
+
+	keydown : function(e) {
+		if ((e.ctrlKey || e.altKey) && e.keyCode == KeyCodes.Enter) {
+			this._insertNewline();
+		} else if (e.keyCode == KeyCodes.Enter)
 			this.save();
 	},
-	
-	keyup: function(e) {
+
+	keyup : function(e) {
 		if (e.keyCode == KeyCodes.Esc)
 			this.reset();
 	},
-	
-	render: function() {
-		this.ui = $(this.el).hide();
+
+	render : function() {
+		this.ui = $(this.el);
 		return this;
 	},
-	
-	edit: function() {
+
+	edit : function() {
 		if (this.editing)
 			return;
+
 		this.editing = true;
 		var desc = this.model.get('desc')
 		this.ui.val(desc ? desc + ' ' : '');
 		this.trigger('edit');
 		this.ui.show().focus();
-		this._setCaretToEnd();
-	},
-	
-	_setCaretToEnd: function() {
 		var text = this.ui.val();
-		if (this.el.setSelectionRange) {			
-			this.el.setSelectionRange(text.length, text.length);
+
+		this.ui.val(text + '\n\n');
+		this.ui.expandingTextarea();
+		this.ui.trigger('input');
+		this._setCaretToPos(text.length);
+		this.ui.focus();
+	},
+
+	_setCaretToPos : function(pos) {
+		if (this.el.setSelectionRange) {
+			this.el.setSelectionRange(pos, pos);
 			this.el.focus();
-		}
-		else if (this.el.createTextRange) {
+		} else if (this.el.createTextRange) {
 			var range = this.el.createTextRange();
 			range.collapse(true);
-			range.moveEnd('character', text.length);
-			range.moveStart('character', text.length);
+			range.moveEnd('character', pos);
+			range.moveStart('character', pos);
 			range.select();
 		}
 	},
+
+	_getCaretPosition : function() {
+		var pos = 0;
+
+		// IE Support
+		if (document.selection) {
+			this.el.focus();
+
+			// To get cursor position, get empty selection range
+			var sel = document.selection.createRange();
+
+			// Move selection start to 0 position
+			sel.moveStart('character', this.el.val().length);
+
+			// The caret position is selection length
+			pos = sel.text.length;
+		}
+
+		// Firefox support
+		else if (this.el.selectionStart || this.el.selectionStart == '0')
+			pos = this.el.selectionStart;
+
+		return pos;
+	},
 	
-	save: function() {
+	_insertNewLine: function() {
+		var text = this.ui.val();
+		var pos = this._getCaretPosition();
+		var left = text.substring(0, pos);
+		var right = text.substring(pos);
+		this.ui.val(left + '\n' + right);
+		this._setCaretToPos(pos + 1);
+		this.ui.trigger('input');
+	},
+
+	save : function() {
 		var view = this;
 		var text = $.trim(this.ui.val());
 		if (text) {
-			this.model.set({desc: text});
+			this.model.set({
+				desc : text
+			});
 			if (!this.model.isNew())
 				this.model.save({}, {
-					success: function(model, response) {
+					success : function(model, response) {
 						view.trigger("save_success");
 					},
-					error: function(model, response) {
+					error : function(model, response) {
 						console.warn("Save of model failed", model, response);
 						view.trigger("save_error");
 					}
 				});
-		}		
+		}
 		this.reset();
 	},
-	
-	reset: function() {
+
+	reset : function() {
 		this.editing = false;
 		this.ui.val('');
-		this.ui.hide();
+		this.ui.expandingTextarea('destroy').hide();
 		this.trigger('reset');
 	}
 });
