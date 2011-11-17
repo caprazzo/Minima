@@ -3,6 +3,7 @@ package net.caprazzi.slabs;
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Entry;
+import net.caprazzi.keez.Keez.KeezException;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 
@@ -37,11 +38,11 @@ public class SlabsOnKeez implements Slabs {
 				list.callNotFound();
 			}
 
-			@Override public void error(Exception ex) {
+			@Override public void error(KeezException ex) {
 				list.callError(ex);
 			}
 			
-			@Override public void applicationError(Exception ex) {
+			@Override public void applicationError(KeezException ex) {
 				list.callApplicationError(ex);
 			}
 		});	
@@ -83,7 +84,7 @@ public class SlabsOnKeez implements Slabs {
 				callback.callCollision(key, yourRev, foundRev);
 			}
 
-			@Override public void error(String key, Exception ex) {
+			@Override public void error(String key, KeezException ex) {
 				callback.callError(key, ex);
 			}
 

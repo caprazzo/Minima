@@ -7,12 +7,14 @@ import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Delete;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
+import net.caprazzi.keez.Keez.KeezException;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
+
 
 public class DbHelper {
 
@@ -34,7 +36,7 @@ public class DbHelper {
 		db.get(MASTER_KEY, new Get() {
 			
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				throw new RuntimeException("Error while loading masterkey " + key, e);
 			}
 			
@@ -59,7 +61,7 @@ public class DbHelper {
 					}
 
 					@Override
-					public void error(String key, Exception e) {
+					public void error(String key, KeezException e) {
 						 throw new RuntimeException("Error while storing masterkey" + key, e);
 					} 
 					
@@ -138,7 +140,7 @@ public class DbHelper {
 			}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				throw new RuntimeException("error " + key, e);				
 			}
 			
@@ -178,7 +180,7 @@ public class DbHelper {
 			}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				throw new RuntimeException("error while creating story " + key, e);
 			}
 		});
@@ -252,7 +254,7 @@ public class DbHelper {
 				}
 
 				@Override
-				public void error(Exception ex) {
+				public void error(KeezException ex) {
 					// TODO Auto-generated method stub
 					
 				}

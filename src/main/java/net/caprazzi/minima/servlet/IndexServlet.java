@@ -29,12 +29,14 @@ public class IndexServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
-		if (info.isPath(req.getContextPath() + "/")) {
-			resp.sendRedirect(req.getContextPath() + "/index");
+		String contextPath = req.getContextPath();
+		
+		if (info.isPath(contextPath + "/")) {
+			resp.sendRedirect(contextPath + "/index");
 			return;
 		}
 		
-		if (!info.isPath(req.getContextPath() +  "/index")) {
+		if (!info.isPath(contextPath +  "/index")) {
 			resp.sendError(404);
 			return;
 		}
@@ -42,34 +44,29 @@ public class IndexServlet extends HttpServlet {
 		Boolean readonly = req.getParameter("readonly") != null 
 				|| (Boolean)req.getAttribute("minima.readonly");
 		
-		
 		resp.setContentType("text/html");
-		
 		SkimpyTemplate index = build.getPage("index");
-		
-//		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
-			
 		index
 			.add("BOARD_TITLE", boardTitle)
 			.add("READ_ONLY", readonly.toString())
 			.add("WEBSOCKET_LOCATION", websocketLocation.equals("auto") 
-					? "ws://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath() + "/websocket" : websocketLocation)
-			.add("DATA_LOCATION", req.getContextPath() + "/data")
-			.add("COMET_LOCATION", req.getContextPath() + "/comet")
-			.add("LOGIN_URL", req.getContextPath() + "/login")
+					? "ws://" + req.getServerName() + ":" + req.getServerPort() + contextPath + "/websocket" : websocketLocation)
+			.add("DATA_LOCATION", contextPath + "/data")
+			.add("COMET_LOCATION", contextPath + "/comet")
+			.add("LOGIN_URL", contextPath + "/login")
 			.add("TEMPLATES", build.getTemplatesHtml());
 		
 		if (req.getParameter("devel") != null) {
 			index
-				.add("CSS_IMPORTS", build.getDevelCssTags(req.getContextPath()))
-				.add("LIB_IMPORTS", build.getDevelLibsTags(req.getContextPath()))
-				.add("MAIN_IMPORTS", build.getDevelMainTags(req.getContextPath()));			
+				.add("CSS_IMPORTS", build.getDevelCssTags(contextPath))
+				.add("LIB_IMPORTS", build.getDevelLibsTags(contextPath))
+				.add("MAIN_IMPORTS", build.getDevelMainTags(contextPath));			
 		}			
 		else {
 			index
-				.add("CSS_IMPORTS", build.getProductionCssTag(req.getContextPath()))
-				.add("LIB_IMPORTS", build.getProductionLibsTag(req.getContextPath()))
-				.add("MAIN_IMPORTS", build.getProductionMainTag(req.getContextPath()));
+				.add("CSS_IMPORTS", build.getProductionCssTag(contextPath))
+				.add("LIB_IMPORTS", build.getProductionLibsTag(contextPath))
+				.add("MAIN_IMPORTS", build.getProductionMainTag(contextPath));
 		}
 
 		PrintWriter writer = resp.getWriter();

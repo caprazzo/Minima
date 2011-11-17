@@ -73,10 +73,10 @@ public class DataServlet extends HttpServlet {
 				
 				for(SlabsDoc doc : docs) {
 					ObjectNode node = doc.toJsonNode();
-					if (doc.getTypeName().equals("list")) {
+					if (doc.getTypeName().equals("list") && !((List) doc).isArchived()) {
 						lists.add(node);
 					}
-					else if (doc.getTypeName().equals("story")) {						
+					else if (doc.getTypeName().equals("story") && !((Note) doc).isArchived()) {						
 						stories.add(node);
 					}
 				}				
