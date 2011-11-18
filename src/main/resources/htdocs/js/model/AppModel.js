@@ -13,7 +13,8 @@ AppModel = Backbone.Model.extend({
 			ws_location: $('#minima-websocket-location').val(),
 			comet_location: $('#minima-comet-location').val(),	
 			data_location: $('#minima-data-location').val(),
-			board_title: $('#minima-board-title').val()
+			board_title: $('#minima-board-title').val(),
+			login_url: $('#minima-login-url').val()
 		});
 	}
 

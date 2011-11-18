@@ -87,6 +87,7 @@ NoteEditView = Backbone.View.extend({
 	},
 	
 	_insertNewLine: function() {
+		// insert a new line 
 		var text = this.ui.val();
 		var pos = this._getCaretPosition();
 		var left = text.substring(0, pos);

@@ -36,6 +36,7 @@
 	],
 	
 	"css": [
+		"/htdocs/js/lib/bootstrap-1.4.0.min.css",
 		"/htdocs/css/app.css",
 		"/htdocs/css/list.css",
 		"/htdocs/css/note.css",

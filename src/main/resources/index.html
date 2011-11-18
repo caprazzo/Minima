@@ -4,11 +4,13 @@
 	<link rel="shortcut icon" href="favicon.ico" />
 	<title>{{ BOARD_TITLE }}</title>
 	
-	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" type="text/css" />
+	
 	
 {{ CSS_IMPORTS }}
 {{ LIB_IMPORTS }}
 {{ MAIN_IMPORTS }}
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" type="text/css" />
 	
 </head>
 <body>
@@ -19,14 +21,10 @@
 	<input type="hidden" id="minima-read-only" value="{{ READ_ONLY }}"/>
 	<input type="hidden" id="minima-websocket-location" value="{{ WEBSOCKET_LOCATION }}"/>
 	<input type="hidden" id="minima-comet-location" value="{{ COMET_LOCATION }}"/>	
+	<input type="hidden" id="minima-login-url" value="{{ LOGIN_URL }}"/>
 	
-	<!-- root of templates -->	
-	<div class="wrapper" id="minima"></div>
+	<div id="minima"></div>
 
-	<div class="footer">
-		<div id="readonly-notice">This board is read-only. Please <a href="{{ LOGIN_URL }}">login</a> to enable editing.</div>
-	</div>
-	
 {{ TEMPLATES }}
 	
 </body>

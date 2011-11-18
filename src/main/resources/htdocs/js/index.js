@@ -4,6 +4,7 @@ if (!window.console)
 $(function() {
 	Templates.load();
 	
+	
 	// read variables from document
 	
 	var app = new AppModel();
