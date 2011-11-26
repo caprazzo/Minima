@@ -17,6 +17,7 @@
 		"/htdocs/js/model/NoteCollection.js",
 		"/htdocs/js/model/NotificationsCtrlModel.js",
 		
+		"/htdocs/js/view/AlertArchivedView.js",
 		
 		"/htdocs/js/view/ListView.js",
 		"/htdocs/js/view/ListNameView.js",
@@ -49,7 +50,8 @@
 	    "templates/list-template.html",
 	    "templates/note-template.html",
 	    "templates/notify-template.html",
-	    "templates/app-template.html"
+	    "templates/app-template.html",
+	    "templates/alert-archived-template.html"
 	],
 	
 	"pages": {

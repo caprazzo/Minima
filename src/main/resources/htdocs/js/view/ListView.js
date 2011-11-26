@@ -77,7 +77,6 @@ ListView = Backbone.View.extend({
 		if (!this.readonly)
 			this._setupEditUi();
 		
-		
 		return this;
 	},
 	

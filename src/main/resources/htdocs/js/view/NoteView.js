@@ -66,9 +66,13 @@ NoteView = Backbone.View.extend({
 	},
 	
 	archiveNote: function() {
-		this.model.set({archived: true});
+		this.model.set();
 		this.remove();
-		this.model.save();
+		this.model.save({archived: true}, {
+			success: function(note) {
+				Minima.trigger('archive-note', note);
+			}
+		});		
 	},
 	
 	activateEdit: function() {

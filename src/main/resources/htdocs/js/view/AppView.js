@@ -7,12 +7,17 @@ AppView = Backbone.View.extend({
 		this.notes = args.notes;
 		this.appModel = args.appModel;
 		this.template = Templates["app-template"];
+		
+		Minima.bind('archive-note', function(note) {
+			var alView = new AlertArchivedView({model: note});
+			$('.alerts').append(alView.render().el);
+		}, this);
 	},
 	
 	render: function() {
 		console.log(this.appModel.toJSON());
 		this.el.html(this.template(this.appModel.toJSON()));
-		
+						
 		// notifications control	
 		var nModel = new NotificationsCtrlModel();
 		var nView = new NotificationsCtrlView({model: nModel});	
@@ -45,8 +50,6 @@ AppView = Backbone.View.extend({
 		
 		$('#board').append(listsView.render().el);
 		
-		listsView.resize($(window).width());
-		
-		
+		listsView.resize($(window).width());		
 	}
 });

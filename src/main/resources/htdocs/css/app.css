@@ -142,7 +142,7 @@ html {
 	text-align: right;
 }
 #topbar .alerts .alert-message {
-	display: none;
+	_display: none;
 }
 #topbar, #board {
 	padding-left: 2em;

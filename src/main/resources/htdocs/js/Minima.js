@@ -1,4 +1,7 @@
-function Minima() {}
+function Minima() {
+}
+
+_.extend(Minima, Backbone.Events);
 
 KeyCodes = {
 	Enter: 13,

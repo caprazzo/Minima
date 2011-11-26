@@ -109,7 +109,8 @@
 .list-archive {
 	float: right;
 }
-.list-archive-btn {
+
+.list-archive .list-archive-btn {
 	display: none;
 	_float: right;
 	display: none;	
