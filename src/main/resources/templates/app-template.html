@@ -1,15 +1,41 @@
-<div id="header">				
-	<div class="minima-logo">&nbsp;</div>
-	<h1><%= board_title %></h1>
-	<div id="controls">
-		<div id="notifications_ctrl"></div>	
+<div id="topbar" class="<% if (readonly) { %>topbar-readonly<% } else { %>topbar-readwrite<% } %>" >
+
+	<div class="firstrow">
+		<div class="board-title">
+			<div class="minima-logo">&nbsp;</div>
+			<div class="minima-title-value"><%= board_title %></div>
+		</div>
+
+		<div class="alerts">
+			<div class="alert-operation-done alert-message success">
+				<a class="close" href="#">×</a>
+				<p>
+					Note archived. <strong><a href="#">Undo</a></strong>
+				</p>
+			</div>
+			<div class="alert-readonly alert-message warning">
+				<a class="close" href="#">×</a>
+				<p>
+					This board is read-only. Please <strong><a href="<%= login_url %>">Login</a></strong> to enable editing.
+				</p>
+			</div>
+		</div>
+		<div class="controls">
+			<div id="notifications_ctrl"></div>
+		</div>
+
 		
 	</div>
+
+	<div class="secondrow">
+		<div class="buttons">
+			<div id="list-create-ctrl"></div>
+		</div>
+	</div>
+	
 </div>
-<div id="ribbon">
-	<div id="list-create-ctrl"></div>
-</div>
+<div id="topbar-push-content" class="<% if (readonly) { %>topbar-readonly<% } else { %>topbar-readwrite<% } %>"></div>
+
 <div id="content">
 	<div id="board"></div>
 </div>
-<div class="push"></div>

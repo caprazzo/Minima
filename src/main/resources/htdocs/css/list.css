@@ -7,7 +7,8 @@
 	_display: block;
 	border-radius: 3px;
 	border: 1px solid gray;
-	margin: 1em;
+	margin-bottom: 1em;
+	margin-right: 1em;
 	padding: 7px;
 	
 }
@@ -66,6 +67,7 @@
 	width: 98%;
 }
 .note-create-btn {
+	min-height: 1em;
 	border: 1px solid #ccc;
 	background-color: #efefef;
 	color: #efefef;
@@ -74,7 +76,7 @@
 	cursor: pointer;	
 	padding-top: 6px;
 	padding-bottom: 6px;	
-	min-height: 1em;
+	
 	text-align: center;
 	display: none;
 }
@@ -83,15 +85,16 @@
 	color: #888;
 }
 .list-create-btn {
+	margin-bottom: 1px;
 	border: 1px solid #ccc;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+		
 	background-color: #efefef;
 	color: #ccc;
 	width: 100px;
 	border-radius: 4px;
-	margin-bottom: 1px;
 	cursor: pointer;	
-	padding-top: 6px;
-	padding-bottom: 6px;	
 	min-height: 1em;
 	display:block;
 	text-align: center;

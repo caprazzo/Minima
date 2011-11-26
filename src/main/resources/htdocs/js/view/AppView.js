@@ -27,7 +27,9 @@ AppView = Backbone.View.extend({
 			$('#list-create-ctrl').append(listCreateView.render().el);
 		}
 		else {
-			$('#readonly-notice').show();
+			$('.alert-readonly').show().find('.close').click(function() {
+				$('.alert-readonly').hide();
+			});		
 		}
 		
 		// list collection view
