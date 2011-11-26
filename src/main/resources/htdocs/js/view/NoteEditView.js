@@ -16,7 +16,9 @@ NoteEditView = Backbone.View.extend({
 
 	keydown : function(e) {
 		if ((e.ctrlKey || e.altKey) && e.keyCode == KeyCodes.Enter) {
-			this._insertNewline();
+			//this._insertNewline();
+			console.log(e);
+			return;
 		} else if (e.keyCode == KeyCodes.Enter)
 			this.save();
 	},
@@ -86,7 +88,7 @@ NoteEditView = Backbone.View.extend({
 		return pos;
 	},
 	
-	_insertNewLine: function() {
+	_insertNewline: function() {
 		var text = this.ui.val();
 		var pos = this._getCaretPosition();
 		var left = text.substring(0, pos);
