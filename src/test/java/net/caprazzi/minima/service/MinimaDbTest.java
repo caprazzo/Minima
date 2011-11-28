@@ -17,6 +17,7 @@ import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
+import net.caprazzi.minima.model.Note;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
 
@@ -158,8 +159,9 @@ public class MinimaDbTest {
 		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
-			new Entry("story1", 1, new Story("id1", "desc1", "todo").toJson()),
-			new Entry("story2", 2, new Story("id2", "desc2", "todo").toJson()),
+			new Entry("story1", 1, new Note().toJson()),
+			new Entry("story1", 1, new Note().toJson()),
+			new Entry("story2", 2, new Note().toJson())
 		};
 		
 		doAnswer(listFound(entries)).when(db).list(any(List.class));
@@ -175,8 +177,8 @@ public class MinimaDbTest {
 		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
-			new Entry("story1", 1, new Story("id1", "desc1", "todo").toJson()),
-			new Entry("story2", 2, new Story("id2", "desc2", "todo").toJson()),
+			new Entry("story1", 1, new Note().toJson()),
+			new Entry("story2", 2, new Note().toJson()),
 		};
 		
 		doAnswer(listFound(entries)).when(db).list(any(List.class));
@@ -192,9 +194,9 @@ public class MinimaDbTest {
 		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
-			new Entry("story1", 1, new Story("id1", "desc1", "todo").toJson()),
-			new Entry("story2", 2, new Story("id2", "desc2", "todo").toJson()),
-			new Entry("story3", 2, new Story("id3", "desc3", "todo").toJson())
+			new Entry("story1", 1, new Note().toJson()),
+			new Entry("story2", 2, new Note().toJson()),
+			new Entry("story3", 2, new Note().toJson()),
 		};
 		
 		doAnswer(listFound(entries)).when(db).list(any(List.class));
@@ -222,9 +224,9 @@ public class MinimaDbTest {
 		minimaDb = spy(new DbHelper(db));
 		
 		Entry[] entries = new Entry[] {
-			new Entry("story0", 0, new Story("id0", "desc0", "todo").toJson()),
-			new Entry("story1", 1, new Story("id1", "desc1", "doing").toJson()),
-			new Entry("story2", 2, new Story("id2", "desc2", "done").toJson())
+			new Entry("story0", 0, new Note().toJson()),
+			new Entry("story1", 1, new Note().toJson()),
+			new Entry("story2", 2, new Note().toJson())
 		};
 		
 		doAnswer(listFound(entries)).when(db).list(any(List.class));
@@ -242,7 +244,7 @@ public class MinimaDbTest {
 	
 	@Test
 	public void upgradeEntry_should_wrap_story_in_meta_and_relink_list_and_zero_rev() throws Exception {
-		Story story = new Story("keyA", "title", "todo");
+		Note story = new Note();
 		story.setRevision(1234);
 		
 		byte[] storyData = story.toJson();		
@@ -287,8 +289,8 @@ public class MinimaDbTest {
 	public void getMasterRecord_should_return_valid_record() throws JsonParseException, IOException {
 		byte[] record = minimaDb.getMasterRecord();
 		System.out.println(new String(record));
-		Meta<MasterRecord> meta = Meta.fromJson(MasterRecord.class, record);
-		assertEquals("1", meta.getObj().getDbVersion());
+		MasterRecord rec = MasterRecord.fromJson(record, MasterRecord.class);
+		assertEquals("1", rec.getDbVersion());
 	}
 	
 }

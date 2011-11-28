@@ -7,14 +7,13 @@ import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Delete;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
-import net.caprazzi.keez.Keez.KeezException;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
-
+import net.caprazzi.keez.KeezException;
 
 public class DbHelper {
 
@@ -157,7 +156,7 @@ public class DbHelper {
 			}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -195,7 +194,7 @@ public class DbHelper {
 			public void deleted(String key, byte[] data) {}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 			}
 		});
 	}
@@ -238,7 +237,7 @@ public class DbHelper {
 							public void deleted(String key, byte[] data) {}
 
 							@Override
-							public void error(String key, Exception e) {
+							public void error(String key, KeezException e) {
 								// TODO Auto-generated method stub
 								
 							}

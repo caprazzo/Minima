@@ -5,7 +5,7 @@ import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.keez.Keez.KeezException;
+import net.caprazzi.keez.KeezException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;

@@ -6,8 +6,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 
 import net.caprazzi.keez.onfile.KeezOnFile;
-import net.caprazzi.minima.TestUtils;
-import net.caprazzi.minima.TestUtils.*;
+import net.caprazzi.minima.TestUtils.GetTestHelp;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
@@ -78,9 +77,10 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<MasterRecord> fromJson = Meta.fromJson(MasterRecord.class, data);
-				assertEquals("master_record", fromJson.getName());
-				assertEquals("1", fromJson.getObj().getDbVersion());
+				MasterRecord record = MasterRecord.fromJson(data, MasterRecord.class);
+				
+				assertEquals("master_recrd", record.getTypeName());
+				assertEquals("1", record.getDbVersion());
 			}
 		});
 		

@@ -7,7 +7,7 @@ import net.caprazzi.keez.Keez.Entry;
 import net.caprazzi.keez.Keez.Get;
 import net.caprazzi.keez.Keez.List;
 import net.caprazzi.keez.Keez.Put;
-import net.caprazzi.minima.model.Entity;
+import net.caprazzi.keez.KeezException;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -25,46 +25,11 @@ public class TestUtils {
 		}
 
 		@Override
-		public void error(String key, Exception e) {
+		public void error(String key, KeezException e) {
 			throw new RuntimeException(key, e);			
 		}
 		
 	};
-	
-	public final static Update updateStoryNoop = new Update() {
-		@Override
-		public void error(String string, Exception e) {
-			throw new RuntimeException(string, e);
-		}
-		
-		@Override
-		public void collision(String key, int yourRev, int foundRev) {}
-
-		@Override
-		public void success(String key, int revision, Entity updated) {
-			// TODO Auto-generated method stub
-			
-		}
-
-	};
-	
-	public static class TestUpdateStory extends Update {
-		@Override
-		public void error(String string, Exception e) {
-			throw new RuntimeException("unexpected error", e);
-		}
-
-		@Override
-		public void collision(String key, int yourRev, int foundRev) {
-			throw new RuntimeException("unexpected collision");
-		}
-
-		@Override
-		public void success(String key, int revision, Entity updated) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
 	
 	public static class GetNotFound implements Answer<Object> {
 		@Override
@@ -136,7 +101,7 @@ public class TestUtils {
 		}
 		
 		@Override
-		public void error(String key, Exception e) {
+		public void error(String key, KeezException e) {
 			throw new RuntimeException("unexpected put error", e);
 		}
 		
@@ -155,7 +120,7 @@ public class TestUtils {
 		}
 		
 		@Override
-		public void error(String key, Exception e) {
+		public void error(String key, KeezException e) {
 			throw new RuntimeException("unexpected error", e);
 		}		
 	}
@@ -173,7 +138,7 @@ public class TestUtils {
 		}
 		
 		@Override
-		public void error(String key, Exception e) {
+		public void error(String key, KeezException e) {
 			throw new RuntimeException("unexpected error", e);
 		}
 		
@@ -192,7 +157,7 @@ public class TestUtils {
 		}
 
 		@Override
-		public void error(Exception ex) {
+		public void error(KeezException ex) {
 			// TODO Auto-generated method stub
 			
 		}

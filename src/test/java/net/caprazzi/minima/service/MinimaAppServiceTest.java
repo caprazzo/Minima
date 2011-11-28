@@ -1,8 +1,8 @@
 package net.caprazzi.minima.service;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class MinimaAppServiceTest {
 	@Test
 	public void test_should_return_devel_css_html_links() {
 		String link = service.getDevelCssTags("xxxx/");
-		assertEquals(link.replaceAll("\\?[0-9]*", ""), // removing cache-defeating query param
+		assertEquals(link,
 			"<link href=\"xxxx/app/css/a.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
 			"<link href=\"xxxx/app/css/b.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
 			"<link href=\"xxxx/app/css/c.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
@@ -49,7 +49,7 @@ public class MinimaAppServiceTest {
 	@Test
 	public void test_should_return_devel_lib_html_links() {
 		String link = service.getDevelLibsTags("xxxx/");
-		assertEquals(link.replaceAll("\\?[0-9]*", ""), // removing cache-defeating query param
+		assertEquals(link,
 			"<script src=\"xxxx/app/js/lib/a.js\" type=\"text/javascript\"></script>\n" +
 			"<script src=\"xxxx/app/js/lib/b.js\" type=\"text/javascript\"></script>\n" +
 			"<script src=\"xxxx/app/js/lib/c.js\" type=\"text/javascript\"></script>\n");
@@ -58,7 +58,7 @@ public class MinimaAppServiceTest {
 	@Test
 	public void test_should_return_devel_main_html_links() {
 		String link = service.getDevelMainTags("xxxx/");
-		assertEquals(link.replaceAll("\\?[0-9]*", ""), // removing cache-defeating query param
+		assertEquals(link,
 			"<script src=\"xxxx/app/js/main/a.js\" type=\"text/javascript\"></script>\n" +
 			"<script src=\"xxxx/app/js/main/b.js\" type=\"text/javascript\"></script>\n" +
 			"<script src=\"xxxx/app/js/main/c.js\" type=\"text/javascript\"></script>\n");
