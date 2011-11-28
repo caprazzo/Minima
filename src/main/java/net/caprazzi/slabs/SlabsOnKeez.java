@@ -104,8 +104,9 @@ public class SlabsOnKeez implements Slabs {
 	private Class<?>[] setupTypes(Class<? extends SlabsDoc>[] types) {
 		Class<?>[] clz = new Class[100];		
 		for (Class<?> t : types) {			
-			String typeName = t.getAnnotation(SlabsType.class).value();
-			int pos = typeName.hashCode() % clz.length;
+			String typeName = t.getAnnotation(SlabsType.class).value();			
+			int hashCode = typeName.hashCode();
+			int pos = Math.abs(hashCode) % clz.length;
 			if (clz[pos] != null) {
 				throw new RuntimeException("collision while building type map list");
 			}
@@ -115,7 +116,7 @@ public class SlabsOnKeez implements Slabs {
 	}
 	
 	private Class<?> getType(String name) {
-		return typeMap[name.hashCode() % typeMap.length];
+		return typeMap[Math.abs(name.hashCode()) % typeMap.length];
 	}
 	
 	

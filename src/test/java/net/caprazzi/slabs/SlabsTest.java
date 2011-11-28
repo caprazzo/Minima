@@ -17,10 +17,10 @@ public class SlabsTest {
 	private Slabs slabs;
 	private boolean called = false;
 
+	@SuppressWarnings("unchecked")
 	@Before public void setup() {
 		db = new KeezInMemory();
-		Class[] clz = new Class[] { TestDoc.class };
-		slabs = new SlabsOnKeez(db, clz);
+		slabs = new SlabsOnKeez(db, new Class[] { TestDoc.class });
 		called = false;
 	}
 	

@@ -1,5 +1,6 @@
 package net.caprazzi.slabs;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -48,8 +49,8 @@ public class SlabsDocTest {
 	@Test
 	public void should_serialize_to_plain_format_without_idrev() {
 		ObjectNode node = doc.toInternalJson();
-		assertEquals("the id", node.get("id").getValueAsText());
-		assertEquals(99, node.get("revision").getValueAsInt());
+		assertNull(node.get("id"));
+		assertNull(node.get("revision"));
 		assertEquals(doc.getValue(), node.get("value").getValueAsText());
 	}
 }
