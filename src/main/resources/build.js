@@ -17,6 +17,9 @@
 		"/htdocs/js/model/NoteCollection.js",
 		"/htdocs/js/model/NotificationsCtrlModel.js",
 		
+		"/htdocs/js/model/AlertModel.js",
+		"/htdocs/js/model/AlertCollection.js",
+		
 		"/htdocs/js/view/AlertArchivedView.js",
 		
 		"/htdocs/js/view/ListView.js",

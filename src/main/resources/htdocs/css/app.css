@@ -143,7 +143,20 @@ html {
 }
 #topbar .alerts .alert-message {
 	_display: none;
+	background-color: #efefef;
+	background-image: none;
+	color: black;
+	text-shadow: none;
 }
+#topbar .alerts .alert-message * {
+	color:black;
+	text-shadow: none;
+}
+
 #topbar, #board {
 	padding-left: 2em;
+}
+
+.alerts {
+	border: 1px solid gray;
 }
