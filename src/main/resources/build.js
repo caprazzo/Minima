@@ -17,8 +17,7 @@
 		"/htdocs/js/model/NoteCollection.js",
 		"/htdocs/js/model/NotificationsCtrlModel.js",
 		
-		"/htdocs/js/model/AlertModel.js",
-		"/htdocs/js/model/AlertCollection.js",
+		
 		
 		"/htdocs/js/view/AlertArchivedView.js",
 		
@@ -31,6 +30,7 @@
 		"/htdocs/js/view/NoteEditView.js",
 		"/htdocs/js/view/NoteCollectionView.js",
 		"/htdocs/js/view/NotificationsCtrlView.js",
+		"/htdocs/js/view/AlertsView.js",
 		
 		"/htdocs/js/Minima.js",	 
 		"/htdocs/js/MinimaClient.js",
@@ -48,13 +48,16 @@
 	],
 	
 	"templates": [
-	    "templates/list-create-template.html",
-	    "templates/list-name-template.html",
-	    "templates/list-template.html",
-	    "templates/note-template.html",
-	    "templates/notify-template.html",
-	    "templates/app-template.html",
-	    "templates/alert-archived-template.html"
+	    "templates/list-create.html",
+	    "templates/list-name.html",
+	    "templates/list.html",
+	    "templates/note.html",
+	    "templates/notify.html",
+	    "templates/app.html",
+	    "templates/alert-archived.html",
+	    "templates/alert-readonly.html",
+	    "templates/alerts.html"
+	    
 	],
 	
 	"pages": {

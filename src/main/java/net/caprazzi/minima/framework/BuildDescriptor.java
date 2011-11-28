@@ -134,6 +134,9 @@ public class BuildDescriptor {
 
 	public byte[] getTemplateData(String path) throws IOException {
 		Resource resource = Resource.newClassPathResource(path);
+		if (resource == null) {
+			throw new RuntimeException("Could not load from classpath: " + path);
+		}
 		InputStream inputStream = resource.getInputStream();
 		byte[] data = IO.readBytes(inputStream);
 		inputStream.close();

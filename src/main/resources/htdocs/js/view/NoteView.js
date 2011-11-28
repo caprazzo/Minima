@@ -5,7 +5,7 @@ NoteView = Backbone.View.extend({
 	_isDragging: false,
 	
 	initialize: function(args) {
-		this.template = Templates['note-template'];	
+		this.template = Templates['note'];	
 		this.readonly = args.readonly;
 		this.model.bind('change:desc', this.refresh, this);
 	},

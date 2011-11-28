@@ -158,5 +158,8 @@ html {
 }
 
 .alerts {
-	border: 1px solid gray;
+	overflow: hidden;
+}
+.alerts-list {
+	overflow: hidden;
 }

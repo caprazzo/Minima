@@ -6,11 +6,17 @@ AppView = Backbone.View.extend({
 		this.lists = args.lists;
 		this.notes = args.notes;
 		this.appModel = args.appModel;
-		this.template = Templates["app-template"];
+		this.template = Templates["app"];
+				
+		
+		this.views = {
+			alerts: new AlertsView(),
+		}
 		
 		Minima.bind('archive-note', function(note) {
-			var alView = new AlertArchivedView({model: note});
-			$('.alerts').append(alView.render().el);
+			var alView = new AlertArchivedView({ model: note });
+			alView.render();
+			this.views.alerts.addAlert(alView, 22000);
 		}, this);
 	},
 	
@@ -18,6 +24,9 @@ AppView = Backbone.View.extend({
 		console.log(this.appModel.toJSON());
 		this.el.html(this.template(this.appModel.toJSON()));
 						
+		// alerts panel
+		$('#alerts').append(this.views.alerts.render().el);
+		
 		// notifications control	
 		var nModel = new NotificationsCtrlModel();
 		var nView = new NotificationsCtrlView({model: nModel});	
@@ -32,9 +41,10 @@ AppView = Backbone.View.extend({
 			$('#list-create-ctrl').append(listCreateView.render().el);
 		}
 		else {
-			$('.alert-readonly').show().find('.close').click(function() {
-				$('.alert-readonly').hide();
-			});		
+			var alert = new AlertReadonlyView({ 
+				login_url: this.appModel.get('login_url')
+			})
+			this.views.alerts.addAlert(alert);
 		}
 		
 		// list collection view

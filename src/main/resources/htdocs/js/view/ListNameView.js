@@ -5,7 +5,7 @@ ListNameView = Backbone.View.extend({
 	_rendered: false,
 	
 	initialize: function(args) {
-		this.template = Templates['list-name-template'];
+		this.template = Templates['list-name'];
 		this.model.bind('change:name', this.render, this);
 		this.readonly = args.readonly;
 		this.tag = '[ListNameView ' + this.model.id + ']';

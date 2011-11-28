@@ -1,11 +1,9 @@
-NoteView = Backbone.View.extend({
+AlertsView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'alerts-container',
 	
 	initialize: function(args) {
-		this.template = Templates['alerts-template'];
-		this.alerts = args.alerts;
-		this.alerts.bind('add', this.addAlert, this);
+		this.template = Templates['alerts'];
 	},
 	
 	events: {
@@ -17,21 +15,23 @@ NoteView = Backbone.View.extend({
 		var el = $(this.el);
 		el.html(this.template({}));
 		this.ui = {
-			el: el
-		}
-		
-		var that = this;
-		this.alerts.each(function(alert) {
-			var alertView = new AlertView(alert);
-			that.el.append(alertView.render().el);
-		});
+			el: el,
+			list: el.find('.alerts-list')
+		}		
 		
 		return this;
 	},
 	
-	addAlert: function(alert) {
-		var alertView = new AlertView(alert);
-		that.el.append(alertView.render().el);
+	addAlert: function(alertView, duration) {
+		this.ui.list.empty();
+		var el = alertView.render().el;
+		this.ui.list.prepend(el);
+		
+		if (duration) {
+			setTimeout(function() { 
+				$(el).fadeOut();
+			}, duration);
+		}
 	}
 	
 });

@@ -11,7 +11,7 @@ ListCreateView = Backbone.View.extend({
 	
 	initialize: function(args) {
 		this.lists = args.lists;
-		this.template = Templates['list-create-template'];
+		this.template = Templates['list-create'];
 	},
 	
 	render: function() {
