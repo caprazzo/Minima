@@ -163,3 +163,36 @@ html {
 .alerts-list {
 	overflow: hidden;
 }
+
+.alert-message {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 0.25em;
+	padding-left: 0.5em;
+	font-size: 90%;
+	text-align: center;
+}
+.alert-message .close {
+	float: right;
+	font-variant: small-caps;
+	color: black;
+	opacity: 0.4;
+	font-weight: bold;
+	cursor: pointer;
+	margin: 0.15em;
+	margin-left: 1em;
+	margin-right: -1px;
+	margin-top: -7px;
+	font-family: Arial, sans-serif;
+	text-shadow: 0 1px 0 white;
+	line-height: 18px;
+	font-size: 14px;
+}
+.alert-message .close:hover {
+	opacity: 0.75;
+}
+.alert-message .undo {
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+}
