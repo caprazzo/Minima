@@ -18,15 +18,16 @@ public class PushService {
 		this.cometServlet = cometServlet;
 	}
 	
-	public void send(SlabsDoc doc) {
-		byte[] json = getUpdateJson(doc);
+	public void send(String sender, SlabsDoc doc) {
+		byte[] json = getUpdateJson(sender, doc);
 		this.websocketServlet.send(json);
 		this.cometServlet.send(json);
 	}
 	
-	private byte[] getUpdateJson(SlabsDoc doc) {
+	private byte[] getUpdateJson(String sender, SlabsDoc doc) {
 		ObjectNode root = mapper.createObjectNode();		
 		ObjectNode entity = doc.toJsonNode();
+		root.put("sender", sender);
 		root.put("name", doc.getTypeName());		
 		try {
 			root.put("obj", entity);

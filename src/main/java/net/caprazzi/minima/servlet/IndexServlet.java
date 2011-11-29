@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.framework.SkimpyTemplate;
+import net.caprazzi.minima.framework.Utils;
 
 @SuppressWarnings("serial")
 public class IndexServlet extends HttpServlet {
@@ -54,6 +55,7 @@ public class IndexServlet extends HttpServlet {
 			.add("DATA_LOCATION", contextPath + "/data")
 			.add("COMET_LOCATION", contextPath + "/comet")
 			.add("LOGIN_URL", contextPath + "/login")
+			.add("CLIENT_TAG", Utils.makeId())
 			.add("TEMPLATES", build.getTemplatesHtml());
 		
 		if (req.getParameter("devel") != null) {

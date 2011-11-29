@@ -21,7 +21,7 @@ public class SlabsOnKeez implements Slabs {
 	private final Db db;
 	private Class<?>[] typeMap;
 
-	public SlabsOnKeez(Db db, Class<? extends SlabsDoc>[] types) {
+	public SlabsOnKeez(Db db, Class<? extends SlabsDoc>... types) {
 		this.db = db;
 		typeMap = setupTypes(types);
 	}		
@@ -216,5 +216,5 @@ public class SlabsOnKeez implements Slabs {
 	public interface SlabsDelete {
 		
 	}
-	
+
 }

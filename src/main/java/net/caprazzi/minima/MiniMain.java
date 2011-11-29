@@ -6,7 +6,6 @@ import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.model.List;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Note;
-//import net.caprazzi.minima.service.DbHelper;
 import net.caprazzi.minima.service.PushService;
 import net.caprazzi.minima.servlet.AppServlet;
 import net.caprazzi.minima.servlet.CometServlet;
@@ -56,7 +55,8 @@ public class MiniMain {
 		//DbHelper minimaDbHelper = new DbHelper(keez);
 		//minimaDbHelper.init();
 		
-		Slabs db = new SlabsOnKeez(keez, new Class[] { List.class, Note.class, MasterRecord.class } ); 
+		@SuppressWarnings("unchecked")
+		Slabs db = new SlabsOnKeez(keez, new Class[] { List.class, Note.class, MasterRecord.class } );
 		final MinimaServer minimaServer = new MinimaServer(
 				db,
 				pushService,

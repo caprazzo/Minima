@@ -3,26 +3,15 @@ if (!window.console)
 	
 $(function() {
 	Templates.load();
-	
-	
-	// read variables from document
-	
+		
 	var app = new AppModel();
 	app.readPageConfig();
 	
-	/*
-	var readonly = ($('#minima-read-only').val() == "true");
-	
-	var mode = (window.WebSocket) ? 'websocket' : 'comet';	
-	var ws_location = $('#minima-websocket-location').val();
-	var comet_location = $('#minima-comet-location').val();	
-	var data_location = $('#minima-data-location').val();
-	*/
+	$.ajaxSetup({ headers : { "X-CLIENT-TAG" : app.get("CLIENT_TAG") } });
 	
 	var notes = new NoteCollection();
 	notes.url = app.get('data_location') + '/stories/';
 	notes.bind('change', function(note) {
-		// WARN: according to documentation this should not necessary
 		notes.sort();			
 	}, this);			
 	
@@ -47,6 +36,7 @@ $(function() {
 	});
 	
 	client.bind('note', function(note) {
+						
 		var found = notes.get(note.id);		
 		var model = new Note(note);
 				

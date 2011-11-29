@@ -2,7 +2,8 @@ function MinimaClient(options) {
 	this.mode = options.appModel.get('mode');
 	this.web_socket_location = options.appModel.get('ws_location');
 	this.comet_location = options.appModel.get('comet_location');
-	this.data_location = options.appModel.get('data_location');;
+	this.data_location = options.appModel.get('data_location');
+	this.client_tag = options.appModel.get('CLIENT_TAG');
 }
 
 _.extend(MinimaClient.prototype, Backbone.Events, {
@@ -25,6 +26,10 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 	
 	_receiveMessage: function(msg) {
 		var obj = $.parseJSON(msg);
+		if (obj.sender == this.client_tag) {
+			console.log("CLIENT: ignoring message from self");
+			return;
+		}
 		if (obj.name == "story")
 			this.trigger('note', obj.obj);
 		else if (obj.name == "list")

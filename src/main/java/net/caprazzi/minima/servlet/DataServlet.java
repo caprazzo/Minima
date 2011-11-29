@@ -119,12 +119,13 @@ public class DataServlet extends HttpServlet {
 		}
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
+		String senderTag = req.getHeader("X-CLIENT-TAG");
 		
 		if (info.isPath(webroot + "/data/stories/_/_")) {
 			String id = info.get(-2);
 			int revision = Integer.parseInt(info.get(-1));		
 			SlabsDoc note = Note.fromJson(req.getInputStream());
-			save(id, revision, note, resp);
+			save(senderTag, id, revision, note, resp);
 			return;
 		}
 		
@@ -132,14 +133,14 @@ public class DataServlet extends HttpServlet {
 			String id = info.get(-2);
 			int revision = Integer.parseInt(info.get(-1));
 			List list = List.fromJson(req.getInputStream());
-			save(id, revision, list, resp);
+			save(senderTag, id, revision, list, resp);
 			return;
 		}
 		
 		sendError(resp, 404, "not found");
 	}
 	
-	private void save(String id, int revision, SlabsDoc doc, final HttpServletResponse resp) {
+	private void save(final String sender, String id, int revision, SlabsDoc doc, final HttpServletResponse resp) {
 		doc.setId(id);
 		doc.setRevision(revision);
 		db.put(doc, new SlabsPut() {
@@ -147,7 +148,7 @@ public class DataServlet extends HttpServlet {
 			@Override
 			public void ok(SlabsDoc doc) {
 				sendDoc(resp, 201, doc);
-				pushService.send(doc);
+				pushService.send(sender, doc);
 			}
 
 			@Override
