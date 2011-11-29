@@ -138,6 +138,7 @@ NoteCollectionView = Backbone.View.extend({
 			connectWith: '.notes-container',
 			placeholder: 'notes-placeholder',
 			tolerance: 'intersect',
+			dropOnEmpty: true,
 			start: function(e, ui) {
 				ui.placeholder.height(ui.item.outerHeight());
 				var view = that._findView(ui.item.attr('id'));

@@ -1,5 +1,5 @@
 .note-container {	
-	background-color: white;	
+	background-color: white;
 	margin-bottom: 8px;
 	cursor: pointer;	
 	min-height: 1.5em;
@@ -70,5 +70,5 @@
 }
 
 .notes-container {
-	_min-height: 2.5em;
+	min-height: 0.75em;
 }
