@@ -35,6 +35,10 @@ ListNameView = Backbone.View.extend({
 		return this;
 	},
 	
+	refresh: function() {
+		this.ui.view.html(this.model.get('name'));
+	},
+	
 	activateEdit: function() {
 		if (this.readonly)
 			return;
@@ -56,6 +60,8 @@ ListNameView = Backbone.View.extend({
 			return;
 		this.model.set({ name: text });
 		this.model.save();
-		this.render();
+		this.refresh();
+		this.ui.edit.hide();
+		this.ui.view.show();		
 	}
 });
