@@ -44,6 +44,7 @@ ListView = Backbone.View.extend({
 	render: function() {
 		if (this._rendered) {
 			console.warn(this.tag, 'RE-RENDER');
+			this.notesView.render();
 			return this;
 		}
 		this._rendered = true;

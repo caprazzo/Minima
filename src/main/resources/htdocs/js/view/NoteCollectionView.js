@@ -51,6 +51,8 @@ NoteCollectionView = Backbone.View.extend({
 	render: function() {
 		if (this._rendered) {
 			console.warn(this.tag, 'RE-RENDER');
+			$(this.el).sortable('destroy');
+			this._setupContainer();
 			return this;
 		}
 		this._rendered = true;
@@ -131,6 +133,7 @@ NoteCollectionView = Backbone.View.extend({
 	
 	_setupContainer: function() {
 		var that = this;
+		
 		$(this.el).sortable({
 			connectWith: '.notes-container',
 			placeholder: 'notes-placeholder',
