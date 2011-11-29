@@ -1,5 +1,7 @@
 package net.caprazzi.slabs;
 
+import java.util.Date;
+
 import net.caprazzi.keez.Keez;
 import net.caprazzi.keez.Keez.Db;
 import net.caprazzi.keez.Keez.Entry;
@@ -71,6 +73,7 @@ public class SlabsOnKeez implements Slabs {
 		byte[] data;
 		try {
 			ObjectNode databaseJson = doc.getDatabaseJson();
+			databaseJson.put("_last_update", new Date().getTime());
 			ObjectMapper mapper = new ObjectMapper();
 			data = mapper.writeValueAsBytes(databaseJson);
 		} catch (Exception e) {
