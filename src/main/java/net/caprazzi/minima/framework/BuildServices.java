@@ -3,6 +3,9 @@ package net.caprazzi.minima.framework;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+
+import com.google.common.base.Joiner;
 
 /**
  * BuildService provides access to client resources (js, css and templates) in plain
@@ -10,6 +13,7 @@ import java.io.OutputStream;
  */
 public class BuildServices {
 
+	private HashMap<String, ByteArrayOutputStream> cache = new HashMap<String, ByteArrayOutputStream>();
 	private final BuildDescriptor descriptor;
 
 	/**
@@ -129,9 +133,15 @@ public class BuildServices {
 	 * @param out
 	 * @throws IOException
 	 */
-	private void writeAllFiles(String[] paths, OutputStream out)
-			throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	private void writeAllFiles(String[] paths, OutputStream out) throws IOException {
+		String key = Joiner.on("+").join(paths);
+		ByteArrayOutputStream baos = cache.get(key);
+		if (baos != null) {
+			baos.writeTo(out);
+			return;
+		}		
+		baos = new ByteArrayOutputStream();
+		cache.put(key, baos);
 		for (String path : paths) {
 			try {
 				baos.write(this.descriptor.getData(path));

@@ -67,7 +67,7 @@ public class MinimaServer {
         if (loginServlet != null) {
         	context.addServlet(new ServletHolder(loginServlet), "/login");
         	context.addServlet(new ServletHolder(loginServlet), "/logout");
-        }
+        }                
         
         DataServlet minimaServlet = new DataServlet(webroot, db, pushService);
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");

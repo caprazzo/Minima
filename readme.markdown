@@ -55,10 +55,18 @@ All configurations are optional
 
 Options to /index
 
-* ?devel: js and css files will be oaded separately and with all cacheing disabled
-* ?readonly: the ui be rendered as if in readonly mode
+* ?devel: JS and CSS files will be loaded separately and with all caching disabled
+* ?readonly: the UI be rendered as if in read-only mode
 
 ## Changelog
+
+### V 0.10 - 29 November 2011
+
+* inverted ui so 'add note button' now is always on top
+* when a user deletes a note, he is offered to undo
+* top bar is now pinned to the top of the viewport
+* edit/create note textarea expands as the user types
+* user can Alt-Enter or Ctrl-Enter to add a newline in note edit
 
 ### V 0.9 - 12 November 2011
 
