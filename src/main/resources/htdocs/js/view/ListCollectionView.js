@@ -207,6 +207,6 @@ ListCollectionView = Backbone.View.extend({
 			sortedObj[val.model.id] = val;
 		});
 		this._listViews = sortedObj;
-	},
+	}
 	
 });
