@@ -31,8 +31,9 @@ $(function() {
 	var client = new MinimaClient({ appModel: app });
 		
 	client.bind('board', function(board) {
+		$('#loading').fadeOut();
 		lists.add(board.lists);
-		notes.add(board.stories);		
+		notes.add(board.stories);			
 	});
 	
 	client.bind('note', function(note) {
@@ -78,6 +79,7 @@ $(function() {
 	});
 	view.render();	
 	
+	$('#loading').fadeIn();
 	client.connect();
-	client.loadBoard();
+	client.loadBoard();	
 });

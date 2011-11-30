@@ -196,3 +196,12 @@ html {
 	text-decoration: underline;
 	cursor: pointer;
 }
+#loading {
+	display: none;
+	text-align: center;
+	font-variant: small-caps;
+	color: #777;
+	font-size: 120%;
+	letter-spacing: 0.15em;
+	font-weight: bold;
+}
