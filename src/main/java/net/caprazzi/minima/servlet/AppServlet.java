@@ -1,6 +1,5 @@
 package net.caprazzi.minima.servlet;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,19 +11,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpMethods;
-
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.HttpUtils;
 import net.caprazzi.minima.framework.RequestInfo;
+
+import org.eclipse.jetty.http.HttpMethods;
 
 @SuppressWarnings("serial")
 public class AppServlet extends HttpServlet {
 
 	private final BuildServices service;
+	
+	private ByteArrayOutputStream gzipCss;
+	private ByteArrayOutputStream gzipMain;
+	private ByteArrayOutputStream gzipLibs;
 
-	public AppServlet(BuildServices service) {
+	private ByteArrayOutputStream plainLibs;
+	private ByteArrayOutputStream plainMain;
+	private ByteArrayOutputStream plainCss;
+
+	public AppServlet(BuildServices service) throws IOException {
 		this.service = service;
+		primeLibsCaches();
+		primeCssCaches();
+		primeMainCaches();
 	}
 
 	@Override
@@ -34,17 +44,17 @@ public class AppServlet extends HttpServlet {
 		RequestInfo info = RequestInfo.fromRequest(req);
 				
 		if (info.isPath(req.getContextPath() + "/app/libs")) {
-			handleLibsRequest(info, req, resp);
+			handleLibsRequest(req, resp);
 			return;
 		}
 		
 		if (info.isPath(req.getContextPath() + "/app/main")) {
-			handleMainRequest(info, req, resp);
+			handleMainRequest(req, resp);
 			return;
 		}
 		
 		if (info.isPath(req.getContextPath() + "/app/css")) {
-			handleCssRequest(info, req, resp);
+			handleCssRequest(req, resp);
 			return;
 		}
 		
@@ -71,46 +81,75 @@ public class AppServlet extends HttpServlet {
 		out.close();
 	}
 	
-	private void handleLibsRequest(RequestInfo info, HttpServletRequest req,
+	private void handleLibsRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");
-		ServletOutputStream out = resp.getOutputStream();
-		service.writeProductionLibsData(out);
-		out.close();
+		if (acceptGzip(req))
+			sendCompressed(gzipLibs, resp);
+		else
+			sendCache(plainLibs, resp);
 	}
 
-	private ByteArrayOutputStream baos;
-	private void handleCssRequest(RequestInfo info, HttpServletRequest req,
+	private void handleCssRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		resp.setContentType("text/css");
-		
-		
-		OutputStream out = resp.getOutputStream();
-		if (acceptGzip(req)) {
-			resp.setHeader("Content-Encoding","gzip");
-			if (baos != null) {
-				baos.writeTo(out);
-				out.close();
-				return;
-			}
-			baos = new ByteArrayOutputStream();
-			OutputStream gzout = new GZIPOutputStream(new BufferedOutputStream(baos));
-			service.writeProductionCssData(gzout);
-			gzout.close();
-			baos.writeTo(out);
-			out.close();
-			return;
-		}		 
-		service.writeProductionCssData(out);
-		out.close();
+		if (acceptGzip(req))
+			sendCompressed(gzipCss, resp);
+		else
+			sendCache(plainCss, resp);
 	}
-
-	private void handleMainRequest(RequestInfo info, HttpServletRequest req,
+	
+	private void handleMainRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");
+		if (acceptGzip(req))
+			sendCompressed(gzipMain, resp);
+		else
+			sendCache(gzipLibs, resp);
+	}
+	
+	private void primeLibsCaches() throws IOException {
+		plainLibs = new ByteArrayOutputStream();
+		service.writeProductionLibsData(plainLibs);
+		plainLibs.close();
+		
+		gzipLibs = new ByteArrayOutputStream();
+		OutputStream gzout = new GZIPOutputStream(gzipLibs);
+		plainLibs.writeTo(gzout);
+		gzout.close();
+	}
+	
+	private void primeMainCaches() throws IOException {
+		plainMain = new ByteArrayOutputStream();
+		service.writeProductionMainData(plainMain);
+		plainMain.close();
+		
+		gzipMain = new ByteArrayOutputStream();
+		OutputStream gzout = new GZIPOutputStream(gzipMain);
+		plainMain.writeTo(gzout);
+		gzout.close();
+	}
+
+	private void primeCssCaches() throws IOException {
+		plainCss = new ByteArrayOutputStream();
+		service.writeProductionCssData(plainCss);
+		plainCss.close();
+		
+		gzipCss = new ByteArrayOutputStream();
+		OutputStream gzout = new GZIPOutputStream(gzipCss);
+		plainCss.writeTo(gzout);
+		gzout.close();
+	}
+	
+	private void sendCache(ByteArrayOutputStream cache, HttpServletResponse resp) throws IOException {
 		ServletOutputStream out = resp.getOutputStream();
-		service.writeProductionMainData(out);
+		cache.writeTo(out);
 		out.close();
+	}
+	
+	private void sendCompressed(ByteArrayOutputStream cache, HttpServletResponse resp) throws IOException {
+		resp.setHeader("Content-Encoding","gzip");
+		sendCache(cache, resp);
 	}
 	
 	private boolean acceptGzip(HttpServletRequest req) {
