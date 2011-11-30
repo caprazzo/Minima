@@ -9,7 +9,7 @@ AppView = Backbone.View.extend({
 		this.template = Templates["app"];
 						
 		this.views = {
-			alerts: new AlertsView(),
+			alerts: new AlertsView()
 		}
 		
 		Minima.bind('archive-note', function(note) {

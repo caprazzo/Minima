@@ -1,5 +1,5 @@
 if (!window.console)
-	window.console = { log: function() {}, warn: function() {} };
+	window.console = { log: function() {}, warn: function() {}, error: function() {} };
 	
 $(function() {
 	Templates.load();

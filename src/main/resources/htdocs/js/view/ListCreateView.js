@@ -19,7 +19,7 @@ ListCreateView = Backbone.View.extend({
 		el.html(this.template({}));
 		this.ui = {
 			el: el,
-			btn: el.find('.list-create-btn'),
+			btn: el.find('.list-create-btn')
 		}
 		return this;
 	},
