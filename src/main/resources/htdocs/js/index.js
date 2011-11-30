@@ -1,5 +1,5 @@
 if (!window.console)
-	window.console = { log: function() {} };
+	window.console = { log: function() {}, warn: function() {} };
 	
 $(function() {
 	Templates.load();
@@ -31,7 +31,7 @@ $(function() {
 	var client = new MinimaClient({ appModel: app });
 		
 	client.bind('board', function(board) {
-		$('#loading').fadeOut();
+		$('#loading').remove();
 		lists.add(board.lists);
 		notes.add(board.stories);			
 	});
@@ -79,7 +79,10 @@ $(function() {
 	});
 	view.render();	
 	
-	$('#loading').fadeIn();
+	setTimeout(function() {
+		$('#loading').fadeIn('fast');
+	}, 750);
+	
 	client.connect();
 	client.loadBoard();	
 });
