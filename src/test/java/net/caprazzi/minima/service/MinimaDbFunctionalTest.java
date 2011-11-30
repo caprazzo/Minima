@@ -7,6 +7,7 @@ import java.io.File;
 
 import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.TestUtils.GetTestHelp;
+import net.caprazzi.minima.model.List;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
@@ -41,11 +42,11 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<StoryList> fromJson = Meta.fromJson(StoryList.class, data);
-				assertEquals("list", fromJson.getName());
-				assertEquals("todo", fromJson.getObj().getName());
-				assertEquals(65536, fromJson.getObj().getPos().intValue());
-				assertEquals("keylisttodo", fromJson.getObj().getId());
+				List list = List.fromJson(data);
+				assertEquals("list", list.getTypeName());
+				assertEquals("todo", list.getName());
+				assertEquals(65536, list.getPos());
+				assertEquals("keylisttodo", list.getId());
 			}
 		});
 		
@@ -53,11 +54,11 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<StoryList> fromJson = Meta.fromJson(StoryList.class, data);
-				assertEquals("list", fromJson.getName());
-				assertEquals("doing", fromJson.getObj().getName());
-				assertEquals(65536*2, fromJson.getObj().getPos().intValue());
-				assertEquals("keylistdoing", fromJson.getObj().getId());
+				List list = List.fromJson(data);
+				assertEquals("list", list.getTypeName());
+				assertEquals("doing", list.getName());
+				assertEquals(65536 * 2, list.getPos());
+				assertEquals("keylistdoing", list.getId());
 			}
 		});
 		
@@ -65,11 +66,11 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<StoryList> fromJson = Meta.fromJson(StoryList.class, data);
-				assertEquals("list", fromJson.getName());
-				assertEquals("done", fromJson.getObj().getName());
-				assertEquals(65536*3, fromJson.getObj().getPos().intValue());
-				assertEquals("keylistdone", fromJson.getObj().getId());
+				List list = List.fromJson(data);
+				assertEquals("list", list.getTypeName());
+				assertEquals("done", list.getName());
+				assertEquals(65536*3, list.getPos());
+				assertEquals("keylistdone", list.getId());
 			}
 		});
 		
@@ -78,8 +79,7 @@ public class MinimaDbFunctionalTest {
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
 				MasterRecord record = MasterRecord.fromJson(data, MasterRecord.class);
-				
-				assertEquals("master_recrd", record.getTypeName());
+				assertEquals("master_record", record.getTypeName());
 				assertEquals("1", record.getDbVersion());
 			}
 		});

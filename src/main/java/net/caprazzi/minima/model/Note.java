@@ -15,6 +15,17 @@ public class Note extends SlabsDoc {
 	private BigDecimal pos;
 	private boolean archived;
 	
+	public Note() {
+		
+	}
+	
+	public Note(String desc, String list, int pos, boolean archived) {
+		this.desc = desc;
+		this.list = list;
+		this.pos = new BigDecimal(pos);
+		this.archived = archived;
+	}
+	
 	public String getDesc() {
 		return desc;
 	}

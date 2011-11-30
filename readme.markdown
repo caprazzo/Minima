@@ -63,8 +63,8 @@ Options to /index
 
 ### V 0.10 - 29 November 2011
 
-* inverted ui so 'add note button' now is always on top
-* when a user deletes a note, he is offered to undo
+* inverted ui so 'add note button' now is always on top - beware: existing notes will be listed in inverse order
+* undo for note archive
 * top bar is now pinned to the top of the viewport
 * edit/create note textarea expands as the user types
 * user can Alt-Enter or Ctrl-Enter to add a newline in note edit

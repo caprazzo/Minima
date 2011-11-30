@@ -3,6 +3,8 @@ package net.caprazzi.minima.model;
 import java.io.InputStream;
 import java.math.BigDecimal;
 
+import javax.servlet.ServletInputStream;
+
 import net.caprazzi.slabs.SlabsDoc;
 import net.caprazzi.slabs.SlabsType;
 
@@ -37,8 +39,12 @@ public class List extends SlabsDoc {
 		this.archived = archived;
 	}
 
+	public static List fromJson(byte[] data) {
+		return SlabsDoc.fromJson(data, List.class);		
+	}
+
 	public static List fromJson(InputStream in) {
-		return SlabsDoc.fromJson(in, List.class);		
+		return SlabsDoc.fromJson(in, List.class);
 	}
 	
 }
