@@ -3,6 +3,8 @@ package net.caprazzi.minima.servlet;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -60,25 +62,38 @@ public class DataServlet extends HttpServlet {
 			@Override
 			public void entries(Iterable<SlabsDoc> docs) {
 				
+				final HashMap<String, List> lists = new HashMap<String,List>();
+				final ArrayList<Note> notes = new ArrayList<Note>();
+				
+				for (SlabsDoc doc : docs) {
+					if (doc.getTypeName().equals("list")) {
+						List list = (List)doc;
+						if (!list.isArchived())
+							lists.put(list.getId(), list);
+					}
+					else if (doc.getTypeName().equals("story")) {
+						Note note = (Note)doc;
+						if (!note.isArchived())
+						notes.add(note);
+					}
+				}
+				
 				ObjectMapper mapper = new ObjectMapper();
 				ObjectNode root = mapper.createObjectNode();
 				
-				ArrayNode stories = mapper.createArrayNode();
-				root.put("stories", stories);
+				ArrayNode listsNode = mapper.createArrayNode();
+				root.put("lists", listsNode);
+				for (List list : lists.values()) {
+					listsNode.add(list.toJsonNode());
+				}
 				
-				ArrayNode lists = mapper.createArrayNode();
-				root.put("lists", lists);
-				
-				for(SlabsDoc doc : docs) {
-					ObjectNode node = doc.toJsonNode();
-					if (doc.getTypeName().equals("list") && !((List) doc).isArchived()) {
-						lists.add(node);
-					}
-					else if (doc.getTypeName().equals("story") && !((Note) doc).isArchived()) {						
-						stories.add(node);
-					}
-				}				
-				
+				ArrayNode notesNode = mapper.createArrayNode();
+				root.put("stories", notesNode);
+				for (Note note : notes) {
+					if (lists.containsKey(note.getList()))
+					notesNode.add(note.toJsonNode());
+				}								
+			
 				try {					
 					resp.setContentType("application/json");
 					ServletOutputStream out = resp.getOutputStream();

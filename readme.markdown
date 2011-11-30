@@ -1,5 +1,5 @@
 # Minima
-Minima is a to-do list board in the spirit of pivotaltracker and trello. Minima is a standalone server that you can run on your host.
+Minima is a shared pin-board that lets you simply organise your notes. Minima is a standalone server that you can run on your host.
 
 Try the [online demo](http://minima.caprazzi.net/demo/ "Minima live demo")
 
@@ -7,12 +7,13 @@ Peek at [this project board](http://minima.caprazzi.net/minima/ "Minima project 
 
 Screenshot:
 
-![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.9.png "Minima Screenshot")
+![screenshot](https://github.com/mcaprari/Minima/raw/master/screenshots/screenshot-minima-0.10.png "Minima Screenshot")
 
 ### Features:
 
-* add, edit and drag notes between lists
-* add, edit and rearrange lists
+* add, edit, delete and drag notes between lists
+* add, edit, delete and rearrange lists
+* undo delete note
 * live updates: all connected browsers are updated
 * desktop notifications (supported browsers only)
 * password protection - same password for all users (see configuration below to enable)
@@ -22,8 +23,8 @@ Screenshot:
 ## For users
  
 ### Install and run
-1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.9-standalone.jar)
-2. java -jar Minima-0.9-standalone.jar (or doubleclick)
+1. Download the [latest jar](https://github.com/downloads/mcaprari/Minima/Minima-0.10-standalone.jar)
+2. java -jar Minima-0.10-standalone.jar (or doubleclick)
 3. browse to http://localhost:8989/index
 
 ### Configuration
@@ -67,6 +68,7 @@ Options to /index
 * top bar is now pinned to the top of the viewport
 * edit/create note textarea expands as the user types
 * user can Alt-Enter or Ctrl-Enter to add a newline in note edit
+* production css and js cached and compressed
 
 ### V 0.9 - 12 November 2011
 
