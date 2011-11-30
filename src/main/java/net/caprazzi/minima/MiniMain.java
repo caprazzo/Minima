@@ -1,18 +1,20 @@
 package net.caprazzi.minima;
 
-import net.caprazzi.keez.Keez.Db;
-import net.caprazzi.keez.simpleFileDb.KeezFileDb;
+import net.caprazzi.keez.onfile.KeezOnFile;
 import net.caprazzi.minima.framework.BuildDescriptor;
 import net.caprazzi.minima.framework.BuildServices;
-import net.caprazzi.minima.service.MinimaDb;
-import net.caprazzi.minima.service.MinimaPushService;
-import net.caprazzi.minima.service.MinimaService;
-import net.caprazzi.minima.servlet.MinimaAppServlet;
-import net.caprazzi.minima.servlet.MinimaCometServlet;
-import net.caprazzi.minima.servlet.MinimaIndexServlet;
-import net.caprazzi.minima.servlet.MinimaLoginServlet;
-import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
+import net.caprazzi.minima.model.List;
+import net.caprazzi.minima.model.MasterRecord;
+import net.caprazzi.minima.model.Note;
+import net.caprazzi.minima.service.PushService;
+import net.caprazzi.minima.servlet.AppServlet;
+import net.caprazzi.minima.servlet.CometServlet;
+import net.caprazzi.minima.servlet.IndexServlet;
+import net.caprazzi.minima.servlet.LoginServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
+import net.caprazzi.minima.servlet.WebsocketServlet;
+import net.caprazzi.slabs.Slabs;
+import net.caprazzi.slabs.SlabsOnKeez;
 
 public class MiniMain {
 
@@ -27,36 +29,37 @@ public class MiniMain {
 		String websocketLocation = System.getProperty("minima.websocket.location", "auto");
 		String webroot = System.getProperty("minima.webroot", "");
 		
-		boolean isPrivate = (password != null && password.length() > 0);
-		boolean hasPublicView = publicView.equalsIgnoreCase("true");
+		boolean requireSessionToEdit = (password != null && password.length() > 0);
+		boolean requireSessionToView = requireSessionToEdit && !publicView.equalsIgnoreCase("true");
 		
-		KeezFileDb db = new KeezFileDb(dbDir, dbPrefix, true);
-		db.setAutoPurge(true);
+		KeezOnFile keez = new KeezOnFile(dbDir, dbPrefix, true);
+		keez.setAutoPurge(true);
 		
 		BuildDescriptor descriptor = BuildDescriptor.fromFile("build.js");		
 		BuildServices appService = new BuildServices(descriptor);
 		
-		MinimaIndexServlet indexServlet = new MinimaIndexServlet(websocketLocation, appService);
+		IndexServlet indexServlet = new IndexServlet(websocketLocation, appService);
 		indexServlet.setTitle(boardTitle);
-		MinimaWebsocketServlet websocketServlet = new MinimaWebsocketServlet();
-		MinimaCometServlet cometServlet = new MinimaCometServlet();
 		
-		MinimaPushService pushService = new MinimaPushService(websocketServlet, cometServlet);
+		WebsocketServlet websocketServlet = new WebsocketServlet();
+		CometServlet cometServlet = new CometServlet();		
+		PushService pushService = new PushService(websocketServlet, cometServlet);		
+		PrivacyFilter privacyFilter = new PrivacyFilter(requireSessionToView, requireSessionToEdit);
 		
-		PrivacyFilter privacyFilter = new PrivacyFilter(isPrivate, hasPublicView);
-		MinimaLoginServlet loginServlet = null;
+		LoginServlet loginServlet = (requireSessionToEdit)
+				? new LoginServlet(password)
+				: null;
+				
+		AppServlet appServlet = new AppServlet(appService);
 		
-		if (isPrivate) {
-			loginServlet = new MinimaLoginServlet(password);
-		}
+		//DbHelper minimaDbHelper = new DbHelper(keez);
+		//minimaDbHelper.init();
 		
-		MinimaAppServlet appServlet = new MinimaAppServlet(appService);
-		
-		MinimaDb minimaDbHelper = new MinimaDb(db);
-		minimaDbHelper.init();
-		MinimaService minimaService = new MinimaService(db, pushService);
+		@SuppressWarnings("unchecked")
+		Slabs db = new SlabsOnKeez(keez, new Class[] { List.class, Note.class, MasterRecord.class } );
 		final MinimaServer minimaServer = new MinimaServer(
-				minimaService,
+				db,
+				pushService,
 				websocketServlet, 
 				cometServlet, 
 				indexServlet,
@@ -71,7 +74,6 @@ public class MiniMain {
 				try {
 					minimaServer.shutdown();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

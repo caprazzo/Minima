@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-import javax.servlet.ServletOutputStream;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jetty.util.IO;
 import org.eclipse.jetty.util.resource.Resource;
@@ -136,6 +134,9 @@ public class BuildDescriptor {
 
 	public byte[] getTemplateData(String path) throws IOException {
 		Resource resource = Resource.newClassPathResource(path);
+		if (resource == null) {
+			throw new RuntimeException("Could not load from classpath: " + path);
+		}
 		InputStream inputStream = resource.getInputStream();
 		byte[] data = IO.readBytes(inputStream);
 		inputStream.close();

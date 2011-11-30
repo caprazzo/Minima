@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class StoryList {
+public class StoryList extends Entity {
 
 	private BigDecimal pos;
 	private String id;

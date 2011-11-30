@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 @WebServlet(asyncSupported = true)
-public class MinimaCometServlet extends HttpServlet {
+public class CometServlet extends HttpServlet {
 
 	private Map<String, AsyncContext> asyncContexts = new ConcurrentHashMap<String, AsyncContext>();
 

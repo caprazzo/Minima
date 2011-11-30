@@ -1,5 +1,5 @@
 .note-container {	
-	background-color: white;	
+	background-color: white;
 	margin-bottom: 8px;
 	cursor: pointer;	
 	min-height: 1.5em;
@@ -32,58 +32,43 @@
 	line-height: 1.2em;
 	word-wrap: break-word;
 }
-.note-edit {	
+
+.note-save-alert {
 	display: none;
-}
-.note-textarea {
-	background-color: #ffffcc;
-	resize: none;
-	width: 100%;
-	height: 100px;
-	padding: 6px;
-	border: 1px solid #ccc;
+	color: #705400;
+	text-align: center;
+	font-style: italic;
+	font-family: monospace;
+	font-size: small;
+	border: 1px solid #705400;
 	border-radius: 4px;
-	font-size: 18px;
-	line-height: 1.2em;		
-	margin: 0;	
-	box-sizing: border-box;         /* For IE and modern versions of Chrome */
-	-moz-box-sizing: border-box;    /* For Firefox                          */
-	-webkit-box-sizing: border-box; 
+	
+	margin-right: 12px;
+	margin-left: 12px;
+	margin-top: 4px;
+	background-color: #ffd4aa;
+	padding: 1px;
+	line-height: 1em;
 }
-.note-create-textarea {
+
+.note-editor {
 	display: none;	
 	background-color: #ffffcc;
 	resize: none;
 	width: 100%;
 	height: 100px;
+	_min-height: 3em;
 	padding: 6px;
 	border: 1px solid #ccc;
 	font-size: 18px;
 	line-height: 1.2em;		
 	margin: 0;	
-	box-sizing: border-box;         /* For IE and modern versions of Chrome */
-	-moz-box-sizing: border-box;    /* For Firefox                          */
-	-webkit-box-sizing: border-box; 
-	
+	-webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .notes-container {
-	min-height: 2.5em;
-}
-.note-create-btn {
-	border: 1px solid #ccc;
-	background-color: #efefef;
-	color: #efefef;
-	border-radius: 4px;
-	margin-bottom: 1px;
-	cursor: pointer;	
-	padding-top: 6px;
-	padding-bottom: 6px;	
-	min-height: 1em;
-	display:block;
-	text-align: center;
-}
-.note-create-btn-hover {
-	background-color: #ddd;
-	color: #888;
+	min-height: 0.75em;
 }

@@ -2,9 +2,10 @@ ListNameView = Backbone.View.extend({
 	tagName: 'div',
 	model: List,
 	className: 'list-name-container',
+	_rendered: false,
 	
 	initialize: function(args) {
-		this.template = Templates['list-name-template'];
+		this.template = Templates['list-name'];
 		this.model.bind('change:name', this.render, this);
 		this.readonly = args.readonly;
 		this.tag = '[ListNameView ' + this.model.id + ']';
@@ -17,7 +18,12 @@ ListNameView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');	
+			return this;
+		}
+		this._rendered = true;
+		
 		var $el = $(this.el);
 		var json = this.model.toJSON();
 		$el.html(this.template(json));
@@ -25,8 +31,12 @@ ListNameView = Backbone.View.extend({
 			edit: $el.find('.list-name-edit'),
 			view: $el.find('.list-name-display')
 		}
-		this._rendered = true;
+		
 		return this;
+	},
+	
+	refresh: function() {
+		this.ui.view.html(this.model.get('name'));
 	},
 	
 	activateEdit: function() {
@@ -50,6 +60,8 @@ ListNameView = Backbone.View.extend({
 			return;
 		this.model.set({ name: text });
 		this.model.save();
-		this.render();
+		this.refresh();
+		this.ui.edit.hide();
+		this.ui.view.show();		
 	}
 });

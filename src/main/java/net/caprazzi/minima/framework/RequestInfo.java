@@ -10,15 +10,27 @@ public final class RequestInfo {
 	private final String[] parts;
 	private final String method;
 	private final boolean endsWithSlash;
+	private final HttpServletRequest req;
 
+	/*
 	public RequestInfo(String method, String uri) {
 		this.method = method;
 		this.parts = uri.substring(1).split("/");
 		this.endsWithSlash = uri.endsWith("/");
 	}
+	*/
 	
-	public static RequestInfo fromRequest(HttpServletRequest req) { 
-		return new RequestInfo(req.getMethod(), req.getRequestURI());
+	public RequestInfo(HttpServletRequest req) {
+		this.req = req;
+		this.method = req.getMethod();
+		String uri = req.getRequestURI();
+		this.parts = uri.substring(1).split("/");
+		this.endsWithSlash = uri.endsWith("/");
+	}
+
+	public static RequestInfo fromRequest(HttpServletRequest req) {
+		return new RequestInfo(req);
+		//return new RequestInfo(req.getMethod(), req.getRequestURI());
 	}
 	
 	/**
@@ -101,6 +113,7 @@ public final class RequestInfo {
 	 * @return
 	 */
 	public boolean isPath(String expression) {		
+		expression = expression.replace("{ctx}", req.getContextPath());
 		String[] checkParts = expression.substring(1).split("/");
 		if (checkParts.length != parts.length)
 			return false;
@@ -114,6 +127,16 @@ public final class RequestInfo {
 		}
 		
 		return true;
+	}
+
+	public boolean isRead() {
+		return	method.equals("GET") 
+				|| method.equals("HEAD")
+				|| method.equals("OPTIONS");
+	}
+
+	public boolean isWrite() {
+		return !isRead();
 	}
 
 }

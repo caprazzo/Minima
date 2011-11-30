@@ -7,7 +7,8 @@
 	_display: block;
 	border-radius: 3px;
 	border: 1px solid gray;
-	margin: 1em;
+	margin-bottom: 1em;
+	margin-right: 1em;
 	padding: 7px;
 	
 }
@@ -36,13 +37,15 @@
 }
 .list-footer {
 	margin-top: 0px;
+	margin-bottom: 9px;
 }
 .list-name-container {
 	margin-bottom: 6px;
 }
 .list-name-display {
-	border: 1px solid white;
+	_border: 1px solid white;
 	border-left: 1px;
+	padding-left: 6px;
 }
 .list-name-display, .list-name-edit {
 	font-size: 18px;
@@ -63,17 +66,35 @@
 	border-radius: 3px;
 	width: 98%;
 }
-
-.list-create-btn {
+.note-create-btn {
+	min-height: 1em;
 	border: 1px solid #ccc;
 	background-color: #efefef;
-	color: #ccc;
-	width: 100px;
+	color: #efefef;
 	border-radius: 4px;
 	margin-bottom: 1px;
 	cursor: pointer;	
 	padding-top: 6px;
 	padding-bottom: 6px;	
+	
+	text-align: center;
+	display: none;
+}
+.note-create-btn-hover {
+	background-color: #ddd;
+	color: #888;
+}
+.list-create-btn {
+	margin-bottom: 1px;
+	border: 1px solid #ccc;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+		
+	background-color: #efefef;
+	color: #ccc;
+	width: 100px;
+	border-radius: 4px;
+	cursor: pointer;	
 	min-height: 1em;
 	display:block;
 	text-align: center;
@@ -88,7 +109,8 @@
 .list-archive {
 	float: right;
 }
-.list-archive-btn {
+
+.list-archive .list-archive-btn {
 	display: none;
 	_float: right;
 	display: none;	

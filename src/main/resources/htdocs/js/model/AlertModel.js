@@ -1,0 +1,1 @@
+Alert = Backbone.Model.extend({});

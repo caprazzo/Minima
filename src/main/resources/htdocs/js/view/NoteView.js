@@ -5,34 +5,43 @@ NoteView = Backbone.View.extend({
 	_isDragging: false,
 	
 	initialize: function(args) {
-		this.template = Templates['note-template'];	
+		this.template = Templates['note'];	
 		this.readonly = args.readonly;
-		this.model.bind('change', this.render, this);
+		this.model.bind('change:desc', this.refresh, this);
 	},
 	
 	events: {
 		'dblclick': 'activateEdit',
-		'keypress .note-textarea': 'onEditEnter',
-		'keyup .note-textarea': 'onEditEsc',
 		'click .note-archive-btn': 'archiveNote'
 	},
 	
+	refresh: function() {
+		var json = this.model.toJSON();
+		var desc = this._filter(json.desc);
+		this.ui.text.html('  ').html(desc);
+		console.log(this.ui.text.html())
+	},
+	
 	render: function() {
+		this._rendered = true;
+		
 		var el = $(this.el);	
 		el.attr('id', 'note-'+ this.model.id);
 		var json = this.model.toJSON();
-		json.obj.desc = this._filter(json.obj.desc);
+		json.desc = this._filter(json.desc);
 		el.html(this.template(json));
+		
 		this.ui = {
 			el: el,
 			archive: el.find('.note-archive-btn').hide(),
 			view: el.find('.note-view'),
 			edit: el.find('.note-edit'),
-			textarea: el.find('.note-textarea')
-		}		
+			text: el.find('.note-text'),
+			alert: el.find('.note-save-alert')
+		}
+		
 		if (this.readonly)
 			this.ui.el.addClass('note-container-readonly');
-		this._rendered = true;
 		
 		var view = this;
 		this.ui.el.hover(
@@ -57,25 +66,31 @@ NoteView = Backbone.View.extend({
 	},
 	
 	archiveNote: function() {
-		this.model.set({archived: true});
-		this.remove();
-		this.model.save();
+		this.model.set();
+		this.ui.el.hide();
+		var that = this;
+		this.model.save({archived: true}, {
+			silent: true,
+			success: function(note) {
+				note.set({archived: true});				
+				Minima.trigger('archive-note', note);
+			},
+			error: function(note) {
+				note.set({archived: false}, {silent: true});
+				that.ui.el.show();
+				that.showSaveFailed();
+			}
+		});		
 	},
 	
 	activateEdit: function() {
 		if (this.readonly)
 			return;
-		this.ui.view.hide();		
-		this.ui.edit.show();
-		this.ui.textarea.val(this.model.get('desc')).focus();
-	},
-	
-	onEditEnter: function(e) {
-		if (e.keyCode == 13) this.save();
-	},
-	
-	onEditEsc: function(e) {
-		if (e.keyCode == 27) this.render();
+		
+		if (!this.noteEditView)
+			this.createEditView();
+		
+		this.noteEditView.edit();
 	},
 	
 	showArchive: function() {
@@ -88,17 +103,38 @@ NoteView = Backbone.View.extend({
 		}).show();
 	},
 	
+	createEditView: function() {
+		this.noteEditView = new NoteEditView({model: this.model});
+		
+		this.noteEditView.bind('reset', function() {
+			this.ui.view.show();		
+		}, this);
+		
+		this.noteEditView.bind('edit', function() {
+			this.ui.view.hide();
+		}, this);
+		
+		this.noteEditView.bind("save_error", function() {
+			this.showSaveFailed();
+		}, this);	
+		
+		this.noteEditView.bind("save_success", function() {
+			this.hideSaveFailed();
+		}, this);
+		
+		this.ui.edit.append(this.noteEditView.render().el);
+	},
+	
 	hideArchive: function() {
 		this.ui.archive.hide();
 	},
 	
-	save: function() {
-		var text = $.trim(this.ui.textarea.val());
-		if (text.length == 0)
-			return;
-		this.model.set({ desc: text });
-		this.model.save();
-		this.render();
+	showSaveFailed: function() {
+		this.ui.alert.fadeIn();
+	},
+	
+	hideSaveFailed: function() {
+		this.ui.alert.fadeOut();
 	},
 	
 	_filter: function(text) {
@@ -125,12 +161,16 @@ NoteView = Backbone.View.extend({
 		return null;
 	},
 	
-	_linkFilter: function(text) {
-		var p1 = /^\s*(http[s]?:\/\/(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
-		var text = text.replace(p1, '<a href="$1">$1</a>');
-		
-		var p2 = /^\s*((www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1})\s*$/gi;
-		return text.replace(p2, '<a href="http://$1">$1</a>');
+	_linkFilter: function(text) {		
+		var p1 = /([-a-zA-Z0-9@:%_\+.~#?&/\/\=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?)/;
+		var reg = new RegExp(p1);
+		var match = reg.exec(text)
+		if (match != null) {	
+			var hasProtocol = match[0].indexOf('://') == -1;
+			var repl =  hasProtocol ? 'http://' + match[0] : match[0];
+			return '<a target="_blank" href="' + repl + '">' + text + '</a>';
+		}
+		return text;
 	},
 	
 	_atFilter: function(text) {

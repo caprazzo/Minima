@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import net.caprazzi.keez.simpleFileDb.KeezFileDb;
-import net.caprazzi.minima.TestUtils;
-import net.caprazzi.minima.TestUtils.*;
+import net.caprazzi.keez.onfile.KeezOnFile;
+import net.caprazzi.minima.TestUtils.GetTestHelp;
+import net.caprazzi.minima.model.List;
 import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
@@ -21,14 +21,14 @@ import com.google.common.io.Files;
 public class MinimaDbFunctionalTest {
 
 	private File testDir;
-	private KeezFileDb db;
-	private MinimaDb minimaDb;
+	private KeezOnFile db;
+	private DbHelper minimaDb;
 
 	@Before
 	public void setUp() {
 		testDir = Files.createTempDir();
-		db = new KeezFileDb(testDir.getAbsolutePath(), "pfx", false);
-		minimaDb = new MinimaDb(db);
+		db = new KeezOnFile(testDir.getAbsolutePath(), "pfx", false);
+		minimaDb = new DbHelper(db);
 	}
 	
 	@Test
@@ -42,11 +42,11 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<StoryList> fromJson = Meta.fromJson(StoryList.class, data);
-				assertEquals("list", fromJson.getName());
-				assertEquals("todo", fromJson.getObj().getName());
-				assertEquals(65536, fromJson.getObj().getPos().intValue());
-				assertEquals("keylisttodo", fromJson.getObj().getId());
+				List list = List.fromJson(data);
+				assertEquals("list", list.getTypeName());
+				assertEquals("todo", list.getName());
+				assertEquals(65536, list.getPos());
+				assertEquals("keylisttodo", list.getId());
 			}
 		});
 		
@@ -54,11 +54,11 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<StoryList> fromJson = Meta.fromJson(StoryList.class, data);
-				assertEquals("list", fromJson.getName());
-				assertEquals("doing", fromJson.getObj().getName());
-				assertEquals(65536*2, fromJson.getObj().getPos().intValue());
-				assertEquals("keylistdoing", fromJson.getObj().getId());
+				List list = List.fromJson(data);
+				assertEquals("list", list.getTypeName());
+				assertEquals("doing", list.getName());
+				assertEquals(65536 * 2, list.getPos());
+				assertEquals("keylistdoing", list.getId());
 			}
 		});
 		
@@ -66,11 +66,11 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<StoryList> fromJson = Meta.fromJson(StoryList.class, data);
-				assertEquals("list", fromJson.getName());
-				assertEquals("done", fromJson.getObj().getName());
-				assertEquals(65536*3, fromJson.getObj().getPos().intValue());
-				assertEquals("keylistdone", fromJson.getObj().getId());
+				List list = List.fromJson(data);
+				assertEquals("list", list.getTypeName());
+				assertEquals("done", list.getName());
+				assertEquals(65536*3, list.getPos());
+				assertEquals("keylistdone", list.getId());
 			}
 		});
 		
@@ -78,9 +78,9 @@ public class MinimaDbFunctionalTest {
 			@Override
 			public void found(String key, int rev, byte[] data) {
 				assertEquals(1, rev);
-				Meta<MasterRecord> fromJson = Meta.fromJson(MasterRecord.class, data);
-				assertEquals("master_record", fromJson.getName());
-				assertEquals("1", fromJson.getObj().getDbVersion());
+				MasterRecord record = MasterRecord.fromJson(data, MasterRecord.class);
+				assertEquals("master_record", record.getTypeName());
+				assertEquals("1", record.getDbVersion());
 			}
 		});
 		
@@ -90,9 +90,11 @@ public class MinimaDbFunctionalTest {
 	public void should_upgrade_existing_legacy_database() {
 		
 		// simulate existing db version 0
+		/*
 		db.put("story1", 0, new Story("story1", "desc1", "todo").toJson(), TestUtils.putNoop);
 		db.put("story2", 0, new Story("story2", "desc2", "todo").toJson(), TestUtils.putNoop);
 		db.put("story3", 0, new Story("story3", "desc3", "doing").toJson(), TestUtils.putNoop);
+		*/
 		
 		minimaDb.init();
 		
@@ -150,9 +152,11 @@ public class MinimaDbFunctionalTest {
 	public void should_leave_alone_existing_recent_db() {
 
 		// simulate existing db version 0
+		/*
 		db.put("story1", 0, new Story("story1", "desc1", "todo").toJson(), TestUtils.putNoop);
 		db.put("story2", 0, new Story("story2", "desc2", "todo").toJson(), TestUtils.putNoop);
 		db.put("story3", 0, new Story("story3", "desc3", "doing").toJson(), TestUtils.putNoop);
+		*/
 		
 		// upgrade to v1
 		minimaDb.init();

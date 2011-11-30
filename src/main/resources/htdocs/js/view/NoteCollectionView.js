@@ -1,6 +1,8 @@
 NoteCollectionView = Backbone.View.extend({
 	tagName: 'ul',
 	className: 'notes-container',
+	_rendered: false,
+	
 	initialize: function(args) {
 		_(this).bindAll('addNote');
 		this.notes = args.notes;
@@ -47,17 +49,18 @@ NoteCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
-		var that = this;
-		if (this._rendered)
-			return;
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');
+			$(this.el).sortable('destroy');
+			this._setupContainer();
+			return this;
+		}
 		this._rendered = true;
-		
-		$(this.el).attr('id', 'lists-' + this.listId);
+		this.el.id = 'list-' + this.listId;
+		var that = this;
 		this._noteViews = {};
 		this._setupContainer();		
 		
-		var that = this;
 		this._noteViews = {};
 		this.filteredNotes.each(this.addNote);
 		return this;
@@ -65,7 +68,7 @@ NoteCollectionView = Backbone.View.extend({
 	
 	_sortViewCache: function() {
 		var sorted = _.sortBy(this._noteViews, function(val, key) {
-			return val.model.get('pos');
+			return - val.model.get('pos');
 		});
 		
 		var sortedObj = {};
@@ -130,10 +133,12 @@ NoteCollectionView = Backbone.View.extend({
 	
 	_setupContainer: function() {
 		var that = this;
+		
 		$(this.el).sortable({
 			connectWith: '.notes-container',
 			placeholder: 'notes-placeholder',
 			tolerance: 'intersect',
+			dropOnEmpty: true,
 			start: function(e, ui) {
 				ui.placeholder.height(ui.item.outerHeight());
 				var view = that._findView(ui.item.attr('id'));
@@ -145,9 +150,10 @@ NoteCollectionView = Backbone.View.extend({
 				if (!view) return;
 				view.stopDrag();
 			},
-			update: function(e, ui) {
+			update: function(e, ui) {								
 				if (ui.item.parent().attr('id') != that.el.id)
 					return;
+				
 				var view = that._findView(ui.item.attr('id'));
 				if (!view) return;
 				

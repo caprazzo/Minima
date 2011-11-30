@@ -5,15 +5,16 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
-import net.caprazzi.minima.service.MinimaService;
+import net.caprazzi.minima.service.PushService;
+import net.caprazzi.minima.servlet.AppServlet;
 import net.caprazzi.minima.servlet.ClasspathFilesServlet;
-import net.caprazzi.minima.servlet.MinimaAppServlet;
-import net.caprazzi.minima.servlet.MinimaCometServlet;
-import net.caprazzi.minima.servlet.MinimaIndexServlet;
-import net.caprazzi.minima.servlet.MinimaLoginServlet;
-import net.caprazzi.minima.servlet.MinimaServlet;
-import net.caprazzi.minima.servlet.MinimaWebsocketServlet;
+import net.caprazzi.minima.servlet.CometServlet;
+import net.caprazzi.minima.servlet.DataServlet;
+import net.caprazzi.minima.servlet.IndexServlet;
+import net.caprazzi.minima.servlet.LoginServlet;
 import net.caprazzi.minima.servlet.PrivacyFilter;
+import net.caprazzi.minima.servlet.WebsocketServlet;
+import net.caprazzi.slabs.Slabs;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.HashSessionManager;
@@ -24,17 +25,19 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class MinimaServer {
 
-	private final MinimaService minimaService;
-	private final MinimaWebsocketServlet websocketServlet;
-	private final MinimaIndexServlet indexServlet;
-	private final MinimaCometServlet cometServlet;
-	private final MinimaLoginServlet loginServlet;
+	private final WebsocketServlet websocketServlet;
+	private final IndexServlet indexServlet;
+	private final CometServlet cometServlet;
+	private final LoginServlet loginServlet;
 	private final PrivacyFilter privacyFilter;
 	private Server server;
-	private final MinimaAppServlet appServlet;
+	private final AppServlet appServlet;
+	private final Slabs db;
+	private final PushService pushService;
 
-	public MinimaServer(MinimaService minimaService, MinimaWebsocketServlet websocketServlet, MinimaCometServlet cometServlet, MinimaIndexServlet indexServlet, MinimaLoginServlet loginServlet, PrivacyFilter privacyFilter, MinimaAppServlet appServlet) {
-		this.minimaService = minimaService;
+	public MinimaServer(Slabs db, PushService pushService, WebsocketServlet websocketServlet, CometServlet cometServlet, IndexServlet indexServlet, LoginServlet loginServlet, PrivacyFilter privacyFilter, AppServlet appServlet) {
+		this.db = db;
+		this.pushService = pushService;
 		this.websocketServlet = websocketServlet;
 		this.cometServlet = cometServlet;
 		this.indexServlet = indexServlet;
@@ -64,9 +67,9 @@ public class MinimaServer {
         if (loginServlet != null) {
         	context.addServlet(new ServletHolder(loginServlet), "/login");
         	context.addServlet(new ServletHolder(loginServlet), "/logout");
-        }
+        }                
         
-        MinimaServlet minimaServlet = new MinimaServlet(webroot, minimaService);
+        DataServlet minimaServlet = new DataServlet(webroot, db, pushService);
         context.addServlet(new ServletHolder(minimaServlet), "/data/*");
         ServletHolder websocketholder = new ServletHolder(websocketServlet);
         context.addServlet(websocketholder, "/websocket");

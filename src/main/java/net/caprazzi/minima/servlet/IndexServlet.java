@@ -1,7 +1,6 @@
 package net.caprazzi.minima.servlet;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -12,17 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import net.caprazzi.minima.framework.BuildServices;
 import net.caprazzi.minima.framework.RequestInfo;
 import net.caprazzi.minima.framework.SkimpyTemplate;
-
-import org.eclipse.jetty.util.IO;
+import net.caprazzi.minima.framework.Utils;
 
 @SuppressWarnings("serial")
-public class MinimaIndexServlet extends HttpServlet {
+public class IndexServlet extends HttpServlet {
 
 	private String boardTitle;
 	private final String websocketLocation;
 	private final BuildServices build;
 
-	public MinimaIndexServlet(String websocketLocation, BuildServices buildService) {
+	public IndexServlet(String websocketLocation, BuildServices buildService) {
 		this.websocketLocation = websocketLocation;
 		this.build = buildService;
 	}
@@ -32,44 +30,45 @@ public class MinimaIndexServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestInfo info = RequestInfo.fromRequest(req);
-		if (info.isPath(req.getContextPath() + "/")) {
-			resp.sendRedirect(req.getContextPath() + "/index");
+		String contextPath = req.getContextPath();
+		
+		if (info.isPath(contextPath + "/")) {
+			resp.sendRedirect(contextPath + "/index");
 			return;
 		}
 		
-		if (!info.isPath(req.getContextPath() +  "/index")) {
+		if (!info.isPath(contextPath +  "/index")) {
 			resp.sendError(404);
 			return;
 		}
 		
+		Boolean readonly = req.getParameter("readonly") != null 
+				|| (Boolean)req.getAttribute("minima.readonly");
 		
 		resp.setContentType("text/html");
-		
 		SkimpyTemplate index = build.getPage("index");
-		
-//		InputStream in = this.getClass().getClassLoader().getResourceAsStream("index.html");
-			
 		index
 			.add("BOARD_TITLE", boardTitle)
-			.add("READ_ONLY", req.getAttribute("minima.readonly").toString())
+			.add("READ_ONLY", readonly.toString())
 			.add("WEBSOCKET_LOCATION", websocketLocation.equals("auto") 
-					? "ws://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath() + "/websocket" : websocketLocation)
-			.add("DATA_LOCATION", req.getContextPath() + "/data")
-			.add("COMET_LOCATION", req.getContextPath() + "/comet")
-			.add("LOGIN_URL", req.getContextPath() + "/login")
+					? "ws://" + req.getServerName() + ":" + req.getServerPort() + contextPath + "/websocket" : websocketLocation)
+			.add("DATA_LOCATION", contextPath + "/data")
+			.add("COMET_LOCATION", contextPath + "/comet")
+			.add("LOGIN_URL", contextPath + "/login")
+			.add("CLIENT_TAG", Utils.makeId())
 			.add("TEMPLATES", build.getTemplatesHtml());
 		
 		if (req.getParameter("devel") != null) {
 			index
-				.add("CSS_IMPORTS", build.getDevelCssTags(req.getContextPath()))
-				.add("LIB_IMPORTS", build.getDevelLibsTags(req.getContextPath()))
-				.add("MAIN_IMPORTS", build.getDevelMainTags(req.getContextPath()));			
+				.add("CSS_IMPORTS", build.getDevelCssTags(contextPath))
+				.add("LIB_IMPORTS", build.getDevelLibsTags(contextPath))
+				.add("MAIN_IMPORTS", build.getDevelMainTags(contextPath));			
 		}			
 		else {
 			index
-				.add("CSS_IMPORTS", build.getProductionCssTag(req.getContextPath()))
-				.add("LIB_IMPORTS", build.getProductionLibsTag(req.getContextPath()))
-				.add("MAIN_IMPORTS", build.getProductionMainTag(req.getContextPath()));
+				.add("CSS_IMPORTS", build.getProductionCssTag(contextPath))
+				.add("LIB_IMPORTS", build.getProductionLibsTag(contextPath))
+				.add("MAIN_IMPORTS", build.getProductionMainTag(contextPath));
 		}
 
 		PrintWriter writer = resp.getWriter();

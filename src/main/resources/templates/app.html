@@ -1,0 +1,36 @@
+<div id="topbar" class="<% if (readonly) { %>topbar-readonly<% } else { %>topbar-readwrite<% } %>" >
+
+	<div class="firstrow">
+		<div class="board-title">
+			<div class="minima-logo">&nbsp;</div>
+			<div class="minima-title-value"><%= board_title %></div>
+		</div>
+
+		
+		<div id="alerts" class="alerts"></div>
+		
+		<!-- 
+		<div>
+			
+		</div>
+		 -->
+		 
+		<div class="controls">
+			<div id="notifications_ctrl"></div>
+		</div>
+
+		
+	</div>
+
+	<div class="secondrow">
+		<div class="buttons">
+			<div id="list-create-ctrl"></div>
+		</div>
+	</div>
+	
+</div>
+<div id="topbar-push-content" class="<% if (readonly) { %>topbar-readonly<% } else { %>topbar-readwrite<% } %>"></div>
+
+<div id="content">
+	<div id="board"></div>
+</div>

@@ -13,8 +13,9 @@ import net.caprazzi.minima.model.MasterRecord;
 import net.caprazzi.minima.model.Meta;
 import net.caprazzi.minima.model.Story;
 import net.caprazzi.minima.model.StoryList;
+import net.caprazzi.keez.KeezException;
 
-public class MinimaDb {
+public class DbHelper {
 
 	public static final String MASTER_KEY = "minimaster";
 
@@ -26,7 +27,7 @@ public class MinimaDb {
 	
 	private final Db db;
 
-	public MinimaDb(Db db) {
+	public DbHelper(Db db) {
 		this.db = db;
 	}
 	
@@ -34,7 +35,7 @@ public class MinimaDb {
 		db.get(MASTER_KEY, new Get() {
 			
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				throw new RuntimeException("Error while loading masterkey " + key, e);
 			}
 			
@@ -59,7 +60,7 @@ public class MinimaDb {
 					}
 
 					@Override
-					public void error(String key, Exception e) {
+					public void error(String key, KeezException e) {
 						 throw new RuntimeException("Error while storing masterkey" + key, e);
 					} 
 					
@@ -99,7 +100,7 @@ public class MinimaDb {
 	byte[] getMasterRecord() {
 		MasterRecord record = new MasterRecord();
 		record.setDbVersion(DB_VERSION);
-		return Meta.wrap("master_record", record).toJson();
+		return record.toJson();
 	}
 	
 	public void upgradeEntry(Entry entry) throws Exception {
@@ -138,7 +139,7 @@ public class MinimaDb {
 			}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				throw new RuntimeException("error " + key, e);				
 			}
 			
@@ -155,7 +156,7 @@ public class MinimaDb {
 			}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -178,7 +179,7 @@ public class MinimaDb {
 			}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 				throw new RuntimeException("error while creating story " + key, e);
 			}
 		});
@@ -193,7 +194,7 @@ public class MinimaDb {
 			public void deleted(String key, byte[] data) {}
 
 			@Override
-			public void error(String key, Exception e) {
+			public void error(String key, KeezException e) {
 			}
 		});
 	}
@@ -236,12 +237,24 @@ public class MinimaDb {
 							public void deleted(String key, byte[] data) {}
 
 							@Override
-							public void error(String key, Exception e) {
+							public void error(String key, KeezException e) {
 								// TODO Auto-generated method stub
 								
 							}
 						});
 					}
+					
+				}
+
+				@Override
+				public void notFound() {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void error(KeezException ex) {
+					// TODO Auto-generated method stub
 					
 				}
 			});

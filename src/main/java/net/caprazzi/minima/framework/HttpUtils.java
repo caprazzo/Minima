@@ -3,6 +3,7 @@ package net.caprazzi.minima.framework;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.servlet.ServletOutputStream;
@@ -37,6 +38,15 @@ public class HttpUtils {
 		ServletOutputStream bos = resp.getOutputStream();
 		bos.write("{}".getBytes());
 		bos.close();			
+	}
+	
+	public static void sendNoCacheHeaders(HttpServletResponse resp) {
+		long now = new Date().getTime();
+		long year = 1000 * 60 * 60 * 24 * 365;
+		resp.addDateHeader("Last-Modified", now + year);
+		resp.addDateHeader("Expires", now - year);
+		resp.addHeader("Cache-control", "no-cache, must-revalidate");
+		resp.addHeader("Pragma", "no-cache");
 	}
 	
 	public final static String readBodyAsString(InputStream is) throws IOException {

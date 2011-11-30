@@ -6,12 +6,26 @@ AppView = Backbone.View.extend({
 		this.lists = args.lists;
 		this.notes = args.notes;
 		this.appModel = args.appModel;
-		this.template = Templates["app-template"];
+		this.template = Templates["app"];
+				
+		
+		this.views = {
+			alerts: new AlertsView(),
+		}
+		
+		Minima.bind('archive-note', function(note) {
+			var alView = new AlertArchivedView({ model: note });
+			alView.render();
+			this.views.alerts.addAlert(alView, 22000);
+		}, this);
 	},
 	
 	render: function() {
 		console.log(this.appModel.toJSON());
 		this.el.html(this.template(this.appModel.toJSON()));
+						
+		// alerts panel
+		$('#alerts').append(this.views.alerts.render().el);
 		
 		// notifications control	
 		var nModel = new NotificationsCtrlModel();
@@ -27,7 +41,10 @@ AppView = Backbone.View.extend({
 			$('#list-create-ctrl').append(listCreateView.render().el);
 		}
 		else {
-			$('#readonly-notice').show();
+			var alert = new AlertReadonlyView({ 
+				login_url: this.appModel.get('login_url')
+			})
+			this.views.alerts.addAlert(alert);
 		}
 		
 		// list collection view
@@ -43,8 +60,6 @@ AppView = Backbone.View.extend({
 		
 		$('#board').append(listsView.render().el);
 		
-		listsView.resize($(window).width());
-		
-		
+		listsView.resize($(window).width());		
 	}
 });

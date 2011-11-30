@@ -6,12 +6,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
 @SuppressWarnings("serial")
-public class MinimaWebsocketServlet extends WebSocketServlet {
+public class WebsocketServlet extends WebSocketServlet {
 
 	private volatile Set<MinimaWebSocket> _consumers = new CopyOnWriteArraySet<MinimaWebSocket>();
 	
@@ -26,7 +25,7 @@ public class MinimaWebsocketServlet extends WebSocketServlet {
 			try {
 				member.sendMessage(data);
 			} catch (IOException e) {
-				Log.info("error while sending message");
+				e.printStackTrace();
 			}
 		}
 	}

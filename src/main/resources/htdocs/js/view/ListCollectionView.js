@@ -1,8 +1,9 @@
 ListCollectionView = Backbone.View.extend({
 	tagName: 'div',
 	className: 'lists-container',
+	_rendered: false,
+	
 	initialize: function(args) {
-		// bind the functions 'add' and 'remove' to the view.
 	    _(this).bindAll('addList');
 	    this.readonly = args.readonly;
 	    this.lists = args.lists;
@@ -49,6 +50,7 @@ ListCollectionView = Backbone.View.extend({
 		if (view) {
 			delete this._listViews[list.id];
 			view.remove();
+			this.resize($(window).width());
 		}	
 	},
 	
@@ -81,8 +83,12 @@ ListCollectionView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');	
+			//return this;
+		}
 		this._rendered = true;
+		
 		var that = this;
 		
 		// when draggin an item that is below the fold
@@ -146,10 +152,11 @@ ListCollectionView = Backbone.View.extend({
 		return this;
 	},
 	
-	addList: function(list) {
-		
-		if (this._listViews[list.id])
+	addList: function(list) {		
+		if (this._listViews[list.id]) {
+			console.warn("ListCollectionView.addList called for a list that was already added", this, list);
 			return;
+		}
 		
 		var filteredNotes = new FilteredCollection([], {
 			parent: this.notes, 

@@ -2,17 +2,19 @@ ListView = Backbone.View.extend({
 	tagName: 'li',
 	model: List,
 	className: 'list-container',
+	_rendered: false,
 	
 	initialize: function(args) {
 		this.notes = args.notes;
 		this.filteredNotes = args.filteredNotes;
 		this.readonly = args.readonly;
-		this.template = Templates['list-template'];
-		this.tag = '[ListView  ' + this.model.name +']';
+		this.template = Templates['list'];
+		this.tag = '[ListView  ' + this.model.id +']';
 	},
 	
 	events: {		
-		'click .list-archive-btn': 'archiveList'
+		'click .list-archive-btn': 'archiveList',
+		'click .note-create-btn': 'showCreateView'
 	},
 	
 	resize: function(width) {
@@ -40,48 +42,70 @@ ListView = Backbone.View.extend({
 	},
 	
 	render: function() {
-		console.log(this.tag, 'render', this._rendered);
+		if (this._rendered) {
+			console.warn(this.tag, 'RE-RENDER');
+			this.notesView.render();
+			return this;
+		}
+		this._rendered = true;
 		var el = $(this.el);		
-		el.html(this.template());		
+		el.html(this.template());
 		
-		var notesView = new NoteCollectionView({ 
+		this.ui = {
+			notes: el.find('.list-notes'),
+			archive: el.find('.list-archive-btn'),
+			header: el.find('.list-header'),
+			name: el.find('.list-name'),
+			footer: el.find('.list-footer'),
+			createBtn: el.find('.note-create-btn')
+		}
+		
+		this.notesView = new NoteCollectionView({ 
 			notes: this.notes,
 			filteredNotes: this.filteredNotes,
 			listId: this.model.id,
 			readonly: this.readonly
 		});
 		
-		el.find('.list-notes').append(notesView.render().el);
-		
-		var nameView = new ListNameView({
+		this.nameView = new ListNameView({
 			model: this.model,
 			readonly: this.readonly
 		});
-		el.find('.list-name').append(nameView.render().el);
 		
+		this.ui.notes.append(this.notesView.render().el);
+		this.ui.name.append(this.nameView.render().el);
 		
-		if (!this.readonly) {
-			var createView = new NoteCreateView({ model: this.model, notes: this.notes });
-			createView.bind('create', function(note) {
-				this.notes.create(note);
-				notesView.addNote(note);				
-			}, this);
-			el.find('.list-footer').append(createView.render().el);
-		}
+		if (!this.readonly)
+			this._setupEditUi();
 		
-		this.ui = {
-			archive: el.find('.list-archive-btn'),
-			header: el.find('.list-header') 
-		}
-		
-		var view = this;
-		this.ui.header.hover(
-			function() { view.showArchive() },
-			function() { view.hideArchive() }
-		);
-		
-		this._rendered = true;
 		return this;
+	},
+	
+	showCreateView: function() {
+		if (this.readonly)
+			return;
+		this.noteEditView.edit();
+		this.ui.createBtn.hide();
+	},
+	
+	createNote: function(note) {
+		// find position
+		var that = this;		
+		
+		var lastNote = _(this.notes.filter(function(note) {
+			return !note.get('archived') && note.get('list') == that.model.id;
+		})).last();		
+		var pos = (lastNote) ? lastNote.get('pos') : 0;
+		
+		note.set({
+			id: Minima.makeId(),
+			revision: 0,
+			list: this.model.id,
+			pos: pos + 65536
+		}, {silent:true});
+		
+		this.notes.create(note);
+		this.notesView.addNote(note);
 	},
 	
 	startDrag: function() {
@@ -106,5 +130,33 @@ ListView = Backbone.View.extend({
 		$(this.el).remove();
 		this.model.set({archived: true});
 		this.model.save();
+	},
+	
+	_setupEditUi: function() {
+		var view = this;
+		
+		this.ui.header.hover(
+			function() { view.showArchive() },
+			function() { view.hideArchive() }
+		);
+
+		this.ui.createBtn.show().hover(
+			function() { view.ui.createBtn.addClass('note-create-btn-hover'); },
+			function() { view.ui.createBtn.removeClass('note-create-btn-hover'); }
+		);
+		
+		var newNote = new Note({});
+		newNote.bind('change', function(note) {
+			var clone = note.clone();
+			note.clear({silent: true});
+			this.createNote(clone);
+		}, this);
+		
+		this.noteEditView = new NoteEditView({model: newNote});
+		this.noteEditView.bind('reset', function() {
+			this.ui.createBtn.show();
+		}, this);
+		
+		this.ui.footer.append(this.noteEditView.render().el);
 	}
 });

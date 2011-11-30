@@ -5,7 +5,7 @@
 
 	<groupId>net.caprazzi.minima</groupId>
 	<artifactId>Minima</artifactId>
-	<version>0.9</version>
+	<version>0.10</version>
 
 	<name>Minima</name>
 
@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>net.caprazzi.keez</groupId>
 			<artifactId>Keez</artifactId>
-			<version>0.6</version>
+			<version>0.7</version>
 		</dependency>
 	
 		<dependency>
@@ -77,6 +77,11 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-websocket</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlets</artifactId>
 			<version>${jettyVersion}</version>
 		</dependency>
 		<dependency>
