@@ -26,6 +26,8 @@ AlertArchivedView = Backbone.View.extend({
 	
 	initialize: function(args) {
 		this.template = Templates['alert-archived'];
+		this.model = args.model;
+		this.itemName = args.itemName;
 	},
 	
 	events: {
@@ -35,13 +37,7 @@ AlertArchivedView = Backbone.View.extend({
 	
 	render: function() {
 		var el = $(this.el);
-		var full = this.model.get('desc');
-		var short = full.substring(0, 10);
-		if (short != full) short += '...';
-		el.html(this.template({ desc: short	}));
-		
-		var that = this;
-		
+		el.html(this.template({ itemName: this.itemName	}));
 		return this;
 	},
 	

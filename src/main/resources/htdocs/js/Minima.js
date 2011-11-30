@@ -58,7 +58,7 @@ Minima.args = function(arguments) {
 	return arr;
 }
 
-
+/*
 Minima.fireEvent = function(handlers) {
 	if (!handlers) {
 		console.warn('trying to fire event with no handler');
@@ -79,7 +79,7 @@ Minima.bindEvent = function(handlers, fn, ctx) {
 	handlers.push({fn:fn, ctx:ctx});
 	return handlers;
 }
-
+*/
 Minima.makeId = function() {
 	return 'id' + new Date().getTime();
 }

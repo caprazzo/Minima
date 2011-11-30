@@ -66,7 +66,6 @@ NoteView = Backbone.View.extend({
 	},
 	
 	archiveNote: function() {
-		this.model.set();
 		this.ui.el.hide();
 		var that = this;
 		this.model.save({archived: true}, {

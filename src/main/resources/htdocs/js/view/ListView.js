@@ -52,6 +52,7 @@ ListView = Backbone.View.extend({
 		el.html(this.template());
 		
 		this.ui = {
+			el: el,
 			notes: el.find('.list-notes'),
 			archive: el.find('.list-archive-btn'),
 			header: el.find('.list-header'),
@@ -127,9 +128,19 @@ ListView = Backbone.View.extend({
 	},
 	
 	archiveList: function() {
-		$(this.el).remove();
-		this.model.set({archived: true});
-		this.model.save();
+		this.ui.el.hide();
+		var that = this;
+		this.model.save({archived: true}, {
+			silent: true,
+			success: function(list) {
+				list.set({archived: true});				
+				Minima.trigger('archive-list', list);
+			},
+			error: function(note) {
+				list.set({archived: false}, {silent: true});
+				that.ui.el.show();
+			}
+		});		
 	},
 	
 	_setupEditUi: function() {

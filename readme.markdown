@@ -63,6 +63,8 @@ Options to /index
 
 ## Changelog
 
+### V0.11
+
 ### V 0.10 - 29 November 2011
 
 * inverted ui so 'add note button' now is always on top - beware: existing notes will be listed in inverse order

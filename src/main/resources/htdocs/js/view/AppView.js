@@ -7,14 +7,19 @@ AppView = Backbone.View.extend({
 		this.notes = args.notes;
 		this.appModel = args.appModel;
 		this.template = Templates["app"];
-				
-		
+						
 		this.views = {
 			alerts: new AlertsView(),
 		}
 		
 		Minima.bind('archive-note', function(note) {
-			var alView = new AlertArchivedView({ model: note });
+			var alView = new AlertArchivedView({ model: note, itemName: 'note' });
+			alView.render();
+			this.views.alerts.addAlert(alView, 22000);
+		}, this);
+		
+		Minima.bind('archive-list', function(list) {
+			var alView = new AlertArchivedView({ model: list, itemName: 'list' });
 			alView.render();
 			this.views.alerts.addAlert(alView, 22000);
 		}, this);
