@@ -2,6 +2,15 @@ if (!window.console)
 	window.console = { log: function() {}, warn: function() {}, error: function() {} };
 	
 $(function() {
+	
+	function check() {
+		console.log('online', navigator.onLine);
+		setTimeout(function() {
+			check();
+		}, 1500);
+	}
+	check();
+	
 	Templates.load();
 		
 	var app = new AppModel();
