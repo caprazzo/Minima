@@ -78,7 +78,11 @@ NoteView = Backbone.View.extend({
 		var that = this;
 		this.model.save({archived: true}, {
 			silent: true,
-			success: function(note, buffered) {
+			buffered: function(note) {
+				note.set({archived: true});				
+				Minima.trigger('archive-note', note);
+			},
+			success: function(note) {
 				note.set({archived: true});				
 				Minima.trigger('archive-note', note);
 			},
@@ -161,7 +165,7 @@ NoteView = Backbone.View.extend({
 		this.ui.buffer.find('span').addClass('buffer-notice-hover');
 		var that = this;
 		that.ui.bufferHelp.outerWidth(that.ui.el.width());
-		that.ui.bufferHelp.delay(500).fadeIn();
+		that.ui.bufferHelp.delay(500).fadeIn('fast');
 	},
 	
 	hideBufferHelp: function() {

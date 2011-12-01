@@ -73,7 +73,9 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 	},
 	
 	_receiveMessage: function(msg) {
+		console.log('_receiveMessage', msg);
 		var obj = $.parseJSON(msg);
+		console.log(obj);
 		if (obj.sender == this.client_tag) {
 			console.log("CLIENT: ignoring message from self");
 			return;
@@ -112,10 +114,31 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 		}
 	},
 	
+	_cometError: function(doRetry) {
+		console.log('Comet transport is offline');
+		this.cometStatus = 'error';
+		if (doRetry) {
+			var client = this; 
+			setTimeout(function() {
+				client._connectComet();
+			}, 1500);
+		}
+	},
+	
+	_cometOnline: function() {
+		this.cometStatus = 'online';
+		Backbone.sync('sync');
+	},
+	
+	_cometCheck: function() {
+		if (this.cometStatus == 'connecting')
+			this._cometOnline();
+	},
+	
 	_connectComet: function() {
-		console.log('connect comet');
-		console.log(this.comet_location);
+		console.log('connect comet', this.comet_location);
 		var client = this;
+		this.cometStatus = 'connecting';
 		function listen() {
 			$.ajax({
 				url: client.comet_location + '?' + new Date().getTime(),
@@ -123,16 +146,25 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 				type: 'get',
 				cache: 'false',
 				success: function(data, textStatus, xhr) {
-					client._receiveMessage(data);
+					// when the connection is dropped (ie server down), 
+					// the browser (ffx) still thinks it's a 200, but the
+					// content is not a json object as expected
+					if (typeof data != 'string') {
+						client._cometError(true);
+						return;						
+					}
 					listen();
+					client._receiveMessage(data);					
 				},
 				error: function(jqXhr, errorString) {
-					// TODO: if error is 403, do not retry
-					setTimeout(function() {
-						client._connectComet();
-					}, 1500);
+					console.log('Comet ERROR', jqXhr.status);
+					client._cometError((jqXhr.status != 403));
 				}
 			});
+			
+			setTimeout(function() {
+				client.cometCheck();
+			}, 750);
 		}
 		listen();
 	}
