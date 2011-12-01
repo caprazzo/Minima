@@ -3,6 +3,7 @@ if (!window.console)
 	
 $(function() {
 	
+	/*
 	function check() {
 		console.log('online', navigator.onLine);
 		setTimeout(function() {
@@ -10,6 +11,7 @@ $(function() {
 		}, 1500);
 	}
 	check();
+	*/
 	
 	Templates.load();
 		

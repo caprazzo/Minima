@@ -1,3 +1,51 @@
+(function() {
+	var _sync = Backbone.sync;
+	var _buffer = {};
+	Backbone.sync = function(method, model, options) {
+		console.log('Backbone sync', method, model, options);
+		
+		switch (method) {
+		case 'read':
+			break;
+		case 'create':
+			break;
+		case 'update':
+			var _options = _.extend({}, options, {
+				error: function(req, msg) {
+					console.log('_sync error', req, msg);
+					if ( req.status != 0) {
+						options.error(req, msg);
+						return;
+					}
+					// network or server problem?
+					_buffer[model.id] = {
+						method: method,
+						model: model,
+						options: options
+					}
+					// trigger success with buffer
+					if (options.buffered)
+						options.buffered(model);
+				}
+			});			
+			_sync(method, model, _options);
+			break;
+		case 'delete':
+			break;
+			
+		case 'sync':
+			var p = _buffer;
+			_buffer = {};
+			_.each(p, function(req) {
+				console.log('Flushing pending', req);
+				Backbone.sync(req.method, req.model, req.options);
+			});
+			break;
+		}
+}
+})();
+
+
 function MinimaClient(options) {
 	this.mode = options.appModel.get('mode');
 	this.web_socket_location = options.appModel.get('ws_location');
@@ -46,6 +94,7 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 		var ws = new WebSocket(this.web_socket_location);
 		ws.onopen = function() {
 			console.log('WebSocket.onopen');
+			Backbone.sync('sync');
 		}
 		ws.onclose = function() {
 			console.log('WebSocket.onclose');

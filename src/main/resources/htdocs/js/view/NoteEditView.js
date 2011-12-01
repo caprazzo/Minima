@@ -107,8 +107,11 @@ NoteEditView = Backbone.View.extend({
 			});
 			if (!this.model.isNew())
 				this.model.save({}, {
-					success : function(model, response) {
-						view.trigger("save_success");
+					buffered: function(req, model) {
+						view.trigger('save_buffered', model);
+					},
+					success : function(req, model) {
+						view.trigger("save_success", model);
 					},
 					error : function(model, response) {
 						console.warn("Save of model failed", model, response);

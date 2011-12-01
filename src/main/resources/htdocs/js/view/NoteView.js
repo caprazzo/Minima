@@ -37,8 +37,16 @@ NoteView = Backbone.View.extend({
 			view: el.find('.note-view'),
 			edit: el.find('.note-edit'),
 			text: el.find('.note-text'),
-			alert: el.find('.note-save-alert')
+			alert: el.find('.note-save-alert'),
+			buffer: el.find('.buffer-notice'),
+			bufferHelp: el.find('.buffer-notice-help')
 		}
+		
+		var that = this;
+		this.ui.buffer.hover(
+			function() { that.showBufferHelp(); },
+			function() { that.hideBufferHelp(); }
+		)
 		
 		if (this.readonly)
 			this.ui.el.addClass('note-container-readonly');
@@ -70,7 +78,7 @@ NoteView = Backbone.View.extend({
 		var that = this;
 		this.model.save({archived: true}, {
 			silent: true,
-			success: function(note) {
+			success: function(note, buffered) {
 				note.set({archived: true});				
 				Minima.trigger('archive-note', note);
 			},
@@ -117,8 +125,13 @@ NoteView = Backbone.View.extend({
 			this.showSaveFailed();
 		}, this);	
 		
-		this.noteEditView.bind("save_success", function() {
+		this.noteEditView.bind("save_success", function(response) {
 			this.hideSaveFailed();
+			this.hideBufferNotice();
+		}, this);
+		
+		this.noteEditView.bind('save_buffered', function(model) {
+			this.showBufferNotice();
 		}, this);
 		
 		this.ui.edit.append(this.noteEditView.render().el);
@@ -134,6 +147,27 @@ NoteView = Backbone.View.extend({
 	
 	hideSaveFailed: function() {
 		this.ui.alert.fadeOut();
+	},
+	
+	showBufferNotice: function() {
+		this.ui.buffer.fadeIn();
+	},
+	
+	hideBufferNotice: function() {
+		this.ui.buffer.fadeOut();
+	},
+	
+	showBufferHelp: function() {
+		this.ui.buffer.find('span').addClass('buffer-notice-hover');
+		var that = this;
+		that.ui.bufferHelp.outerWidth(that.ui.el.width());
+		that.ui.bufferHelp.delay(500).fadeIn();
+	},
+	
+	hideBufferHelp: function() {
+		this.ui.buffer.find('span').removeClass('buffer-notice-hover');
+		this.ui.bufferHelp.stop(true, true).hide();
+		//this.ui.bufferHelp.hide();
 	},
 	
 	_filter: function(text) {

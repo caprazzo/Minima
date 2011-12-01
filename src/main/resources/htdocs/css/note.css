@@ -72,3 +72,38 @@
 .notes-container {
 	min-height: 0.75em;
 }
+.buffer-notice {
+	display: none;
+	text-align: right;
+	margin-top: -1.25em;	
+}
+.buffer-notice span {
+	width: 1em;	
+	color: #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	font-size: 80%;
+	font-weight: bold;
+	padding: 0.15em;
+	padding-right: 0.35em;
+	padding-left: 0.35em;	
+	border-bottom-right-radius: 3px;
+	border-top-left-radius: 3px;
+}
+.buffer-notice p {
+	margin-top: 0.25em;
+}
+span.buffer-notice-hover {
+	color: orange;
+	_background-color: #ffffaa;
+}
+.buffer-notice .buffer-notice-help {
+	position: fixed;
+	text-align: left;
+	display: none;
+	opacity: 1.0;
+	background-color:#ffffaa;
+	padding: 0.5em;
+	font-size: 85%;
+	margin-top: 0.25em;
+}
