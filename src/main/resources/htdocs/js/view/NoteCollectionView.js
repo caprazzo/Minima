@@ -68,7 +68,7 @@ NoteCollectionView = Backbone.View.extend({
 	
 	_sortViewCache: function() {
 		var sorted = _.sortBy(this._noteViews, function(val, key) {
-			return - val.model.get('pos');
+			return val.model.get('pos');
 		});
 		
 		var sortedObj = {};

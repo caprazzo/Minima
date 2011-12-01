@@ -130,9 +130,15 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 		Backbone.sync('sync');
 	},
 	
+	/* if the status of the connection has not turned to error
+	 * within 750ms, we can say that connectivity to the server is
+	 * good once again */
 	_cometCheck: function() {
-		if (this.cometStatus == 'connecting')
-			this._cometOnline();
+		var that = this;
+		setTimeout(function() {
+		if (that.cometStatus == 'connecting')
+			that._cometOnline();
+		}, 750);
 	},
 	
 	_connectComet: function() {
@@ -147,7 +153,7 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 				cache: 'false',
 				success: function(data, textStatus, xhr) {
 					// when the connection is dropped (ie server down), 
-					// the browser (ffx) still thinks it's a 200, but the
+					// the browser (ffx at least) still thinks it's a 200, but the
 					// content is not a json object as expected
 					if (typeof data != 'string') {
 						client._cometError(true);
@@ -161,10 +167,7 @@ _.extend(MinimaClient.prototype, Backbone.Events, {
 					client._cometError((jqXhr.status != 403));
 				}
 			});
-			
-			setTimeout(function() {
-				client.cometCheck();
-			}, 750);
+			client.cometCheck();
 		}
 		listen();
 	}
